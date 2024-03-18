@@ -14,8 +14,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +36,8 @@ import com.google.firebase.storage.UploadTask;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.io.ByteArrayOutputStream;
+
 public class EquipmentTambahActivity extends AppCompatActivity {
 
     private EditText etResult;
@@ -42,42 +46,46 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private ImageView uploadGambar;
     String imageURL;
     Uri uri;
-
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
+
+    private Uri getImageUri(Context context, Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipment_tambah);
 
+        // Inisialisasi komponen UI
         etResult = findViewById(R.id.et_result);
         tbKondisi = findViewById(R.id.toggle_kondisi);
         uploadGambar = findViewById(R.id.iv_image);
         btnUpload = findViewById(R.id.btn_ipload);
 
-        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK){
-                            Intent data = result.getData();
-                            uri =data.getData();
-                            uploadGambar.setImageURI(uri);
-                        } else {
-                            Toast.makeText(EquipmentTambahActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
-                        }
+        // Registrasi launcher untuk mengambil gambar dari kamera
+        ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Bundle extras = result.getData().getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        // Menampilkan gambar di ImageView
+                        uploadGambar.setImageBitmap(imageBitmap);
+                        // Mengonversi Bitmap ke Uri
+                        uri = getImageUri(this, imageBitmap);
+                    } else {
+                        Toast.makeText(EquipmentTambahActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                     }
                 });
 
-        uploadGambar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent photoPicker = new Intent(Intent.ACTION_PICK);
-                photoPicker.setType("image/*");
-                activityResultLauncher.launch(photoPicker);
-            }
-        });
+        // Menambahkan onClickListener untuk mengambil gambar dari kamera
+        uploadGambar.setOnClickListener(view -> dispatchTakePictureIntent(takePictureLauncher));
 
         initActivityResultLaunchers();
 
@@ -89,6 +97,28 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 saveData();
             }
         });
+
+        // Inisialisasi ActivityResultLauncher untuk izin kamera
+        requestPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        dispatchTakePictureIntent(takePictureLauncher);
+                    } else {
+                        Toast.makeText(EquipmentTambahActivity.this, "Camera permission required", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    // Metode untuk mengirimkan intent untuk mengambil gambar dari kamera
+    private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            takePictureLauncher.launch(takePictureIntent);
+        } else {
+            Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void saveData(){
@@ -148,7 +178,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void initActivityResultLaunchers() {
         requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
