@@ -71,7 +71,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         btnUpload = findViewById(R.id.btn_ipload);
 
         btnImage = findViewById(R.id.btn_capture);
-        
+
         // Registrasi launcher untuk mengambil gambar dari kamera
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -114,7 +114,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         btnImage.setOnClickListener(View -> dispatchTakePictureIntent(takePictureLauncher));
 
-
         initActivityResultLaunchers();
 
         findViewById(R.id.fab).setOnClickListener(view -> checkPermissionAndShowActivity(this));
@@ -131,7 +130,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 new ActivityResultContracts.RequestPermission(),
                 isGranted -> {
                     if (isGranted) {
-                        dispatchTakePictureIntent(takePictureLauncher);
+                        Toast.makeText(EquipmentTambahActivity.this, "Access Granted", Toast.LENGTH_SHORT).show();
+//                        dispatchTakePictureIntent(takePictureLauncher);
                     } else {
                         Toast.makeText(EquipmentTambahActivity.this, "Camera permission required", Toast.LENGTH_SHORT).show();
                     }
