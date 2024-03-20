@@ -38,6 +38,8 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 public class EquipmentTambahActivity extends AppCompatActivity {
 
@@ -170,6 +172,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         String kodeQR = etResult.getText().toString().trim(); // Mengambil teks dan menghapus spasi di awal dan akhir
         Boolean kondisi = tbKondisi.isChecked();
 
+        String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
         // Memeriksa apakah kodeQR tidak kosong
         if (kodeQR.isEmpty()) {
             Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
@@ -179,7 +183,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         // Custom Value ToggleButton
         String kondisiString = kondisi ? "baik" : "rusak";
 
-        DataClass dataClass = new DataClass(kodeQR, kondisiString, imageURL);
+        DataClass dataClass = new DataClass(kodeQR, kondisiString, imageURL, currentDate);
 
         FirebaseDatabase.getInstance().getReference("Input").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -2,25 +2,42 @@ package com.test.input;
 
 public class DataClass {
 
-    private String KodeQR;
-    private String KondisiTabung;
+    private String kodeQR;
+    private String kondisiTabung;
     private String dataImage;
+    private String dataDate;
+    private String key;
 
-    public DataClass(String kodeQR, String kondisiString, String dataImage){
-        this.KodeQR = kodeQR;
-        this.KondisiTabung = kondisiString;
+    public DataClass(String KodeQR, String KondisiString, String dataImage, String CurrentTime){
+        this.kodeQR = KodeQR;
+        this.kondisiTabung = KondisiString;
         this.dataImage = dataImage;
+        this.dataDate = CurrentTime;
+    }
+
+    public DataClass(){
+    }
+
+    public String getKey() {
+        return key;
+    }
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getKodeQR() {
-        return KodeQR;
+        return kodeQR;
     }
 
     public String getKondisiTabung() {
-        return KondisiTabung;
+        return kondisiTabung;
     }
 
     public String getDataImage() {
         return dataImage;
+    }
+
+    public String getDataDate() {
+        return dataDate;
     }
 }

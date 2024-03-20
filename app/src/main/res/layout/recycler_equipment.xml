@@ -15,33 +15,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/recImage"
+            android:src="@drawable/baseline_image_24"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"/>
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="30dp"
-            android:id="@+id/recycler_tv_noreg"
-            android:text="ID Registrasi"
+            android:id="@+id/recQr"
+            android:text="Kode QR"
+            android:textColor="@color/purple_200"
             android:textSize="20sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/recImage"/>
 
         <TextView
             android:layout_width="80dp"
-            android:layout_height="30dp"
-            android:id="@+id/recycler_tv_merk"
-            android:text="Merk"
-            android:layout_toEndOf="@id/recycler_tv_noreg"
+            android:layout_height="50dp"
+            android:id="@+id/tv_date"
+            android:text="Tanggal"
+            android:layout_toEndOf="@id/recQr"
             android:layout_marginTop="20dp"
-            android:layout_marginStart="170dp"
+            android:layout_marginStart="90dp"
             android:textAlignment="center"
+            android:textColor="@color/purple_200"
             android:textSize="16sp"/>
 
         <TextView
-            android:layout_width="140dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:id="@+id/recycler_tv_lokasi"
-            android:text="Lokasi"
+            android:id="@+id/tv_kondisi"
+            android:text="Kondisi"
+            android:textColor="@color/purple_200"
             android:textSize="14sp"
-            android:layout_below="@id/recycler_tv_noreg"
+            android:layout_toEndOf="@id/recImage"
+            android:layout_below="@id/recQr"
             android:layout_marginStart="20dp"
             android:maxLines="1"
             android:layout_marginBottom="12dp"/>
