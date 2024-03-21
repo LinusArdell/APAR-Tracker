@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -142,13 +143,24 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     }
 
     public void saveData(){
+
+        Log.d("EquipmentTambahActivity", "URI: " + uri);
+
+        // Memeriksa apakah URI gambar tidak null
+        if (uri == null) {
+            Toast.makeText(EquipmentTambahActivity.this, "Pilih gambar terlebih dahulu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
                 .child(uri.getLastPathSegment());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog = builder.create();
         dialog.show();
+
         storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -178,6 +190,11 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         if (kodeQR.isEmpty()) {
             Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return; // Menghentikan proses upload jika kodeQR kosong
+        }
+
+        if (uri == null) {
+            Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         // Custom Value ToggleButton
