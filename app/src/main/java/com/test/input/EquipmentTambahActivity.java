@@ -185,7 +185,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         DataClass dataClass = new DataClass(kodeQR, kondisiString, imageURL, currentDate);
 
-        FirebaseDatabase.getInstance().getReference("Input").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
