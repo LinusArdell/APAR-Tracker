@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">Input</string>
-
-    <string-array name="nama_facilities">
-        <item>Production</item>
-        <item>Warehouse</item>
-    </string-array>
-</resources>
