@@ -1,6 +1,7 @@
 package com.test.input.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.test.input.DataClass;
+import com.test.input.DetailActivity;
 import com.test.input.R;
 
 import java.util.ArrayList;
@@ -41,6 +43,20 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.recQr.setText(dataList.get(position).getKodeQR());
         holder.recKondisi.setText(dataList.get(position).getKondisiTabung());
         holder.recDate.setText(dataList.get(position).getDataDate());
+
+        holder.recCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent(context, DetailActivity.class);
+                intent.putExtra("Image", dataList.get(holder.getAdapterPosition()).getDataImage());
+                intent.putExtra("KodeQR", dataList.get(holder.getAdapterPosition()).getKodeQR());
+                intent.putExtra("Tanggal", dataList.get(holder.getAdapterPosition()).getDataDate());
+                intent.putExtra("Kondisi", dataList.get(holder.getAdapterPosition()).getKondisiTabung());
+                intent.putExtra("Key", dataList.get(holder.getAdapterPosition()).getKey());
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

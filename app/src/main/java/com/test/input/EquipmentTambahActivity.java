@@ -232,7 +232,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         qrCodeLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() == null) {
-                Toast.makeText(this, "Result is null", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
             } else {
                 setResult(result.getContents());
             }
