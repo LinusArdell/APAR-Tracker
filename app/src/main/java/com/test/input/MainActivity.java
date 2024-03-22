@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,13 +37,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    FloatingActionButton fab, btnQR;
+    FloatingActionButton fab;
     DatabaseReference databaseReference;
     ValueEventListener eventListener;
     RecyclerView recyclerView;
     List<DataClass> dataList;
     EquipmentAdapter adapter;
     SearchView searchView;
+
+    private FirebaseAuth auth;
 
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
     private ActivityResultLauncher<String> requestPermissionLauncher;

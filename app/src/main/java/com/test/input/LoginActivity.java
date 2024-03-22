@@ -2,9 +2,13 @@ package com.test.input;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,11 +34,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private ProgressDialog processDialog;
+    private static final int PERMISSION_REQUEST_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        auth = FirebaseAuth.getInstance();
+
+        FirebaseUser user = auth.getCurrentUser();
+
+        if(user != null){
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
+        checkAndRequestPermissions();
 
         Email = (EditText) findViewById(R.id.emailSignIn);
         Password = (EditText) findViewById(R.id.password);
@@ -60,6 +77,27 @@ public class LoginActivity extends AppCompatActivity {
                 resetpasword();
             }
         });
+    }
+
+    // Memeriksa dan meminta izin penyimpanan dan kamera
+    private void checkAndRequestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permissions denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void validate(String userEmail, String userPassword){

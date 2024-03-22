@@ -31,6 +31,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -50,10 +52,11 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private ImageView uploadGambar;
     String imageURL;
     Uri uri;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     ImageButton btnImage;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
+
+    private FirebaseAuth firebaseAuth;
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -66,6 +69,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipment_tambah);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         // Inisialisasi komponen UI
         etResult = findViewById(R.id.et_result);
@@ -184,6 +188,9 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         String kodeQR = etResult.getText().toString().trim(); // Mengambil teks dan menghapus spasi di awal dan akhir
         Boolean kondisi = tbKondisi.isChecked();
 
+        final FirebaseUser users = firebaseAuth.getCurrentUser();
+        String finalUser = users.getEmail();
+
         String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
         // Memeriksa apakah kodeQR tidak kosong
@@ -200,7 +207,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         // Custom Value ToggleButton
         String kondisiString = kondisi ? "baik" : "rusak";
 
-        DataClass dataClass = new DataClass(kodeQR, kondisiString, imageURL, currentDate);
+        DataClass dataClass = new DataClass(kodeQR, kondisiString, imageURL, currentDate, finalUser);
 
         FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -8,14 +8,25 @@ public class DataClass {
     private String dataDate;
     private String key;
 
-    public DataClass(String KodeQR, String KondisiString, String dataImage, String CurrentTime){
+    private String user;
+
+    public DataClass(String KodeQR, String KondisiString, String dataImage, String CurrentTime, String user){
         this.kodeQR = KodeQR;
         this.kondisiTabung = KondisiString;
         this.dataImage = dataImage;
         this.dataDate = CurrentTime;
+        this.user = user;
     }
 
     public DataClass(){
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getKey() {

@@ -30,6 +30,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -53,6 +55,7 @@ public class UpdateActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     StorageReference storageReference;
 
+    private FirebaseAuth firebaseAuth;
     SwitchMaterial switchKondisi;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
@@ -68,6 +71,8 @@ public class UpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         updateButton = findViewById(R.id.btn_update);
 
@@ -191,6 +196,9 @@ public class UpdateActivity extends AppCompatActivity {
         kodeQr = updateQr.getText().toString().trim();
         Boolean kondisi = switchKondisi.isChecked();
 
+        final FirebaseUser users = firebaseAuth.getCurrentUser();
+        String finalUser = users.getEmail();
+
         String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
         // Memeriksa apakah kodeQR tidak kosong
@@ -206,7 +214,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         String kondisiString = kondisi ? "baik" : "rusak";
 
-        DataClass dataClass = new DataClass(kodeQr, kondisiString, imageUrl, currentDate);
+        DataClass dataClass = new DataClass(kodeQr, kondisiString, imageUrl, currentDate, finalUser);
         databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
