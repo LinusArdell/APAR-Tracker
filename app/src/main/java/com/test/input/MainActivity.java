@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setResult(String contents) {
-        searchList(contents);
+        searchView.setQuery(contents, true);
     }
 
     private void showCamera() {
