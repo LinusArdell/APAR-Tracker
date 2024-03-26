@@ -51,8 +51,8 @@
         <TextView
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_kondisi"
-            android:text="Kondisi"
+            android:id="@+id/tv_user"
+            android:text="User"
             android:textColor="@color/purple_200"
             android:textSize="14sp"
             android:layout_toEndOf="@id/recImage"

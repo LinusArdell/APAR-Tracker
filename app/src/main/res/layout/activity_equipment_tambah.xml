@@ -1,75 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EquipmentTambahActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center"
-        android:id="@+id/layout_result">
-
-        <ImageView
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:src="@drawable/baseline_image_24"
-            android:id="@+id/iv_image"/>
-
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:src="@drawable/baseline_camera_alt_24"
-            android:id="@+id/btn_capture"/>
-
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:hint="Masukkan Kode QR"
-            android:id="@+id/et_result"/>
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/toggle_kondisi"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Kondisi"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <Button
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:text="Upload"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/purple_200"
-            android:id="@+id/btn_ipload"/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <com.google.android.material.bottomappbar.BottomAppBar
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:backgroundTint="@color/purple_200"
-        app:fabCradleMargin="10dp"
-        app:fabCradleRoundedCornerRadius="10dp"
-        app:fabCradleVerticalOffset="10dp"
-        android:id="@+id/bottom_appBar"/>
+        android:padding="50dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="30dp">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="QRcode"
-        app:backgroundTint="@color/purple_200"
-        app:layout_anchor="@id/bottom_appBar"
-        android:src="@drawable/baseline_qr_code_scanner_24"
-        android:tint="@color/white"
-        android:id="@+id/fab"/>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:id="@+id/layout_result">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:src="@drawable/baseline_image_24"
+                android:id="@+id/iv_image"/>
+
+            <ImageButton
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_camera_alt_24"
+                android:id="@+id/btn_capture"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Masukkan Kode QR"
+                android:layout_gravity="left"
+                android:id="@+id/et_result"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Lokasi"
+                android:layout_gravity="left"
+                android:id="@+id/et_lokasi"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text=" Merk APAR"
+                    android:textSize="17dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="left"
+                    android:id="@+id/tv_merk"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/tv_merk"
+                    android:layout_marginLeft="20dp"
+                    android:entries="@array/merk_apar"
+                    android:id="@+id/upload_merk"/>
+            </RelativeLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="left"
+                android:hint="Berat Tabung"
+                android:inputType="numberDecimal"
+                android:id="@+id/upload_berat"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text=" Jenis APAR"
+                    android:textSize="17dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="left"
+                    android:id="@+id/tv_jenis"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/tv_jenis"
+                    android:layout_marginLeft="20dp"
+                    android:entries="@array/jenis_apar"
+                    android:id="@+id/upload_jenis"/>
+
+            </RelativeLayout>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Isi Tabung (Baik / Beku)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_isi"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tekanan (Cukup / Kurang)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_tekanan"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kesesuaian Berat (Cukup / Kurang)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_kesesuaian"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kondisi Tabung (Baik / Berkarat)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_kondisi"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kondisi Selang (Baik / Rusak)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_selang"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pin / Segel (Baik / Rusak)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_pin"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Keterangan"
+                android:id="@+id/upload_keterangan"/>
+
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Upload"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/purple_200"
+                android:id="@+id/btn_ipload"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="40dp"
+                android:backgroundTint="@color/purple_200"
+                app:tint = "@color/white"
+                android:src="@drawable/baseline_qr_code_scanner_24" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.cardview.widget.CardView>
+
+
+</ScrollView>

@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,8 +47,9 @@ import java.util.Calendar;
 
 public class EquipmentTambahActivity extends AppCompatActivity {
 
-    private EditText etResult;
-    private SwitchMaterial tbKondisi;
+    private EditText etResult, etLokasi, etBerat, etketerangan;
+    private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
+    private Spinner merkAPAR, jenisAPAR;
     private Button btnUpload;
     private ImageView uploadGambar;
     String imageURL;
@@ -73,13 +75,24 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         // Inisialisasi komponen UI
         etResult = findViewById(R.id.et_result);
-        tbKondisi = findViewById(R.id.toggle_kondisi);
         uploadGambar = findViewById(R.id.iv_image);
         btnUpload = findViewById(R.id.btn_ipload);
-
         btnImage = findViewById(R.id.btn_capture);
 
-        // Registrasi launcher untuk mengambil gambar dari kamera
+        isiTabung = findViewById(R.id.upload_isi);
+        tekananTabung = findViewById(R.id.upload_tekanan);
+        kesesuaianBerat = findViewById(R.id.upload_kesesuaian);
+        kondisiTabung = findViewById(R.id.upload_kondisi);
+        kondisiSelang = findViewById(R.id.upload_selang);
+        kondisiPin = findViewById(R.id.upload_pin);
+
+        merkAPAR = findViewById(R.id.upload_merk);
+        jenisAPAR = findViewById(R.id.upload_jenis);
+
+        etketerangan = findViewById(R.id.upload_keterangan);
+        etLokasi = findViewById(R.id.et_lokasi);
+        etBerat = findViewById(R.id.upload_berat);
+
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -185,29 +198,44 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
     //  set value
     private void uploadData() {
-        String kodeQR = etResult.getText().toString().trim(); // Mengambil teks dan menghapus spasi di awal dan akhir
-        Boolean kondisi = tbKondisi.isChecked();
+        String kodeQR = etResult.getText().toString().trim();
+        String lokasi = etLokasi.getText().toString();
+        String berat = etBerat.getText().toString();
+        String keterangan = etketerangan.getText().toString();
+
+        String MerkAPAR = merkAPAR.getSelectedItem().toString();
+        String JenisAPAR = jenisAPAR.getSelectedItem().toString();
+
+        Boolean isitabung = isiTabung.isChecked();
+        Boolean tekanan = tekananTabung.isChecked();
+        Boolean kesesuaian = kesesuaianBerat.isChecked();
+        Boolean kondisi = kondisiTabung.isChecked();
+        Boolean selang = kondisiSelang.isChecked();
+        Boolean pin = kondisiPin.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
         String finalUser = users.getEmail();
 
         String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
-        // Memeriksa apakah kodeQR tidak kosong
         if (kodeQR.isEmpty()) {
             Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            return; // Menghentikan proses upload jika kodeQR kosong
+            return;
         }
-
         if (uri == null) {
             Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Custom Value ToggleButton
-        String kondisiString = kondisi ? "baik" : "rusak";
+        String isiString = isitabung ? "Baik" : "Beku";
+        String tekananString = tekanan ? "Cukup" : "Kurang";
+        String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+        String kondisiString = kondisi ? "Baik" : "Berkarat";
+        String selangString = selang ? "Baik" : "Rusak";
+        String pinString = pin ? "Baik" : "Rusak";
 
-        DataClass dataClass = new DataClass(kodeQR, kondisiString, imageURL, currentDate, finalUser);
+        DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser);
 
         FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

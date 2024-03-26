@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,51 +8,162 @@
     android:orientation="vertical"
     tools:context=".DetailActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/detail_qr"
-        android:text="Kode QR"
-        android:layout_marginTop="14dp"
-        android:textSize="24sp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="12dp"
-        android:textColor="@color/purple_200"/>
-
-    <ImageView
-        android:layout_width="400dp"
-        android:layout_height="200dp"
-        android:id="@+id/detail_image"
-        android:padding="8dp"
-        android:layout_gravity="center"
-        android:src="@drawable/baseline_image_24"
-        android:scaleType="fitXY"/>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="20dp"
-        android:text="Tanggal"
-        android:layout_gravity="center"
-        android:id="@+id/detail_tanggal"
-        android:textSize="18sp"
-        android:textColor="@color/purple_200"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="20dp"
-        android:text="Kondisi"
-        android:layout_gravity="center"
-        android:id="@+id/detail_kondisi"
-        android:textSize="18sp"
-        android:textColor="@color/purple_200"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_qr"
+            android:text="Kode QR"
+            android:layout_marginTop="14dp"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/purple_200"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="400dp"
+            android:layout_height="200dp"
+            android:id="@+id/detail_image"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_image_24"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Tanggal"
+            android:layout_gravity="center"
+            android:id="@+id/detail_tanggal"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Lokasi"
+            android:layout_gravity="center"
+            android:id="@+id/detail_lokasi"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Merk APAR"
+            android:layout_gravity="center"
+            android:id="@+id/detail_merk"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Berat"
+            android:layout_gravity="center"
+            android:id="@+id/detail_berat"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Jenis"
+            android:layout_gravity="center"
+            android:id="@+id/detail_jenis"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Isi Tabung"
+            android:layout_gravity="center"
+            android:id="@+id/detail_isi"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Tekanan"
+            android:layout_gravity="center"
+            android:id="@+id/detail_tekanan"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Kesesuaian Berat"
+            android:layout_gravity="center"
+            android:id="@+id/detail_kesesuaian"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Kondisi Tabung"
+            android:layout_gravity="center"
+            android:id="@+id/detail_kondisi"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Kondisi Selang"
+            android:layout_gravity="center"
+            android:id="@+id/detail_selang"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Pin / Segel"
+            android:layout_gravity="center"
+            android:id="@+id/detail_pin"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:text="Keterangan"
+            android:layout_gravity="center"
+            android:id="@+id/detail_keterangan"
+            android:textSize="18sp"
+            android:textColor="@color/purple_200"/>
 
         <com.github.clans.fab.FloatingActionMenu
             android:layout_width="wrap_content"
@@ -88,6 +199,6 @@
 
         </com.github.clans.fab.FloatingActionMenu>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

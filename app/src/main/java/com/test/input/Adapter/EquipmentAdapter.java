@@ -41,7 +41,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Glide.with(context).load(dataList.get(position).getDataImage()).into(holder.recImage);
         holder.recQr.setText(dataList.get(position).getKodeQR());
-        holder.recKondisi.setText(dataList.get(position).getKondisiTabung());
+        holder.recUser.setText(dataList.get(position).getUser());
         holder.recDate.setText(dataList.get(position).getDataDate());
 
         holder.recCard.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +51,20 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
                 intent.putExtra("Image", dataList.get(holder.getAdapterPosition()).getDataImage());
                 intent.putExtra("KodeQR", dataList.get(holder.getAdapterPosition()).getKodeQR());
                 intent.putExtra("Tanggal", dataList.get(holder.getAdapterPosition()).getDataDate());
-                intent.putExtra("Kondisi", dataList.get(holder.getAdapterPosition()).getKondisiTabung());
+                intent.putExtra("User", dataList.get(holder.getAdapterPosition()).getUser());
+
+                intent.putExtra("Lokasi", dataList.get(holder.getAdapterPosition()).getLokasiTabung());
+                intent.putExtra("Merk", dataList.get(holder.getAdapterPosition()).getMerkAPAR());
+                intent.putExtra("Berat", dataList.get(holder.getAdapterPosition()).getBeratTabung());
+                intent.putExtra("Jenis", dataList.get(holder.getAdapterPosition()).getJenisAPAR());
+                intent.putExtra("IsiTabung", dataList.get(holder.getAdapterPosition()).getIsiTabung());
+                intent.putExtra("Tekanan", dataList.get(holder.getAdapterPosition()).getTekananTabung());
+                intent.putExtra("Kesesuaian", dataList.get(holder.getAdapterPosition()).getKesesuaianBerat());
+                intent.putExtra("KondisiTabung", dataList.get(holder.getAdapterPosition()).getKondisiTabung());
+                intent.putExtra("KondisiSelang", dataList.get(holder.getAdapterPosition()).getKondisiSelang());
+                intent.putExtra("KondisiPin", dataList.get(holder.getAdapterPosition()).getKondisiPin());
+                intent.putExtra("Keterangan", dataList.get(holder.getAdapterPosition()).getKeterangan());
+
                 intent.putExtra("Key", dataList.get(holder.getAdapterPosition()).getKey());
 
                 context.startActivity(intent);
@@ -72,14 +85,17 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
 class MyViewHolder extends RecyclerView.ViewHolder{
     ImageView recImage;
-    TextView recQr, recKondisi, recDate;
+    TextView recQr, recUser, recDate;
     CardView recCard;
+
+    TextView lokasi, merk, berat, jenis, isitabung, tekanan, kesesuaian, kondisiTabung, kondisiSelang, kondisiPin, keterangan;
+
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
         recImage = itemView.findViewById(R.id.recImage);
         recCard = itemView.findViewById(R.id.recycler_equipment_card);
         recQr = itemView.findViewById(R.id.recQr);
-        recKondisi = itemView.findViewById(R.id.tv_kondisi);
+        recUser = itemView.findViewById(R.id.tv_user);
         recDate = itemView.findViewById(R.id.tv_date);
     }
 }

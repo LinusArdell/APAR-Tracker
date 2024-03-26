@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -48,7 +49,7 @@ public class UpdateActivity extends AppCompatActivity {
     Button updateButton;
     ImageButton btnCapture;
     EditText updateQr;
-    String kodeQr, lang;
+    String kodeQr;
     String imageUrl;
     String key, oldImageURL;
     Uri uri;
@@ -58,6 +59,10 @@ public class UpdateActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     SwitchMaterial switchKondisi;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+
+    private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
+    private Spinner merkAPAR, jenisAPAR;
+    private EditText etLokasi, etBerat, etketerangan;
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -72,15 +77,25 @@ public class UpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        merkAPAR = findViewById(R.id.update_merk);
+        jenisAPAR = findViewById(R.id.update_jenis);
 
-        updateButton = findViewById(R.id.btn_update);
+        etLokasi = findViewById(R.id.update_lokasi);
+        etBerat = findViewById(R.id.update_berat);
+        etketerangan = findViewById(R.id.update_keterangan);
 
-        updateImage = findViewById(R.id.update_img);
-        switchKondisi = findViewById(R.id.update_kondisi);
-        updateQr = findViewById(R.id.update_qr);
+        isiTabung = findViewById(R.id.update_tabung);
+        tekananTabung = findViewById(R.id.update_tekanan);
+        kesesuaianBerat = findViewById(R.id.update_kesesuaian);
+        kondisiTabung = findViewById(R.id.update_tabung);
+        kondisiSelang = findViewById(R.id.update_selang);
+        kondisiPin = findViewById(R.id.update_pin);
 
         btnCapture = findViewById(R.id.btn_capture);
+        firebaseAuth = FirebaseAuth.getInstance();
+        updateButton = findViewById(R.id.btn_update);
+        updateImage = findViewById(R.id.update_image);
+        updateQr = findViewById(R.id.update_qr);
 
         ActivityResultLauncher<Intent> activityResultLauncher= registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -96,10 +111,8 @@ public class UpdateActivity extends AppCompatActivity {
                     }
                 });
 
-        // Registrasi launcher untuk mengambil gambar dari kamera
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
+                new ActivityResultContracts.StartActivityForResult(), result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Bundle extras = result.getData().getExtras();
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -116,14 +129,52 @@ public class UpdateActivity extends AppCompatActivity {
         if (bundle != null){
             Glide.with(UpdateActivity.this).load(bundle.getString("Image")).into(updateImage);
             updateQr.setText(bundle.getString("KodeQR"));
-            String kondisiString = bundle.getString("Kondisi");
-            boolean kondisiBoolean = kondisiString.equals("baik");
+            etLokasi.setText(bundle.getString("Lokasi"));
+            etBerat.setText(bundle.getString("Berat"));
+            etketerangan.setText(bundle.getString("Keterangan"));
 
-            switchKondisi.setChecked(kondisiBoolean);
+            String merkAparValue = bundle.getString("Merk");
+            String jenisAparValue = bundle.getString("Jenis");
+
+            if (merkAparValue != null) {
+                int merkAparPosition = getIndexSpinner(merkAPAR, merkAparValue);
+                if (merkAparPosition != -1) {
+                    merkAPAR.setSelection(merkAparPosition);
+                }
+            }
+
+            if (jenisAparValue != null) {
+                int jenisAparPosition = getIndexSpinner(jenisAPAR, jenisAparValue);
+                if (jenisAparPosition != -1) {
+                    jenisAPAR.setSelection(jenisAparPosition);
+                }
+            }
+
+            String isiTabungString = bundle.getString("IsiTabung");
+            String tekananString = bundle.getString("Tekanan");
+            String kesesuaianString = bundle.getString("Kesesuaian");
+            String kondisiString = bundle.getString("KondisiTabung");
+            String selangString = bundle.getString("KondisiSelang");
+            String pinString = bundle.getString("KondisiPin");
+
+            boolean isiTabungBoolean = isiTabungString.equals("Baik");
+            boolean tekananBoolean = tekananString.equals("Cukup");
+            boolean kesesuaianBoolean = kesesuaianString.equals("Cukup");
+            boolean kondisiBoolean = kondisiString.equals("Baik");
+            boolean selangBoolean = selangString.equals("Baik");
+            boolean pinBoolean = pinString.equals("Baik");
+
+            isiTabung.setChecked(isiTabungBoolean);
+            tekananTabung.setChecked(tekananBoolean);
+            kesesuaianBerat.setChecked(kesesuaianBoolean);
+            kondisiTabung.setChecked(kondisiBoolean);
+            kondisiSelang.setChecked(selangBoolean);
+            kondisiPin.setChecked(pinBoolean);
 
             key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
         }
+
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
 
@@ -147,8 +198,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         // Inisialisasi ActivityResultLauncher untuk izin kamera
         requestPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
+                new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         Toast.makeText(UpdateActivity.this, "Access Granted", Toast.LENGTH_SHORT).show();
 //                        dispatchTakePictureIntent(takePictureLauncher);
@@ -157,6 +207,15 @@ public class UpdateActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private int getIndexSpinner(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void saveData(){
@@ -194,14 +253,26 @@ public class UpdateActivity extends AppCompatActivity {
 
     public void updateData(){
         kodeQr = updateQr.getText().toString().trim();
-        Boolean kondisi = switchKondisi.isChecked();
+
+        String lokasi = etLokasi.getText().toString();
+        String berat = etBerat.getText().toString();
+        String keterangan = etketerangan.getText().toString();
+
+        String MerkAPAR = merkAPAR.getSelectedItem().toString();
+        String JenisAPAR = jenisAPAR.getSelectedItem().toString();
+
+        Boolean isitabung = isiTabung.isChecked();
+        Boolean tekanan = tekananTabung.isChecked();
+        Boolean kesesuaian = kesesuaianBerat.isChecked();
+        Boolean kondisi = kondisiTabung.isChecked();
+        Boolean selang = kondisiSelang.isChecked();
+        Boolean pin = kondisiPin.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
         String finalUser = users.getEmail();
 
         String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
-        // Memeriksa apakah kodeQR tidak kosong
         if (kodeQr.isEmpty()) {
             Toast.makeText(UpdateActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return; // Menghentikan proses upload jika kodeQR kosong
@@ -212,9 +283,15 @@ public class UpdateActivity extends AppCompatActivity {
             return;
         }
 
-        String kondisiString = kondisi ? "baik" : "rusak";
+        String isiString = isitabung ? "Baik" : "Beku";
+        String tekananString = tekanan ? "Cukup" : "Kurang";
+        String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+        String kondisiString = kondisi ? "Baik" : "Berkarat";
+        String selangString = selang ? "Baik" : "Rusak";
+        String pinString = pin ? "Baik" : "Rusak";
 
-        DataClass dataClass = new DataClass(kodeQr, kondisiString, imageUrl, currentDate, finalUser);
+        DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                kondisiString,selangString, pinString, keterangan, imageUrl, currentDate, finalUser);
         databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -236,7 +313,6 @@ public class UpdateActivity extends AppCompatActivity {
         });
     }
 
-    // Metode untuk mengirimkan intent untuk mengambil gambar dari kamera
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {

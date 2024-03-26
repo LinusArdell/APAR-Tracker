@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Input</string>
+
+    <string-array name="merk_apar">
+        <item> Appron </item>
+        <item> Yamato </item>
+        <item> Garra Fire </item>
+        <item> 321 Stop </item>
+        <item> Gunnebo </item>
+        <item> Hercules </item>
+        <item> Chubb </item>
+        <item> Pyrosafe </item>
+        <item> Pina </item>
+        <item> Altek </item>
+        <item> Holly Fire </item>
+    </string-array>
+
+    <string-array name="jenis_apar">
+        <item> Multi Purpose Dry Chemical </item>
+        <item> Carbondioxide </item>
+        <item> Halotron </item>
+        <item> HF 11 </item>
+        <item> Dry chemical powder </item>
+    </string-array>
 </resources>
