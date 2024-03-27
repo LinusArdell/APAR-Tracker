@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -48,7 +49,7 @@ import java.util.Calendar;
 public class EquipmentTambahActivity extends AppCompatActivity {
 
     private EditText etResult, etLokasi, etBerat, etketerangan;
-    private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
+    private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPAR, jenisAPAR;
     private Button btnUpload;
     private ImageView uploadGambar;
@@ -67,6 +68,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         return Uri.parse(path);
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,24 +76,24 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Inisialisasi komponen UI
-        etResult = findViewById(R.id.et_result);
-        uploadGambar = findViewById(R.id.iv_image);
-        btnUpload = findViewById(R.id.btn_ipload);
+        etResult = findViewById(R.id.upload_qr);
+        uploadGambar = findViewById(R.id.upload_image);
+        btnUpload = findViewById(R.id.btn_upload);
         btnImage = findViewById(R.id.btn_capture);
-
         isiTabung = findViewById(R.id.upload_isi);
         tekananTabung = findViewById(R.id.upload_tekanan);
         kesesuaianBerat = findViewById(R.id.upload_kesesuaian);
         kondisiTabung = findViewById(R.id.upload_kondisi);
         kondisiSelang = findViewById(R.id.upload_selang);
         kondisiPin = findViewById(R.id.upload_pin);
-
         merkAPAR = findViewById(R.id.upload_merk);
         jenisAPAR = findViewById(R.id.upload_jenis);
-
         etketerangan = findViewById(R.id.upload_keterangan);
-        etLokasi = findViewById(R.id.et_lokasi);
+        etLokasi = findViewById(R.id.upload_lokasi);
         etBerat = findViewById(R.id.upload_berat);
+
+        kondisiNozzle = findViewById(R.id.upload_nozzle);
+        posisiTabung = findViewById(R.id.upload_posisi);
 
         String qrResult = getIntent().getStringExtra("KodeQR");
 
@@ -218,6 +220,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         Boolean kondisi = kondisiTabung.isChecked();
         Boolean selang = kondisiSelang.isChecked();
         Boolean pin = kondisiPin.isChecked();
+        Boolean nozzle = kondisiNozzle.isChecked();
+        Boolean posisi = posisiTabung.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
         String finalUser = users.getEmail();
@@ -239,9 +243,11 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         String kondisiString = kondisi ? "Baik" : "Berkarat";
         String selangString = selang ? "Baik" : "Rusak";
         String pinString = pin ? "Baik" : "Rusak";
+        String nozzleString = nozzle ? "Baik" : "Tersumbat";
+        String posisiString = posisi ? "Baik" : "Terhalang";
 
         DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser);
+                kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser, nozzleString, posisiString);
 
         FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

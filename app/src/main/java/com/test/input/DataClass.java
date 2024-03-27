@@ -9,10 +9,27 @@ public class DataClass implements Serializable {
     private String dataDate;
     private String key;
     private String user;
-    private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan;
+    private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
     private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
 
-    public DataClass (String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR, String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang, String kondisiPin, String keterangan, String dataImage, String dataDate, String user){
+    public DataClass (String kodeQR,
+                      String lokasiTabung,
+                      String merkAPAR,
+                      String beratTabung,
+                      String jenisAPAR,
+                      String isiTabung,
+                      String Tekanan,
+                      String kesesuaianBerat,
+                      String kondisiTabung,
+                      String kondisiSelang,
+                      String kondisiPin,
+                      String keterangan,
+                      String dataImage,
+                      String dataDate,
+                      String user,
+                      String kondisiNozzle,
+                      String posisiTabung){
+
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
         this.merkAPAR = merkAPAR;
@@ -27,10 +44,21 @@ public class DataClass implements Serializable {
         this.keterangan = keterangan;
         this.dataDate = dataDate;
         this.dataImage = dataImage;
+        this.kondisiNozzle = kondisiNozzle;
+        this.posisiTabung = posisiTabung;
+
         this.user = user;
     }
 
     public DataClass(){
+    }
+
+    public String getKondisiNozzle() {
+        return kondisiNozzle;
+    }
+
+    public String getPosisiTabung() {
+        return posisiTabung;
     }
 
     public String getKeterangan() {

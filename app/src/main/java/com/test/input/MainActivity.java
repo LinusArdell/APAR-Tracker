@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("Lokasi", data.getLokasiTabung().toString());
                         intent.putExtra("Merk", data.getMerkAPAR().toString());
                         intent.putExtra("Berat", data.getBeratTabung().toString());
-                        intent.putExtra("Jenis", data.getIsiTabung().toString());
+                        intent.putExtra("Jenis", data.getJenisAPAR().toString());
                         intent.putExtra("IsiTabung", data.getIsiTabung().toString());
                         intent.putExtra("Tekanan", data.getTekananTabung().toString());
                         intent.putExtra("Kesesuaian", data.getKesesuaianBerat().toString());
@@ -196,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("KondisiPin", data.getKondisiPin().toString());
                         intent.putExtra("Keterangan", data.getKeterangan().toString());
                         intent.putExtra("User", data.getUser().toString());
+
+                        intent.putExtra("Nozzle", data.getKondisiNozzle().toString());
+                        intent.putExtra("Posisi", data.getPosisiTabung().toString());
 
                         startActivity(intent);
                     }

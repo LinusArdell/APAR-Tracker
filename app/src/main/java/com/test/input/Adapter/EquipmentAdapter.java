@@ -68,6 +68,9 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
                 intent.putExtra("KondisiPin", dataList.get(holder.getAdapterPosition()).getKondisiPin());
                 intent.putExtra("Keterangan", dataList.get(holder.getAdapterPosition()).getKeterangan());
 
+                intent.putExtra("Nozzle", dataList.get(holder.getAdapterPosition()).getKondisiNozzle());
+                intent.putExtra("Posisi", dataList.get(holder.getAdapterPosition()).getPosisiTabung());
+
                 intent.putExtra("Key", dataList.get(holder.getAdapterPosition()).getKey());
 
                 context.startActivity(intent);

@@ -61,7 +61,7 @@ public class UpdateActivity extends AppCompatActivity {
     SwitchMaterial switchKondisi;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
-    private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
+    private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPAR, jenisAPAR;
     private EditText etLokasi, etBerat, etketerangan;
     private TextView tvQR;
@@ -81,24 +81,22 @@ public class UpdateActivity extends AppCompatActivity {
 
         merkAPAR = findViewById(R.id.update_merk);
         jenisAPAR = findViewById(R.id.update_jenis);
-
         etLokasi = findViewById(R.id.update_lokasi);
         etBerat = findViewById(R.id.update_berat);
         etketerangan = findViewById(R.id.update_keterangan);
-
-        isiTabung = findViewById(R.id.update_tabung);
+        isiTabung = findViewById(R.id.update_isi);
         tekananTabung = findViewById(R.id.update_tekanan);
         kesesuaianBerat = findViewById(R.id.update_kesesuaian);
         kondisiTabung = findViewById(R.id.update_tabung);
         kondisiSelang = findViewById(R.id.update_selang);
         kondisiPin = findViewById(R.id.update_pin);
-
         btnCapture = findViewById(R.id.btn_capture);
         firebaseAuth = FirebaseAuth.getInstance();
         updateButton = findViewById(R.id.btn_update);
         updateImage = findViewById(R.id.update_image);
 
-//        updateQr = findViewById(R.id.update_qr);
+        kondisiNozzle = findViewById(R.id.update_nozzle);
+        posisiTabung = findViewById(R.id.update_posisi);
 
         tvQR = findViewById(R.id.tv_qr_update);
 
@@ -166,6 +164,9 @@ public class UpdateActivity extends AppCompatActivity {
             String selangString = bundle.getString("KondisiSelang");
             String pinString = bundle.getString("KondisiPin");
 
+            String nozzleString = bundle.getString("Nozzle");
+            String posisiString = bundle.getString("Posisi");
+
             boolean isiTabungBoolean = isiTabungString.equals("Baik");
             boolean tekananBoolean = tekananString.equals("Cukup");
             boolean kesesuaianBoolean = kesesuaianString.equals("Cukup");
@@ -173,12 +174,18 @@ public class UpdateActivity extends AppCompatActivity {
             boolean selangBoolean = selangString.equals("Baik");
             boolean pinBoolean = pinString.equals("Baik");
 
+            boolean nozzleBoolean = nozzleString.equals("Baik");
+            boolean posisiBoolean = posisiString.equals("Baik");
+
             isiTabung.setChecked(isiTabungBoolean);
             tekananTabung.setChecked(tekananBoolean);
             kesesuaianBerat.setChecked(kesesuaianBoolean);
             kondisiTabung.setChecked(kondisiBoolean);
             kondisiSelang.setChecked(selangBoolean);
             kondisiPin.setChecked(pinBoolean);
+
+            kondisiNozzle.setChecked(nozzleBoolean);
+            posisiTabung.setChecked(posisiBoolean);
 
             key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
@@ -277,6 +284,9 @@ public class UpdateActivity extends AppCompatActivity {
         Boolean selang = kondisiSelang.isChecked();
         Boolean pin = kondisiPin.isChecked();
 
+        Boolean nozzle = kondisiNozzle.isChecked();
+        Boolean posisi = posisiTabung.isChecked();
+
         final FirebaseUser users = firebaseAuth.getCurrentUser();
         String finalUser = users.getEmail();
 
@@ -299,8 +309,11 @@ public class UpdateActivity extends AppCompatActivity {
         String selangString = selang ? "Baik" : "Rusak";
         String pinString = pin ? "Baik" : "Rusak";
 
+        String nozzleString = nozzle ? "Baik" : "Tersumbat";
+        String posisiString = posisi ? "Baik" : "Terhalang";
+
         DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                kondisiString,selangString, pinString, keterangan, imageUrl, currentDate, finalUser);
+                kondisiString,selangString, pinString, keterangan, imageUrl, currentDate, finalUser, nozzleString, posisiString);
         databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:src="@drawable/baseline_image_24"
-                android:id="@+id/iv_image"/>
+                android:id="@+id/upload_image"/>
 
             <ImageButton
                 android:layout_width="80dp"
@@ -40,14 +40,14 @@
                 android:layout_height="50dp"
                 android:hint="Masukkan Kode QR"
                 android:layout_gravity="left"
-                android:id="@+id/et_result"/>
+                android:id="@+id/upload_qr"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="Lokasi"
                 android:layout_gravity="left"
-                android:id="@+id/et_lokasi"/>
+                android:id="@+id/upload_lokasi"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -105,34 +105,7 @@
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Isi Tabung (Baik / Beku)"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/upload_isi"/>
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tekanan (Cukup / Kurang)"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/upload_tekanan"/>
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Kesesuaian Berat (Cukup / Kurang)"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/upload_kesesuaian"/>
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Kondisi Tabung (Baik / Berkarat)"
+                android:text="Badan tabung tidak berkarat (Berkarat / Baik)"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -141,7 +114,16 @@
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Kondisi Selang (Baik / Rusak)"
+                android:text="Posisi tabung tidak terhalangi barang (Terhalang / Baik)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_posisi"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kondisi Selang (Rusak / Baik)"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -150,11 +132,47 @@
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pin / Segel (Baik / Rusak)"
+                android:text="Segel Pin terpasang baik (Rusak / Baik)"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/upload_pin"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mulut nozzle tidak tersumbat (Tersumbat / Baik)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_nozzle"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jarum Indikator menunjukkan tekanan cukup     (Kurang / Cukup)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_tekanan"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Powder tidak mengendap (Beku / Baik)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_isi"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selisih berat tabung (Kurang / Cukup)"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/upload_kesesuaian"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -168,7 +186,7 @@
                 android:text="Upload"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/purple_200"
-                android:id="@+id/btn_ipload"/>
+                android:id="@+id/btn_upload"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"

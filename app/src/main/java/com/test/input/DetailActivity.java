@@ -30,7 +30,7 @@ public class DetailActivity extends AppCompatActivity {
     String imageUrl = "";
 
     private TextView isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
-    private TextView merkAPAR, jenisAPAR;
+    private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
     private TextView etLokasi, etBerat, etketerangan;
 
     @SuppressLint("MissingInflatedId")
@@ -57,6 +57,9 @@ public class DetailActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         editButton = findViewById(R.id.editButton);
 
+        kondisiNozzle = findViewById(R.id.detail_nozzle);
+        posisiTabung = findViewById(R.id.detail_posisi);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
             detailKodeQR.setText(bundle.getString("KodeQR"));
@@ -73,6 +76,9 @@ public class DetailActivity extends AppCompatActivity {
             etLokasi.setText(bundle.getString("Lokasi"));
             etBerat.setText(bundle.getString("Berat"));
             etketerangan.setText(bundle.getString("Keterangan"));
+
+            kondisiNozzle.setText(bundle.getString("Nozzle"));
+            posisiTabung.setText(bundle.getString("Posisi"));
 
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
@@ -115,6 +121,9 @@ public class DetailActivity extends AppCompatActivity {
                         .putExtra("KondisiSelang", kondisiSelang.getText().toString())
                         .putExtra("KondisiPin", kondisiPin.getText().toString())
                         .putExtra("Keterangan", etketerangan.getText().toString())
+
+                        .putExtra("Nozzle", kondisiNozzle.getText().toString())
+                        .putExtra("Posisi", posisiTabung.getText().toString())
 
                         .putExtra("Image", imageUrl)
                         .putExtra("Key", key);
