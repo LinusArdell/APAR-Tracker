@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -63,6 +64,7 @@ public class UpdateActivity extends AppCompatActivity {
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
     private Spinner merkAPAR, jenisAPAR;
     private EditText etLokasi, etBerat, etketerangan;
+    private TextView tvQR;
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -95,7 +97,10 @@ public class UpdateActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         updateButton = findViewById(R.id.btn_update);
         updateImage = findViewById(R.id.update_image);
-        updateQr = findViewById(R.id.update_qr);
+
+//        updateQr = findViewById(R.id.update_qr);
+
+        tvQR = findViewById(R.id.tv_qr_update);
 
         ActivityResultLauncher<Intent> activityResultLauncher= registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -127,8 +132,12 @@ public class UpdateActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
+            tvQR.setText(bundle.getString("KodeQR"));
+
             Glide.with(UpdateActivity.this).load(bundle.getString("Image")).into(updateImage);
-            updateQr.setText(bundle.getString("KodeQR"));
+
+//            updateQr.setText(bundle.getString("KodeQR"));
+
             etLokasi.setText(bundle.getString("Lokasi"));
             etBerat.setText(bundle.getString("Berat"));
             etketerangan.setText(bundle.getString("Keterangan"));
@@ -252,7 +261,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void updateData(){
-        kodeQr = updateQr.getText().toString().trim();
+        kodeQr = tvQR.getText().toString().trim();
 
         String lokasi = etLokasi.getText().toString();
         String berat = etBerat.getText().toString();

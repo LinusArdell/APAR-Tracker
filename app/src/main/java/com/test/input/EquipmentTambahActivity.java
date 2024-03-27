@@ -93,6 +93,12 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         etLokasi = findViewById(R.id.et_lokasi);
         etBerat = findViewById(R.id.upload_berat);
 
+        String qrResult = getIntent().getStringExtra("KodeQR");
+
+        if (qrResult != null){
+            etResult.setText(qrResult);
+        }
+
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {

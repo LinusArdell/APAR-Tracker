@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -121,11 +122,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Inisialisasi ActivityResultLauncher untuk izin kamera
         requestPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
+                new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         Toast.makeText(MainActivity.this, "Access Granted", Toast.LENGTH_SHORT).show();
-//                        dispatchTakePictureIntent(takePictureLauncher);
                     } else {
                         Toast.makeText(MainActivity.this, "Camera permission required", Toast.LENGTH_SHORT).show();
                     }
@@ -164,8 +163,55 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+//    private void setResult(String contents) {
+//        searchView.setQuery(contents, true);
+//    }
+
     private void setResult(String contents) {
-        searchView.setQuery(contents, true);
+        // Cari data dalam database berdasarkan hasil pemindaian QR
+        Query query = databaseReference.orderByChild("kodeQR").equalTo(contents);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Jika data ditemukan, buka aktivitas detail
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        DataClass data = snapshot.getValue(DataClass.class);
+                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+
+                        intent.putExtra("Key", data.getKodeQR().toString());
+
+                        intent.putExtra("Image", data.getDataImage());
+                        intent.putExtra("KodeQR", data.getKodeQR().toString());
+                        intent.putExtra("Tanggal", data.getDataDate().toString());
+                        intent.putExtra("Lokasi", data.getLokasiTabung().toString());
+                        intent.putExtra("Merk", data.getMerkAPAR().toString());
+                        intent.putExtra("Berat", data.getBeratTabung().toString());
+                        intent.putExtra("Jenis", data.getIsiTabung().toString());
+                        intent.putExtra("IsiTabung", data.getIsiTabung().toString());
+                        intent.putExtra("Tekanan", data.getTekananTabung().toString());
+                        intent.putExtra("Kesesuaian", data.getKesesuaianBerat().toString());
+                        intent.putExtra("KondisiTabung", data.getKondisiTabung().toString());
+                        intent.putExtra("KondisiSelang", data.getKondisiSelang().toString());
+                        intent.putExtra("KondisiPin", data.getKondisiPin().toString());
+                        intent.putExtra("Keterangan", data.getKeterangan().toString());
+                        intent.putExtra("User", data.getUser().toString());
+
+                        startActivity(intent);
+                    }
+                } else {
+                    // Jika data tidak ditemukan, buka aktivitas tambah
+                    Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
+                    intent.putExtra("KodeQR", contents);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Tangani pembatalan permintaan
+            }
+        });
     }
 
     private void showCamera() {

@@ -23,7 +23,7 @@ import com.google.firebase.storage.StorageReference;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView detailKodeQR, detailTanggal, detailKondisiTabung;
+    TextView detailKodeQR, detailTanggal;
     ImageView detailImage;
     FloatingActionButton deleteButton, editButton;
     String key = "";

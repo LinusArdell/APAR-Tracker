@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -26,7 +27,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private List<DataClass> dataList;
 
     public EquipmentAdapter(@NonNull Context context, List<DataClass> dataList) {
-        this.context =context;
+        this.context = context;
         this.dataList = dataList;
     }
 
@@ -48,6 +49,8 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
             @Override
             public void onClick(View view) {
                 Intent intent =new Intent(context, DetailActivity.class);
+
+                Toast.makeText(context, dataList.get(holder.getAdapterPosition()).getKey(), Toast.LENGTH_SHORT).show();
                 intent.putExtra("Image", dataList.get(holder.getAdapterPosition()).getDataImage());
                 intent.putExtra("KodeQR", dataList.get(holder.getAdapterPosition()).getKodeQR());
                 intent.putExtra("Tanggal", dataList.get(holder.getAdapterPosition()).getDataDate());

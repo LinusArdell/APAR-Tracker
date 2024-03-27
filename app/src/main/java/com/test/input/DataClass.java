@@ -1,6 +1,8 @@
 package com.test.input;
 
-public class DataClass {
+import java.io.Serializable;
+
+public class DataClass implements Serializable {
 
     private String kodeQR;
     private String dataImage;
@@ -10,7 +12,7 @@ public class DataClass {
     private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan;
     private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
 
-    public DataClass(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR, String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang, String kondisiPin, String keterangan, String dataImage, String dataDate, String user){
+    public DataClass (String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR, String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang, String kondisiPin, String keterangan, String dataImage, String dataDate, String user){
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
         this.merkAPAR = merkAPAR;
