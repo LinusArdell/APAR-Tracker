@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.test.input.DataClass;
-import com.test.input.DetailActivity;
+import com.test.input.Activity.DetailActivity;
 import com.test.input.R;
 
 import java.util.ArrayList;

@@ -21,19 +21,19 @@
         android:theme="@style/Theme.Input"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".DetailActivity"
+            android:name=".Activity.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdateActivity"
+            android:name=".Activity.UpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".EquipmentTambahActivity"
+            android:name=".Activity.EquipmentTambahActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

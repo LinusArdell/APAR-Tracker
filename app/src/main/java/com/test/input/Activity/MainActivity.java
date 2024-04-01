@@ -1,11 +1,14 @@
-package com.test.input;
+package com.test.input.Activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -15,13 +18,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,40 +34,46 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
-import com.google.firebase.FirebaseApp;
+import com.test.input.DataClass;
+import com.test.input.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    FloatingActionButton fab;
     DatabaseReference databaseReference;
     ValueEventListener eventListener;
     RecyclerView recyclerView;
     List<DataClass> dataList;
     EquipmentAdapter adapter;
     SearchView searchView;
+    TextView jumlahAPAR;
+    ImageButton btnAdd, btnQR;
 
-    private FirebaseAuth auth;
-
-    private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
+    private ActivityResultLauncher<ScanOptions> qrCodeLauncher, qrCodeLaunchers;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        fab = findViewById(R.id.fab);
+        Toolbar toolbar = findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
+        recyclerView = findViewById(R.id.recyclerView);
+        btnAdd = findViewById(R.id.btn_add);
         searchView = findViewById(R.id.search);
         searchView.clearFocus();
+
+        jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
+        btnQR = findViewById(R.id.searchQr);
 
         initActivityResultLaunchers();
 
         findViewById(R.id.qrScan).setOnClickListener(view -> checkPermissionAndShowActivity(this));
-
+        findViewById(R.id.searchQr).setOnClickListener(view -> checkPermissionAndShowActivitys(this));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -86,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dataList.clear();
+
                 for (DataSnapshot itemSnapshot: snapshot.getChildren()){
                     DataClass dataClass = itemSnapshot.getValue(DataClass.class);
                     dataClass.setKey(itemSnapshot.getKey());
@@ -93,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
+
+                int totalData = dataList.size();
+                String totalDataString = "Jumlah data: " + totalData;
+                jumlahAPAR.setText(totalDataString);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -112,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
@@ -120,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Inisialisasi ActivityResultLauncher untuk izin kamera
         requestPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
@@ -161,11 +174,19 @@ public class MainActivity extends AppCompatActivity {
                 setResult(result.getContents());
             }
         });
+
+        qrCodeLaunchers = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+            } else {
+                setResults(result.getContents());
+            }
+        });
     }
 
-//    private void setResult(String contents) {
-//        searchView.setQuery(contents, true);
-//    }
+    private void setResults(String contents) {
+        searchView.setQuery(contents, true);
+    }
 
     private void setResult(String contents) {
         // Cari data dalam database berdasarkan hasil pemindaian QR
@@ -229,12 +250,37 @@ public class MainActivity extends AppCompatActivity {
         qrCodeLauncher.launch(options);
     }
 
+    private void showCameras() {
+        ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        options.setPrompt("Scan QR Code");
+        options.setCameraId(0);
+        options.setBeepEnabled(false);
+        options.setBarcodeImageEnabled(true);
+        options.setOrientationLocked(false);
+
+        qrCodeLaunchers.launch(options);
+    }
+
     private void checkPermissionAndShowActivity(Context context) {
         if (ContextCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED) {
             showCamera();
+        } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
+            Toast.makeText(context, "Camera permission required", Toast.LENGTH_SHORT).show();
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    private void checkPermissionAndShowActivitys(Context context) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED) {
+            showCameras();
         } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
             Toast.makeText(context, "Camera permission required", Toast.LENGTH_SHORT).show();
         } else {

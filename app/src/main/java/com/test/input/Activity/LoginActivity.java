@@ -1,10 +1,11 @@
-package com.test.input;
+package com.test.input.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.test.input.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog processDialog;
     private static final int PERMISSION_REQUEST_CODE = 1001;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

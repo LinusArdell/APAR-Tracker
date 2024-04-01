@@ -1,4 +1,4 @@
-package com.test.input;
+package com.test.input.Activity;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -39,6 +39,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.test.input.DataClass;
+import com.test.input.R;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
