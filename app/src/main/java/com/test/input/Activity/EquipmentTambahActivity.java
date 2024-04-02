@@ -57,7 +57,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private ImageView uploadGambar;
     String imageURL;
     Uri uri;
-    ImageButton btnImage;
+    ImageButton btnImage, btnScanQR;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
 
@@ -146,7 +146,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         initActivityResultLaunchers();
 
-        findViewById(R.id.fab).setOnClickListener(view -> checkPermissionAndShowActivity(this));
+        findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override

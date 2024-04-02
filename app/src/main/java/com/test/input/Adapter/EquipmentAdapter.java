@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.test.input.DataClass;
 import com.test.input.Activity.DetailActivity;
+import com.test.input.Experimental.DateHelper;
 import com.test.input.R;
 
 import java.util.ArrayList;
@@ -43,7 +44,9 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
         Glide.with(context).load(dataList.get(position).getDataImage()).into(holder.recImage);
         holder.recQr.setText(dataList.get(position).getKodeQR());
         holder.recUser.setText(dataList.get(position).getUser());
-        holder.recDate.setText(dataList.get(position).getDataDate());
+//        holder.recDate.setText(dataList.get(position).getDataDate());
+        String formattedDate = DateHelper.convertToRelativeDate(dataList.get(position).getDataDate());
+        holder.recDate.setText(formattedDate);
 
         holder.recCard.setOnClickListener(new View.OnClickListener() {
             @Override

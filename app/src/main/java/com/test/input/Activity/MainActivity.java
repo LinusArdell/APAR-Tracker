@@ -37,8 +37,15 @@ import com.test.input.Adapter.EquipmentAdapter;
 import com.test.input.DataClass;
 import com.test.input.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -101,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     dataClass.setKey(itemSnapshot.getKey());
                     dataList.add(dataClass);
                 }
-                adapter.notifyDataSetChanged();
+                sortDataByDate();
                 dialog.dismiss();
 
                 int totalData = dataList.size();
@@ -144,6 +151,25 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
+
+    private void sortDataByDate() {
+        Collections.sort(dataList, new Comparator<DataClass>() {
+            DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+            @Override
+            public int compare(DataClass data1, DataClass data2) {
+                try {
+                    Date date1 = dateFormat.parse(data1.getDataDate());
+                    Date date2 = dateFormat.parse(data2.getDataDate());
+                    return date1.compareTo(date2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
+
 
     public void searchList(String text){
         ArrayList<DataClass> searchList = new ArrayList<>();
