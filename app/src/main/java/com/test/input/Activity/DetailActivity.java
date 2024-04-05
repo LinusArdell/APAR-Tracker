@@ -3,6 +3,8 @@ package com.test.input.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +32,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private TextView isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
     private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
-    private TextView etLokasi, etBerat, etketerangan;
+    private TextView etLokasi, etBerat, etketerangan, tvTitleDetail;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,11 +58,16 @@ public class DetailActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         editButton = findViewById(R.id.editButton);
 
+        tvTitleDetail = findViewById(R.id.tc_title_detail);
+
         kondisiNozzle = findViewById(R.id.detail_nozzle);
         posisiTabung = findViewById(R.id.detail_posisi);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
+
+            tvTitleDetail.setText("Hasil Pemeriksaan APAR " + bundle.getString("KodeQR") + " per tanggal " + bundle.getString("Tanggal"));
+
             detailKodeQR.setText(bundle.getString("KodeQR"));
             detailTanggal.setText(bundle.getString("Tanggal"));
 
@@ -87,18 +94,38 @@ public class DetailActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
-                storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                // Membuat kotak dialog konfirmasi
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
+                builder.setTitle("Delete");
+                builder.setMessage("Are you sure want to delete " + detailKodeQR.getText().toString() + "?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        reference.child(key).removeValue();
-                        Toast.makeText(DetailActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Melakukan penghapusan data
+                        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
+                        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                reference.child(key).removeValue();
+                                Toast.makeText(DetailActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                            }
+                        });
                     }
                 });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Batalkan penghapusan
+                        dialogInterface.dismiss();
+                    }
+                });
+                // Menampilkan kotak dialog
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 

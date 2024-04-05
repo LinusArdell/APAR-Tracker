@@ -13,6 +13,8 @@
         <item> Pina </item>
         <item> Altek </item>
         <item> Holly Fire </item>
+        <item> Chubb Fire </item>
+        <item> Tonanta </item>
     </string-array>
 
     <string-array name="jenis_apar">
@@ -21,5 +23,9 @@
         <item> Halotron </item>
         <item> HF 11 </item>
         <item> Dry chemical powder </item>
+        <item> Abc  Chemical multi purpose </item>
     </string-array>
+
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
 </resources>

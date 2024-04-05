@@ -16,6 +16,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hasil pemeriksaan APAR"
+                android:textSize="24sp"
+                android:layout_gravity="center"
+                android:padding="20dp"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/main_color"
+                android:id="@+id/tc_title_detail"/>
+
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,128 +46,299 @@
                 android:textSize="24sp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="12dp"
-                android:textColor="@color/purple_200"/>
+                android:textColor="@color/main_color"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Tanggal"
-                android:layout_gravity="center"
-                android:id="@+id/detail_tanggal"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Lokasi"
-                android:layout_gravity="center"
-                android:id="@+id/detail_lokasi"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Merk APAR"
-                android:layout_gravity="center"
-                android:id="@+id/detail_merk"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                    <TextView
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Lokasi Fisik "
+                        android:id="@+id/tv_lokasi_fisik"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Berat"
-                android:layout_gravity="center"
-                android:id="@+id/detail_berat"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Lokasi"
+                        android:id="@+id/detail_lokasi"
+                        android:layout_toEndOf="@id/tv_lokasi_fisik"/>
+                </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Jenis"
-                android:layout_gravity="center"
-                android:id="@+id/detail_jenis"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Isi Tabung"
-                android:layout_gravity="center"
-                android:id="@+id/detail_isi"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                    <TextView
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Merk APAR "
+                        android:id="@+id/tv_merk"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Tekanan"
-                android:layout_gravity="center"
-                android:id="@+id/detail_tekanan"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Merk APAR"
+                        android:id="@+id/detail_merk"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Kesesuaian Berat"
-                android:layout_gravity="center"
-                android:id="@+id/detail_kesesuaian"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Kondisi Tabung"
-                android:layout_gravity="center"
-                android:id="@+id/detail_kondisi"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Kondisi Selang"
-                android:layout_gravity="center"
-                android:id="@+id/detail_selang"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                    <TextView
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Berat APAR"/>
 
-            <TextView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Berat"
+                        android:id="@+id/detail_berat"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Jenis APAR "/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Jenis"
+                        android:id="@+id/detail_jenis"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Terakhir di Update "/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/main_color"
+                        android:text="Tanggal"
+                        android:id="@+id/detail_tanggal"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Pin / Segel"
-                android:layout_gravity="center"
-                android:id="@+id/detail_pin"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/linear_switch">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Badan Tabung tidak berkarat"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Posisi tabung tidak terhalangi barang"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Kondisi selang"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Segel pin terpasang"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Mulut nozzle tidak tersumbat"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Jarum indikator menunjukkan tekanan cukup"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Powder tidak mengendap"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Selisih berat tabung &lt; 10%"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/linear_switch">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Kondisi"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_kondisi" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Posisi"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_posisi" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Selang"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_selang" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Pin / Segel"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_pin" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Nozzle"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_nozzle" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Tekanan"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_tekanan" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Isi Tabung"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_isi"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:textSize="13dp"
+                        android:textColor="@color/main_color"
+                        android:text="Kesesuaian"
+                        android:layout_gravity="center"
+                        android:id="@+id/detail_kesesuaian" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -165,28 +348,6 @@
                 android:text="Keterangan"
                 android:layout_gravity="center"
                 android:id="@+id/detail_keterangan"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Kondisi Nozzle"
-                android:layout_gravity="center"
-                android:id="@+id/detail_nozzle"
-                android:textSize="18sp"
-                android:textColor="@color/purple_200"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:text="Posisi Tabung"
-                android:layout_gravity="center"
-                android:id="@+id/detail_posisi"
                 android:textSize="18sp"
                 android:textColor="@color/purple_200"/>
 

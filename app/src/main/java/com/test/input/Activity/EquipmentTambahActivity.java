@@ -77,7 +77,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         setContentView(R.layout.activity_equipment_tambah);
         firebaseAuth = FirebaseAuth.getInstance();
 
-        // Inisialisasi komponen UI
         etResult = findViewById(R.id.upload_qr);
         uploadGambar = findViewById(R.id.upload_image);
         btnUpload = findViewById(R.id.btn_upload);
@@ -247,6 +246,12 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         String pinString = pin ? "Baik" : "Rusak";
         String nozzleString = nozzle ? "Baik" : "Tersumbat";
         String posisiString = posisi ? "Baik" : "Terhalang";
+
+        if (jenisAPAR.equals("Carbondioxide")){
+            kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+        } else {
+            kesesuaianString = "N/A";
+        }
 
         DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
                 kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser, nozzleString, posisiString);

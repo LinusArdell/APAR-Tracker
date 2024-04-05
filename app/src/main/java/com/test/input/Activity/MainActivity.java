@@ -2,11 +2,18 @@ package com.test.input.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,16 +22,24 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +50,7 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
 import com.test.input.DataClass;
+import com.test.input.ProfileActivity;
 import com.test.input.R;
 
 import java.text.DateFormat;
@@ -58,6 +74,16 @@ public class MainActivity extends AppCompatActivity {
     TextView jumlahAPAR;
     ImageButton btnAdd, btnQR;
 
+    private DrawerLayout drawerLayout;
+    FirebaseAuth mAuth;
+    TextView userEmail;
+
+    private boolean isAscendingByName = true;
+    private boolean isDescendingByName = false;
+    private boolean isAscendingByDate = true;
+    private boolean isDescendingByDate = false;
+    private static final int PERMISSION_STORAGE_CODE = 1000;
+
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher, qrCodeLaunchers;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     @SuppressLint("MissingInflatedId")
@@ -69,11 +95,64 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        userEmail = headerView.findViewById(R.id.user_email);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_STORAGE_CODE);
+
+        Menu menu = navigationView.getMenu();
+        MenuItem logoutItem = menu.findItem(R.id.nav_logout);
+        MenuItem addNew = menu.findItem(R.id.nav_add);
+        MenuItem downloadItem = menu.findItem(R.id.nav_download);
+
+        downloadItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                if (isStoragePermissionGranted()) {
+                    downloadFile();
+                } else {
+                    Toast.makeText(MainActivity.this, "Izin penyimpanan diperlukan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+
+        logoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                logout();
+                return true;
+            }
+        });
+
+        addNew.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // Mendapatkan email user dan menampilkannya pada TextView
+            String email = currentUser.getEmail();
+            userEmail.setText(email);
+        }
+
         recyclerView = findViewById(R.id.recyclerView);
         btnAdd = findViewById(R.id.btn_add);
         searchView = findViewById(R.id.search);
         searchView.clearFocus();
-
         jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
         btnQR = findViewById(R.id.searchQr);
 
@@ -108,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     dataClass.setKey(itemSnapshot.getKey());
                     dataList.add(dataClass);
                 }
-                sortDataByDate();
+                adapter.notifyDataSetChanged();
                 dialog.dismiss();
 
                 int totalData = dataList.size();
@@ -152,6 +231,62 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    private void logout() {
+        mAuth.signOut();
+        // Redirect ke halaman login atau activity lain yang sesuai
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+//    private void sortDataByDate() {
+//        Collections.sort(dataList, new Comparator<DataClass>() {
+//            DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+//            @Override
+//            public int compare(DataClass data1, DataClass data2) {
+//                try {
+//                    Date date1 = dateFormat.parse(data1.getDataDate());
+//                    Date date2 = dateFormat.parse(data2.getDataDate());
+//                    return date1.compareTo(date2);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                return 0;
+//            }
+//        });
+//        adapter.notifyDataSetChanged();
+//    }
+
+//    private void sortDataByName() {
+//        Collections.sort(dataList, new Comparator<DataClass>() {
+//            @Override
+//            public int compare(DataClass data1, DataClass data2) {
+//                if (isAscendingByName) {
+//                    return data1.getKodeQR().compareTo(data2.getKodeQR());
+//                } else {
+//                    return data2.getKodeQR().compareTo(data1.getKodeQR());
+//                }
+//            }
+//        });
+//        adapter.notifyDataSetChanged();
+//    }
+
+    private void sortDataByName() {
+        Collections.sort(dataList, new Comparator<DataClass>() {
+            @Override
+            public int compare(DataClass data1, DataClass data2) {
+                if (isAscendingByName) {
+                    return data1.getKodeQR().compareTo(data2.getKodeQR());
+                } else if (isDescendingByName) {
+                    return data2.getKodeQR().compareTo(data1.getKodeQR());
+                }
+                return 0;
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
+
     private void sortDataByDate() {
         Collections.sort(dataList, new Comparator<DataClass>() {
             DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
@@ -160,7 +295,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Date date1 = dateFormat.parse(data1.getDataDate());
                     Date date2 = dateFormat.parse(data2.getDataDate());
-                    return date1.compareTo(date2);
+                    if (isAscendingByDate) {
+                        return date1.compareTo(date2);
+                    } else if (isDescendingByDate) {
+                        return date2.compareTo(date1);
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -170,11 +309,50 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_name_ascending:
+                isAscendingByName = true;
+                isDescendingByName = false;
+                sortDataByName();
+                return true;
+            case R.id.sort_name_descending:
+                isAscendingByName = false;
+                isDescendingByName = true;
+                sortDataByName();
+                return true;
+            case R.id.sort_date_ascending:
+                isAscendingByDate = true;
+                isDescendingByDate = false;
+                sortDataByDate();
+                return true;
+            case R.id.sort_date_descending:
+                isAscendingByDate = false;
+                isDescendingByDate = true;
+                sortDataByDate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void searchList(String text){
         ArrayList<DataClass> searchList = new ArrayList<>();
         for (DataClass dataClass: dataList){
             if (dataClass.getKodeQR().toLowerCase().contains(text.toLowerCase())){
+                searchList.add(dataClass);
+            } else if (dataClass.getLokasiTabung().toLowerCase().contains(text.toLowerCase())) {
+                searchList.add(dataClass);
+            } else if (dataClass.getUser().toLowerCase().contains(text.toLowerCase())) {
+                searchList.add(dataClass);
+            } else if (dataClass.getDataDate().toLowerCase().contains(text.toLowerCase())){
                 searchList.add(dataClass);
             }
         }
@@ -311,6 +489,39 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(context, "Camera permission required", Toast.LENGTH_SHORT).show();
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    private boolean isStoragePermissionGranted() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    // Fungsi untuk mengunduh file dari tautan yang diberikan
+    private void downloadFile() {
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlBkOtlUi_8ROqZxxeID4-pniUSl4s9plF5WVtonEEep3EJRBC1VOFvVhOnSngu8pCOaNQJaepMBdk/pub?output=xlsx";
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setTitle("File Spreadsheet");
+        request.setDescription("Mengunduh file spreadsheet...");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
+
+        Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
+    }
+
+    // Memeriksa izin yang diminta dan menanggapi hasilnya
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_STORAGE_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this, "Izin penyimpanan diberikan. Klik tombol unduh untuk mengunduh file.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

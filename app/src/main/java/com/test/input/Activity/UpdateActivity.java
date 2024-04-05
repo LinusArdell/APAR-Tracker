@@ -314,6 +314,12 @@ public class UpdateActivity extends AppCompatActivity {
         String nozzleString = nozzle ? "Baik" : "Tersumbat";
         String posisiString = posisi ? "Baik" : "Terhalang";
 
+        if (jenisAPAR.equals("Carbondioxide")){
+            kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+        } else {
+            kesesuaianString = "N/A";
+        }
+
         DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
                 kondisiString,selangString, pinString, keterangan, imageUrl, currentDate, finalUser, nozzleString, posisiString);
         databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -19,7 +19,12 @@ public class DateHelper {
             long diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
 
             if (diffInDays == 0) {
-                return "Hari ini";
+                long diffInHours = diffInMillis / (1000 * 60 * 60);
+                if (diffInHours > 0) {
+                    return diffInHours + " jam yang lalu";
+                } else {
+                    return "Baru saja";
+                }
             } else if (diffInDays == 1) {
                 return "Kemarin";
             } else if (diffInDays < 7) {

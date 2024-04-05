@@ -112,6 +112,7 @@
                                 android:hint="Lokasi APAR"
                                 android:layout_gravity="left"
                                 android:id="@+id/upload_lokasi"
+                                android:inputType="textCapWords"
                                 android:background="@drawable/custom_edittext"/>
                         </LinearLayout>
 
@@ -164,6 +165,7 @@
                                 android:hint="Berat APAR"
                                 android:layout_gravity="left"
                                 android:id="@+id/upload_berat"
+                                android:inputType="numberDecimal"
                                 android:background="@drawable/custom_edittext"/>
 
                     </RelativeLayout>

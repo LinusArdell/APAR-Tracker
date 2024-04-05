@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.test.input.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -105,7 +107,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void validate(String userEmail, String userPassword){
 
-        processDialog.setMessage("................Please Wait.............");
+        if(userEmail.isEmpty() || userPassword.isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Email and password cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        processDialog.setMessage("Loading...");
         processDialog.show();
 
         auth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -117,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
                 else{
-                    Toast.makeText(LoginActivity.this,"Login Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,"Email or Password is incorrect", Toast.LENGTH_SHORT).show();
                     processDialog.dismiss();
                 }
             }
@@ -131,21 +138,69 @@ public class LoginActivity extends AppCompatActivity {
             passwordresetemail.setError("It's empty");
             passwordresetemail.requestFocus();
             return;
-        }
-        progressBar.setVisibility(View.VISIBLE);
-        auth.sendPasswordResetEmail(resetemail)
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(resetemail).matches()) {
+            passwordresetemail.setError("Email is not registered");
+            passwordresetemail.requestFocus();
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            auth.sendPasswordResetEmail(resetemail)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                            }
 
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
                         }
-
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
+                    });
+        }
     }
+
+//    public void resetpasword(){
+//        final String resetemail = passwordresetemail.getText().toString();
+//
+//        if (resetemail.isEmpty()) {
+//            passwordresetemail.setError("It's empty");
+//            passwordresetemail.requestFocus();
+//            return;
+//        }
+//
+//        progressBar.setVisibility(View.VISIBLE);
+//
+//        // Memeriksa apakah email terdaftar di Firebase Authentication
+//        auth.fetchSignInMethodsForEmail(resetemail).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+//                if (task.isSuccessful()) {
+//                    SignInMethodQueryResult result = task.getResult();
+//                    assert result != null;
+//                    if (result.getSignInMethods().isEmpty()) {
+//                        // Email tidak terdaftar
+//                        Toast.makeText(LoginActivity.this, "Email is not registered", Toast.LENGTH_SHORT).show();
+//                        progressBar.setVisibility(View.GONE);
+//                    } else {
+//                        // Email terdaftar, kirim email reset password
+//                        auth.sendPasswordResetEmail(resetemail).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+//                                }
+//                                progressBar.setVisibility(View.GONE);
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    Toast.makeText(LoginActivity.this, "Failed to check email!", Toast.LENGTH_SHORT).show();
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            }
+//        });
+//    }
+
 }
