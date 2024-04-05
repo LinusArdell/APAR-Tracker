@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean isDescendingByDate = false;
     private static final int PERMISSION_STORAGE_CODE = 1000;
 
+    private SharedPreferences sharedPreferences;
+
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher, qrCodeLaunchers;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     @SuppressLint("MissingInflatedId")
@@ -107,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_STORAGE_CODE);
+        sharedPreferences = getSharedPreferences("sorting_prefs", Context.MODE_PRIVATE);
 
         Menu menu = navigationView.getMenu();
         MenuItem logoutItem = menu.findItem(R.id.nav_logout);
@@ -187,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                     dataClass.setKey(itemSnapshot.getKey());
                     dataList.add(dataClass);
                 }
-                adapter.notifyDataSetChanged();
+                restoreSortingStatus();
                 dialog.dismiss();
 
                 int totalData = dataList.size();
@@ -272,6 +276,29 @@ public class MainActivity extends AppCompatActivity {
 //        adapter.notifyDataSetChanged();
 //    }
 
+    private void restoreSortingStatus() {
+        isAscendingByName = sharedPreferences.getBoolean("ascending_by_name", true);
+        isDescendingByName = sharedPreferences.getBoolean("descending_by_name", false);
+        isAscendingByDate = sharedPreferences.getBoolean("ascending_by_date", true);
+        isDescendingByDate = sharedPreferences.getBoolean("descending_by_date", false);
+
+        // Apply sorting status to RecyclerView
+        if (isAscendingByName || isDescendingByName) {
+            sortDataByName();
+        } else if (isAscendingByDate || isDescendingByDate) {
+            sortDataByDate();
+        }
+    }
+
+    private void saveSortingStatus() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("ascending_by_name", isAscendingByName);
+        editor.putBoolean("descending_by_name", isDescendingByName);
+        editor.putBoolean("ascending_by_date", isAscendingByDate);
+        editor.putBoolean("descending_by_date", isDescendingByDate);
+        editor.apply();
+    }
+
     private void sortDataByName() {
         Collections.sort(dataList, new Comparator<DataClass>() {
             @Override
@@ -285,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         adapter.notifyDataSetChanged();
+        saveSortingStatus();
     }
 
     private void sortDataByDate() {
@@ -307,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         adapter.notifyDataSetChanged();
+        saveSortingStatus();
     }
 
     @Override
