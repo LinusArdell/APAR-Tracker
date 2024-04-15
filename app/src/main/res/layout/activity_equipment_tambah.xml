@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Activity.EquipmentTambahActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_color"
@@ -52,7 +52,7 @@
                 android:layout_below="@id/tv_title"/>
         </RelativeLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.navigation.NavigationView>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -119,7 +119,7 @@
                                 android:id="@+id/upload_qr"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:hint="Masukkan Kode QR"
+                                android:hint="Masukkan Nomor Registrasi"
                                 android:background="@drawable/custom_input"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginLeft="60dp"
@@ -160,7 +160,7 @@
                                 android:id="@+id/upload_lokasi"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Masukkan Kode QR"
+                                android:hint="Lokasi APAR"
                                 android:background="@drawable/custom_input"
                                 android:layout_marginLeft="70dp"
                                 android:textSize="16dp"/>
@@ -210,14 +210,14 @@
                                 android:textColor="@color/main_color"
                                 android:textStyle="bold"
                                 android:textSize="16dp"
-                                android:text="Berat APAR"/>
+                                android:text="Berat APAR"
+                                android:id="@+id/tv_berat"/>
 
                             <EditText
-                                android:layout_toRightOf="@id/tv_berat"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="30dp"
-                                android:hint=" Berat APAR"
+                                android:hint=" Berat (KG)"
                                 android:id="@+id/upload_berat"
                                 android:inputType="numberDecimal"
                                 android:background="@drawable/custom_input"/>
@@ -244,7 +244,6 @@
                             <Spinner
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_toRightOf="@id/tv_jenis"
                                 android:layout_marginLeft="22dp"
                                 android:entries="@array/jenis_apar"
                                 android:id="@+id/upload_jenis"/>

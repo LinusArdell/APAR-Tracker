@@ -49,7 +49,7 @@ import java.util.Calendar;
 public class UpdateActivity extends AppCompatActivity {
 
     ImageView updateImage;
-    Button updateButton;
+    Button updateButton, btnCancel, btnSave;
     ImageButton btnCapture;
     EditText updateQr;
     String kodeQr;
@@ -66,7 +66,7 @@ public class UpdateActivity extends AppCompatActivity {
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPAR, jenisAPAR;
     private EditText etLokasi, etBerat, etketerangan;
-    private TextView tvQR;
+    private TextView tvQR, tvID;
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -96,11 +96,28 @@ public class UpdateActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         updateButton = findViewById(R.id.btn_update);
         updateImage = findViewById(R.id.update_image);
+        btnCancel = findViewById(R.id.btn_cancel);
+        btnSave = findViewById(R.id.btn_save);
 
         kondisiNozzle = findViewById(R.id.update_nozzle);
         posisiTabung = findViewById(R.id.update_posisi);
 
         tvQR = findViewById(R.id.tv_qr_update);
+        tvID = findViewById(R.id.tv_title_id);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveData();
+            }
+        });
 
         ActivityResultLauncher<Intent> activityResultLauncher= registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -191,6 +208,8 @@ public class UpdateActivity extends AppCompatActivity {
 
             key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
+
+            tvID.setText("Update " + bundle.getString("KodeQR"));
         }
 
 

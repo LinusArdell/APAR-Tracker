@@ -55,12 +55,11 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private Spinner merkAPAR, jenisAPAR;
     private Button btnUpload;
     private ImageView uploadGambar;
-    String imageURL;
-    Uri uri;
-    ImageButton btnImage, btnScanQR;
+    private ImageButton btnImage, btnBack;
+    private String imageURL;
+    private Uri uri;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
-
     private FirebaseAuth firebaseAuth;
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
@@ -77,30 +76,19 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         setContentView(R.layout.activity_equipment_tambah);
         firebaseAuth = FirebaseAuth.getInstance();
 
-        etResult = findViewById(R.id.upload_qr);
-        uploadGambar = findViewById(R.id.upload_image);
-        btnUpload = findViewById(R.id.btn_upload);
-        btnImage = findViewById(R.id.btn_capture);
-        isiTabung = findViewById(R.id.upload_isi);
-        tekananTabung = findViewById(R.id.upload_tekanan);
-        kesesuaianBerat = findViewById(R.id.upload_kesesuaian);
-        kondisiTabung = findViewById(R.id.upload_kondisi);
-        kondisiSelang = findViewById(R.id.upload_selang);
-        kondisiPin = findViewById(R.id.upload_pin);
-        merkAPAR = findViewById(R.id.upload_merk);
-        jenisAPAR = findViewById(R.id.upload_jenis);
-        etketerangan = findViewById(R.id.upload_keterangan);
-        etLokasi = findViewById(R.id.upload_lokasi);
-        etBerat = findViewById(R.id.upload_berat);
-
-        kondisiNozzle = findViewById(R.id.upload_nozzle);
-        posisiTabung = findViewById(R.id.upload_posisi);
+        initializeUI();
 
         String qrResult = getIntent().getStringExtra("KodeQR");
-
         if (qrResult != null){
             etResult.setText(qrResult);
         }
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -108,9 +96,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Bundle extras = result.getData().getExtras();
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        // Menampilkan gambar di ImageView
                         uploadGambar.setImageBitmap(imageBitmap);
-                        // Mengonversi Bitmap ke Uri
                         uri = getImageUri(this, imageBitmap);
                     } else {
                         Toast.makeText(EquipmentTambahActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
@@ -131,7 +117,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                     }
                 });
 
-        // Menambahkan onClickListener untuk mengambil gambar dari kamera
         uploadGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,34 +130,36 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         initActivityResultLaunchers();
 
-        findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));
-
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveData();
             }
         });
-
-        // Inisialisasi ActivityResultLauncher untuk izin kamera
-        requestPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
-                    if (isGranted) {
-                        Toast.makeText(EquipmentTambahActivity.this, "Access Granted", Toast.LENGTH_SHORT).show();
-//                        dispatchTakePictureIntent(takePictureLauncher);
-                    } else {
-                        Toast.makeText(EquipmentTambahActivity.this, "Camera permission required", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
     }
 
-    public void saveData(){
+    private void initializeUI() {
+        etResult = findViewById(R.id.upload_qr);
+        uploadGambar = findViewById(R.id.upload_image);
+        btnUpload = findViewById(R.id.btn_upload);
+        btnImage = findViewById(R.id.btn_capture);
+        isiTabung = findViewById(R.id.upload_isi);
+        tekananTabung = findViewById(R.id.upload_tekanan);
+        kesesuaianBerat = findViewById(R.id.upload_kesesuaian);
+        kondisiTabung = findViewById(R.id.upload_kondisi);
+        kondisiSelang = findViewById(R.id.upload_selang);
+        kondisiPin = findViewById(R.id.upload_pin);
+        merkAPAR = findViewById(R.id.upload_merk);
+        jenisAPAR = findViewById(R.id.upload_jenis);
+        etketerangan = findViewById(R.id.upload_keterangan);
+        etLokasi = findViewById(R.id.upload_lokasi);
+        etBerat = findViewById(R.id.upload_berat);
+        kondisiNozzle = findViewById(R.id.upload_nozzle);
+        posisiTabung = findViewById(R.id.upload_posisi);
+        btnBack = findViewById(R.id.btn_back);
+    }
 
-        Log.d("EquipmentTambahActivity", "URI: " + uri);
-
-        // Memeriksa apakah URI gambar tidak null
+    public void saveData() {
         if (uri == null) {
             Toast.makeText(EquipmentTambahActivity.this, "Pilih gambar terlebih dahulu", Toast.LENGTH_SHORT).show();
             return;
@@ -205,7 +192,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         });
     }
 
-    //  set value
     private void uploadData() {
         String kodeQR = etResult.getText().toString().trim();
         String lokasi = etLokasi.getText().toString();
@@ -322,7 +308,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         }
     }
 
-    // Metode untuk mengirimkan intent untuk mengambil gambar dari kamera
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {

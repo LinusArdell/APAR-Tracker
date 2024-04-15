@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Activity.DetailActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_color"
@@ -54,7 +54,7 @@
                 android:layout_below="@id/tc_title_detail"/>
         </RelativeLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.navigation.NavigationView>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -517,7 +517,7 @@
                 android:layout_weight="1"
                 android:text="Update"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <com.google.android.material.button.MaterialButton
@@ -527,7 +527,7 @@
                 android:layout_weight="1"
                 android:text="Delete"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
         </LinearLayout>

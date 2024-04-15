@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     EquipmentAdapter adapter;
     SearchView searchView;
     TextView jumlahAPAR;
-    ImageButton btnAdd, btnQR;
+    ImageButton btnQR;
 
     private DrawerLayout drawerLayout;
     FirebaseAuth mAuth;
@@ -148,13 +148,11 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // Mendapatkan email user dan menampilkannya pada TextView
             String email = currentUser.getEmail();
             userEmail.setText(email);
         }
 
         recyclerView = findViewById(R.id.recyclerView);
-        btnAdd = findViewById(R.id.btn_add);
         searchView = findViewById(R.id.search);
         searchView.clearFocus();
         jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
@@ -216,14 +214,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
-                startActivity(intent);
-            }
-        });
-
         requestPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
@@ -237,44 +227,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout() {
         mAuth.signOut();
-        // Redirect ke halaman login atau activity lain yang sesuai
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
-
-//    private void sortDataByDate() {
-//        Collections.sort(dataList, new Comparator<DataClass>() {
-//            DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
-//            @Override
-//            public int compare(DataClass data1, DataClass data2) {
-//                try {
-//                    Date date1 = dateFormat.parse(data1.getDataDate());
-//                    Date date2 = dateFormat.parse(data2.getDataDate());
-//                    return date1.compareTo(date2);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                return 0;
-//            }
-//        });
-//        adapter.notifyDataSetChanged();
-//    }
-
-//    private void sortDataByName() {
-//        Collections.sort(dataList, new Comparator<DataClass>() {
-//            @Override
-//            public int compare(DataClass data1, DataClass data2) {
-//                if (isAscendingByName) {
-//                    return data1.getKodeQR().compareTo(data2.getKodeQR());
-//                } else {
-//                    return data2.getKodeQR().compareTo(data1.getKodeQR());
-//                }
-//            }
-//        });
-//        adapter.notifyDataSetChanged();
-//    }
 
     private void restoreSortingStatus() {
         isAscendingByName = sharedPreferences.getBoolean("ascending_by_name", true);
@@ -282,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
         isAscendingByDate = sharedPreferences.getBoolean("ascending_by_date", true);
         isDescendingByDate = sharedPreferences.getBoolean("descending_by_date", false);
 
-        // Apply sorting status to RecyclerView
         if (isAscendingByName || isDescendingByName) {
             sortDataByName();
         } else if (isAscendingByDate || isDescendingByDate) {
@@ -375,13 +331,10 @@ public class MainActivity extends AppCompatActivity {
     public void searchList(String text){
         ArrayList<DataClass> searchList = new ArrayList<>();
         for (DataClass dataClass: dataList){
-            if (dataClass.getKodeQR().toLowerCase().contains(text.toLowerCase())){
-                searchList.add(dataClass);
-            } else if (dataClass.getLokasiTabung().toLowerCase().contains(text.toLowerCase())) {
-                searchList.add(dataClass);
-            } else if (dataClass.getUser().toLowerCase().contains(text.toLowerCase())) {
-                searchList.add(dataClass);
-            } else if (dataClass.getDataDate().toLowerCase().contains(text.toLowerCase())){
+            if (dataClass.getKodeQR().toLowerCase().contains(text.toLowerCase())
+                    || dataClass.getLokasiTabung().toLowerCase().contains(text.toLowerCase())
+                    || dataClass.getUser().toLowerCase().contains(text.toLowerCase())
+                    || dataClass.getDataDate().toLowerCase().contains(text.toLowerCase())) {
                 searchList.add(dataClass);
             }
         }
@@ -422,53 +375,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setResult(String contents) {
-        // Cari data dalam database berdasarkan hasil pemindaian QR
-        Query query = databaseReference.orderByChild("kodeQR").equalTo(contents);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Jika data ditemukan, buka aktivitas detail
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        DataClass data = snapshot.getValue(DataClass.class);
-                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-
-                        intent.putExtra("Key", data.getKodeQR().toString());
-
-                        intent.putExtra("Image", data.getDataImage());
-                        intent.putExtra("KodeQR", data.getKodeQR().toString());
-                        intent.putExtra("Tanggal", data.getDataDate().toString());
-                        intent.putExtra("Lokasi", data.getLokasiTabung().toString());
-                        intent.putExtra("Merk", data.getMerkAPAR().toString());
-                        intent.putExtra("Berat", data.getBeratTabung().toString());
-                        intent.putExtra("Jenis", data.getJenisAPAR().toString());
-                        intent.putExtra("IsiTabung", data.getIsiTabung().toString());
-                        intent.putExtra("Tekanan", data.getTekananTabung().toString());
-                        intent.putExtra("Kesesuaian", data.getKesesuaianBerat().toString());
-                        intent.putExtra("KondisiTabung", data.getKondisiTabung().toString());
-                        intent.putExtra("KondisiSelang", data.getKondisiSelang().toString());
-                        intent.putExtra("KondisiPin", data.getKondisiPin().toString());
-                        intent.putExtra("Keterangan", data.getKeterangan().toString());
-                        intent.putExtra("User", data.getUser().toString());
-
-                        intent.putExtra("Nozzle", data.getKondisiNozzle().toString());
-                        intent.putExtra("Posisi", data.getPosisiTabung().toString());
-
-                        startActivity(intent);
-                    }
-                } else {
-                    // Jika data tidak ditemukan, buka aktivitas tambah
-                    Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
-                    intent.putExtra("KodeQR", contents);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Tangani pembatalan permintaan
-            }
-        });
+        // Find data in the database based on the QR scan result
     }
 
     private void showCamera() {
@@ -525,7 +432,6 @@ public class MainActivity extends AppCompatActivity {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    // Fungsi untuk mengunduh file dari tautan yang diberikan
     private void downloadFile() {
         String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlBkOtlUi_8ROqZxxeID4-pniUSl4s9plF5WVtonEEep3EJRBC1VOFvVhOnSngu8pCOaNQJaepMBdk/pub?output=xlsx";
 
@@ -541,13 +447,11 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
     }
 
-    // Memeriksa izin yang diminta dan menanggapi hasilnya
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this, "Izin penyimpanan diberikan. Klik tombol unduh untuk mengunduh file.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
             }

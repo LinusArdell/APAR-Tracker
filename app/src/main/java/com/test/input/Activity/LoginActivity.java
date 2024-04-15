@@ -158,49 +158,4 @@ public class LoginActivity extends AppCompatActivity {
                     });
         }
     }
-
-//    public void resetpasword(){
-//        final String resetemail = passwordresetemail.getText().toString();
-//
-//        if (resetemail.isEmpty()) {
-//            passwordresetemail.setError("It's empty");
-//            passwordresetemail.requestFocus();
-//            return;
-//        }
-//
-//        progressBar.setVisibility(View.VISIBLE);
-//
-//        // Memeriksa apakah email terdaftar di Firebase Authentication
-//        auth.fetchSignInMethodsForEmail(resetemail).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-//                if (task.isSuccessful()) {
-//                    SignInMethodQueryResult result = task.getResult();
-//                    assert result != null;
-//                    if (result.getSignInMethods().isEmpty()) {
-//                        // Email tidak terdaftar
-//                        Toast.makeText(LoginActivity.this, "Email is not registered", Toast.LENGTH_SHORT).show();
-//                        progressBar.setVisibility(View.GONE);
-//                    } else {
-//                        // Email terdaftar, kirim email reset password
-//                        auth.sendPasswordResetEmail(resetemail).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
-//                                }
-//                                progressBar.setVisibility(View.GONE);
-//                            }
-//                        });
-//                    }
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "Failed to check email!", Toast.LENGTH_SHORT).show();
-//                    progressBar.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-//    }
-
 }

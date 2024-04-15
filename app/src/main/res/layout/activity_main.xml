@@ -28,7 +28,7 @@
             app:itemTextColor="@color/main_color">
 
             <androidx.appcompat.widget.SearchView
-                android:layout_width="200dp"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/search"
                 app:iconifiedByDefault="false"
@@ -37,7 +37,7 @@
                 android:focusable="false"
                 app:closeIcon="@drawable/baseline_clear_24"
                 app:searchIcon="@drawable/baseline_search_24"
-                android:layout_marginLeft="85dp"/>
+                android:layout_marginLeft="60dp"/>
 
             <ImageButton
                 android:layout_width="40dp"
@@ -47,14 +47,6 @@
                 app:tint="@color/white"
                 android:id="@+id/searchQr"
                 android:layout_gravity="right|center_horizontal"/>
-
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/fab_add"
-                android:background="@color/main_color"
-                android:id="@+id/btn_add"
-                android:layout_gravity="center_vertical|right"/>
 
         </androidx.appcompat.widget.Toolbar>
 
