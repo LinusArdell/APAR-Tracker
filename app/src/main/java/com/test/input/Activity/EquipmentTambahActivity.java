@@ -78,6 +78,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         initializeUI();
 
+        findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));
+
         String qrResult = getIntent().getStringExtra("KodeQR");
         if (qrResult != null){
             etResult.setText(qrResult);
