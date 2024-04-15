@@ -9,10 +9,15 @@
     android:background="@color/main_color"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <DigitalClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_foreground"/>
+        android:textStyle="bold"
+        android:textSize="46dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:format24Hour="HH:mm:ss"/>
 
     <TextView
         android:layout_width="wrap_content"

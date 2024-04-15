@@ -32,7 +32,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private TextView isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
     private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
-    private TextView etLokasi, etBerat, etketerangan, tvTitleDetail;
+    private TextView etLokasi, etBerat, etketerangan, tvTitleDetail, tvDate;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -59,6 +59,7 @@ public class DetailActivity extends AppCompatActivity {
         editButton = findViewById(R.id.editButton);
 
         tvTitleDetail = findViewById(R.id.tc_title_detail);
+        tvDate = findViewById(R.id.tv_date);
 
         kondisiNozzle = findViewById(R.id.detail_nozzle);
         posisiTabung = findViewById(R.id.detail_posisi);
@@ -66,7 +67,8 @@ public class DetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
-            tvTitleDetail.setText("Hasil Pemeriksaan APAR " + bundle.getString("KodeQR") + " per tanggal " + bundle.getString("Tanggal"));
+            tvTitleDetail.setText("Hasil Pemeriksaan APAR " + bundle.getString("KodeQR"));
+            tvDate.setText("Pertanggal " + bundle.getString("Tanggal"));
 
             detailKodeQR.setText(bundle.getString("KodeQR"));
             detailTanggal.setText(bundle.getString("Tanggal"));

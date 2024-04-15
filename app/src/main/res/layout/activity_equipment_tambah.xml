@@ -6,358 +6,458 @@
     android:layout_height="match_parent"
     tools:context=".Activity.EquipmentTambahActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_color"
+        app:titleTextColor="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/tool_bar"
+        app:itemIconTint="@color/main_color"
+        app:itemTextColor="@color/main_color">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                app:tint="@color/white"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Add item"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:id="@+id/tv_title"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="Tap logo QR untuk mengisi kode QR"
+                android:textSize="10dp"
+                android:layout_below="@id/tv_title"/>
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation">
+        android:layout_above="@id/bottom_navigation"
+        android:layout_below="@id/tool_bar">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="300dp"
+                android:src="@drawable/baseline_image_24"
+                android:id="@+id/upload_image"/>
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+            <ImageButton
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_camera_alt_24"
+                android:id="@+id/btn_capture"
+                android:layout_marginTop="10dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_edittext"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center"
-                    android:id="@+id/layout_result">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:src="@drawable/baseline_image_24"
-                        android:id="@+id/upload_image"/>
-
-                    <ImageButton
-                        android:layout_width="80dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/baseline_camera_alt_24"
-                        android:id="@+id/btn_capture"/>
-
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical"
-                            android:layout_marginRight="10dp"
-                            android:text="Kode QR : "
-                            android:textSize="20dp"
-                            android:id="@+id/tv_kode_qr"/>
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_toRightOf="@id/tv_kode_qr">
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="20dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Kode QR"
+                                android:textColor="@color/main_color"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
 
                             <EditText
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="20dp"
-                                android:drawableLeft="@drawable/fab_add"
-                                android:drawableRight="@drawable/fab_add"
-                                android:hint="Masukkan Kode QR"
-                                android:layout_gravity="left"
                                 android:id="@+id/upload_qr"
-                                android:background="@drawable/custom_edittext"/>
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Masukkan Kode QR"
+                                android:background="@drawable/custom_input"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginLeft="60dp"
+                                android:textAlignment="center"
+                                android:layout_gravity="center"
+                                android:textSize="16dp" />
 
                             <ImageButton
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_toEndOf="@id/upload_qr"
-                                android:src="@drawable/baseline_qr_code_scanner_24"
                                 android:id="@+id/btn_upload_qr"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|right"
                                 android:background="@color/main_color"
+                                android:src="@drawable/baseline_qr_code_scanner_24"
                                 app:tint="@color/white" />
+
                         </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical"
-                            android:layout_marginRight="10dp"
-                            android:text="Lokasi     : "
-                            android:textSize="20dp"
-                            android:id="@+id/tv_lokasi"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_toRightOf="@id/tv_lokasi">
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16dp"
+                                android:textStyle="bold"
+                                android:textColor="@color/main_color"
+                                android:text="Lokasi "
+                                android:id="@+id/tv_lokasi_fisik"/>
 
                             <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_marginLeft="10dp"
-                                android:drawableLeft="@drawable/fab_add"
-                                android:drawableRight="@drawable/fab_add"
-                                android:hint="Lokasi APAR"
-                                android:layout_gravity="left"
                                 android:id="@+id/upload_lokasi"
-                                android:inputType="textCapWords"
-                                android:background="@drawable/custom_edittext"/>
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Masukkan Kode QR"
+                                android:background="@drawable/custom_input"
+                                android:layout_marginLeft="70dp"
+                                android:textSize="16dp"/>
+
                         </LinearLayout>
 
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical"
-                            android:text="Merk APAR"
-                            android:textSize="17dp"
-                            android:layout_gravity="left"
-                            android:id="@+id/tv_merk"/>
-
-                        <Spinner
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_toRightOf="@id/tv_merk"
-                            android:layout_marginLeft="20dp"
-                            android:entries="@array/merk_apar"
-                            android:id="@+id/upload_merk"/>
-                    </RelativeLayout>
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16dp"
+                                android:textColor="@color/main_color"
+                                android:text="Merk APAR "
+                                android:textStyle="bold"
+                                android:id="@+id/tv_merk"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical"
-                            android:layout_marginRight="10dp"
-                            android:text="Berat       : "
-                            android:textSize="20dp"
-                            android:id="@+id/tv_berat"/>
+                            <Spinner
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@id/tv_merk"
+                                android:layout_marginLeft="26dp"
+                                android:entries="@array/merk_apar"
+                                android:id="@+id/upload_merk"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/main_color"
+                                android:textStyle="bold"
+                                android:textSize="16dp"
+                                android:text="Berat APAR"/>
 
                             <EditText
                                 android:layout_toRightOf="@id/tv_berat"
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_marginLeft="10dp"
-                                android:drawableLeft="@drawable/fab_add"
-                                android:drawableRight="@drawable/fab_add"
-                                android:hint="Berat APAR"
-                                android:layout_gravity="left"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:hint=" Berat APAR"
                                 android:id="@+id/upload_berat"
                                 android:inputType="numberDecimal"
-                                android:background="@drawable/custom_edittext"/>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical"
-                            android:text="Jenis APAR"
-                            android:textSize="17dp"
-                            android:layout_gravity="left"
-                            android:id="@+id/tv_jenis"/>
-
-                        <Spinner
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_toRightOf="@id/tv_jenis"
-                            android:layout_marginLeft="20dp"
-                            android:entries="@array/jenis_apar"
-                            android:id="@+id/upload_jenis"/>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/linear_layout"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:gravity="center_vertical"
-                                android:text="Badan Tabung tidak berkarat"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:text="Posisi tabung tidak terhalangi barang"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:text="Kondisi selang"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:text="Segel pin terpasang"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:text="Mulut nozzle tidak tersumbat"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:text="Jarum indikator menunjukkan tekanan cukup"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:text="Powder tidak mengendap"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:text="Selisih berat tabung &lt; 10%"/>
+                                android:background="@drawable/custom_input"/>
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_toEndOf="@+id/linear_layout">
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:orientation="horizontal">
 
-                            <com.google.android.material.switchmaterial.SwitchMaterial
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/main_color"
+                                android:textSize="16dp"
+                                android:textStyle="bold"
+                                android:text="Jenis APAR "/>
+
+                            <Spinner
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
+                                android:layout_toRightOf="@id/tv_jenis"
+                                android:layout_marginLeft="22dp"
+                                android:entries="@array/jenis_apar"
+                                android:id="@+id/upload_jenis"/>
 
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/main_color"
+                        android:layout_margin="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Badan Tabung tidak berkarat"
+                                android:id="@+id/tv_parameter1"/>
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 android:id="@+id/upload_kondisi"/>
 
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Posisi tabung tidak terhalangi barang"
+                                android:id="@+id/tv_parameter2"/>
+
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginTop="10dp"
                                 android:id="@+id/upload_posisi"/>
 
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginTop="10dp"
-                                android:id="@+id/upload_selang"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Kondisi selang" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginTop="10dp"
+                                android:id="@+id/upload_selang"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Segel pin terpasang"/>
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 android:id="@+id/upload_pin"/>
 
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Mulut nozzle tidak tersumbat"/>
+
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginTop="10dp"
                                 android:id="@+id/upload_nozzle"/>
 
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Jarum indikator menunjukkan tekanan cukup"/>
+
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginTop="10dp"
                                 android:id="@+id/upload_tekanan"/>
 
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginTop="10dp"
-                                android:id="@+id/upload_isi"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Powder tidak mengendap"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginTop="10dp"
+                                android:id="@+id/upload_isi"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Selisih berat tabung &lt; 10%"/>
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 android:id="@+id/upload_kesesuaian"/>
 
                         </LinearLayout>
 
+                    </LinearLayout>
 
-
-                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/main_color"
+                        android:layout_margin="10dp"/>
 
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:background="@drawable/custom_edittext"
-                        android:layout_marginTop="10dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_input"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:textAlignment="center"
+                        android:textSize="24dp"
                         android:drawableLeft="@drawable/fab_add"
                         android:hint="Keterangan"
                         android:id="@+id/upload_keterangan"/>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
         </LinearLayout>
 
