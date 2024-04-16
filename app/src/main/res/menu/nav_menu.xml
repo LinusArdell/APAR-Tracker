@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/baseline_home_24"
-            android:title="Home"/>
-        <item
-            android:id="@+id/nav_add"
-            android:icon="@drawable/fab_add"
-            android:title="Add new item"/>
-
-        <item
-            android:id="@+id/nav_download"
-            android:icon="@drawable/baseline_download_24"
-            android:title="Download"/>
-    </group>
     <item
-        android:title="">
+        android:title="Data">
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_home"
+                    android:icon="@drawable/baseline_list_alt_24"
+                    android:title="Overview"
+                    android:checked="true"/>
+                <item
+                    android:id="@+id/nav_add"
+                    android:icon="@drawable/fab_add"
+                    android:title="Add new item"/>
+            </group>
+        </menu>
+    </item>
+    <item
+        android:title="Laporan">
+        <menu>
+            <item
+                android:id="@+id/nav_download"
+                android:icon="@drawable/baseline_download_24"
+                android:title="Download"/>
+        </menu>
+    </item>
+    <item
+        android:title="Tools">
+        <menu>
+            <item
+                android:id="@+id/nav_generate"
+                android:icon="@drawable/qr_24"
+                android:title="Generate QR"/>
+            <item
+                android:id="@+id/nav_guide"
+                android:title="Panduan pengguna"
+                android:icon="@drawable/help_24"/>
+        </menu>
+    </item>
+    <item
+        android:title="Account">
         <menu>
             <item
                 android:id="@+id/nav_logout"

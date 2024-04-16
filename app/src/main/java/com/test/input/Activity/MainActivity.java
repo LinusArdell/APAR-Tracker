@@ -2,6 +2,7 @@ package com.test.input.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +11,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,11 +86,44 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher, qrCodeLaunchers;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    Dialog dialog;
+    Button btnCancel, btnLogout;
+
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        if (!isOnboardingCompleted()) {
+//            showOnboarding();
+//        }
+
+        dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.custom_dialog_logout);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+        dialog.setCancelable(false);
+
+        btnCancel = dialog.findViewById(R.id.customCancel);
+        btnLogout = dialog.findViewById(R.id.customLogout);
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -110,6 +147,16 @@ public class MainActivity extends AppCompatActivity {
         MenuItem logoutItem = menu.findItem(R.id.nav_logout);
         MenuItem addNew = menu.findItem(R.id.nav_add);
         MenuItem downloadItem = menu.findItem(R.id.nav_download);
+        MenuItem generateQR = menu.findItem(R.id.nav_generate);
+
+        generateQR.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent intent = new Intent(MainActivity.this, Generator.class);
+                startActivity(intent);
+                return false;
+            }
+        });
 
         downloadItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -126,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
         logoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                logout();
-                return true;
+                dialog.show();
+                return false;
             }
         });
 
@@ -217,6 +264,21 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
+
+    }
+
+    private boolean isOnboardingCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(KEY_ONBOARDING_COMPLETE, false);
+    }
+
+    private void setOnboardingCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
+        editor.apply();
     }
 
     private void logout() {
@@ -342,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isGranted) {
                     showCamera();
                 } else {
-                    // Handle permission not granted
+                    Toast.makeText(MainActivity.this, "Beri akses kamera untuk aplikasi", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -412,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Tangani pembatalan permintaan
+                Toast.makeText(MainActivity.this, "Database Error!", Toast.LENGTH_SHORT).show();
             }
         });
     }

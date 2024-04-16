@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,10 +43,11 @@ import java.io.IOException;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView detailKodeQR, detailTanggal;
+    TextView detailKodeQR, detailTanggal, tvDeleteDialog;
     ImageView detailImage;
     MaterialButton deleteButton, editButton;
-    ImageButton tbnBack, btnQr;
+    ImageButton btnQr;
+    Button tbnBack;
     String key = "";
     String imageUrl = "";
 
@@ -55,6 +58,8 @@ public class DetailActivity extends AppCompatActivity {
     AlertDialog.Builder dialogScan;
     LayoutInflater inflaterScan;
     View dialogViewScan;
+    Dialog dialog;
+    Button btnCancel, btnDelete;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,6 +71,32 @@ public class DetailActivity extends AppCompatActivity {
         fillDataFromIntent();
         setupDeleteButtonListener();
         setupEditButtonListener();
+
+        dialog = new Dialog(DetailActivity.this);
+        dialog.setContentView(R.layout.custom_dialog_delete);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+        dialog.setCancelable(false);
+
+        btnCancel = dialog.findViewById(R.id.customCancelDelete);
+        btnDelete = dialog.findViewById(R.id.customDelete);
+        tvDeleteDialog = dialog.findViewById(R.id.deleteID);
+
+        tvDeleteDialog.setText("Anda yakin ingin menghapus " + detailKodeQR.getText().toString() + "?");
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                performDeleteAction();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         tbnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +187,7 @@ public class DetailActivity extends AppCompatActivity {
     private void fillDataFromIntent() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            tvTitleDetail.setText("Preview Pemeriksaan APAR " + bundle.getString("KodeQR"));
+            tvTitleDetail.setText("Preview Pemeriksaan " + bundle.getString("KodeQR"));
             tvDate.setText("Pertanggal " + bundle.getString("Tanggal"));
 
             detailKodeQR.setText(bundle.getString("KodeQR"));
@@ -184,29 +215,9 @@ public class DetailActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDeleteConfirmationDialog();
+                dialog.show();
             }
         });
-    }
-
-    private void showDeleteConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
-        builder.setTitle("Delete");
-        builder.setMessage("Anda yaking ingin menghapus " + detailKodeQR.getText().toString() + "?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                performDeleteAction();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
     private void performDeleteAction() {
