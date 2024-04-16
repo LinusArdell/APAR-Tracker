@@ -4,10 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,24 +24,37 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.test.input.R;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class DetailActivity extends AppCompatActivity {
 
     TextView detailKodeQR, detailTanggal;
     ImageView detailImage;
     MaterialButton deleteButton, editButton;
-    ImageButton tbnBack;
+    ImageButton tbnBack, btnQr;
     String key = "";
     String imageUrl = "";
 
     private TextView isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
     private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
     private TextView etLokasi, etBerat, etketerangan, tvTitleDetail, tvDate;
+    public boolean success = false;
+    AlertDialog.Builder dialogScan;
+    LayoutInflater inflaterScan;
+    View dialogViewScan;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,6 +71,59 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+
+        btnQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                File folder = new File(Environment.getExternalStorageDirectory()
+                        +"/Documents/"+ DetailActivity.this.getString(R.string.folder_name));
+
+                try {
+                    success = true;
+                    if (!folder.exists())
+                        folder.mkdirs();
+
+                    if (success){
+                        dialogScan  = new AlertDialog.Builder(DetailActivity.this,
+                                androidx.appcompat.R.style.Base_Theme_AppCompat_Light_Dialog);
+                        inflaterScan = getLayoutInflater();
+                        dialogViewScan = inflaterScan.inflate(R.layout.dialog_name_file,null);
+                        Button okButton = dialogViewScan.findViewById(R.id.btn_ok);
+                        TextInputEditText filename = dialogViewScan.findViewById(R.id.file_name);
+                        dialogScan.setView(dialogViewScan);
+                        dialogScan.setCancelable(true);
+
+                        final AlertDialog show = dialogScan.show();
+                        okButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                try {
+                                    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                                    try {
+                                        BitMatrix bitMatrix = multiFormatWriter.encode(detailKodeQR.getText().toString(), BarcodeFormat.QR_CODE, 150,150);
+                                        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+
+                                        saveImageToInternalStorage(bitmap, folder.getAbsolutePath(), filename.getText().toString());
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    show.dismiss();
+                                    Toast.makeText(DetailActivity.this, "Gambar berhasil disimpan", Toast.LENGTH_SHORT).show();
+                                    OpenFolder(folder.getAbsolutePath(), filename.getText().toString()+".jpg");
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    success = false;
+                }
             }
         });
     }
@@ -76,12 +150,13 @@ public class DetailActivity extends AppCompatActivity {
         kondisiNozzle = findViewById(R.id.detail_nozzle);
         posisiTabung = findViewById(R.id.detail_posisi);
         tbnBack = findViewById(R.id.btn_back);
+        btnQr = findViewById(R.id.btn_qr);
     }
 
     private void fillDataFromIntent() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            tvTitleDetail.setText("Hasil Pemeriksaan APAR " + bundle.getString("KodeQR"));
+            tvTitleDetail.setText("Preview Pemeriksaan APAR " + bundle.getString("KodeQR"));
             tvDate.setText("Pertanggal " + bundle.getString("Tanggal"));
 
             detailKodeQR.setText(bundle.getString("KodeQR"));
@@ -117,7 +192,7 @@ public class DetailActivity extends AppCompatActivity {
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
         builder.setTitle("Delete");
-        builder.setMessage("Are you sure want to delete " + detailKodeQR.getText().toString() + "?");
+        builder.setMessage("Anda yaking ingin menghapus " + detailKodeQR.getText().toString() + "?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -178,5 +253,41 @@ public class DetailActivity extends AppCompatActivity {
                 .putExtra("Image", imageUrl)
                 .putExtra("Key", key);
         startActivity(intent);
+    }
+
+    private void OpenFolder(String absolutePath, String filename) {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        File path = new File(absolutePath+"/"+filename);
+        Uri uri = Uri.fromFile(path);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "image/jpg");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private String saveImageToInternalStorage(Bitmap bitmap, String folder, String filename){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+
+        File myPath = new File(folder, filename + ".jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(myPath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                fos.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
     }
 }

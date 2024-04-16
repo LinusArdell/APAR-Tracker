@@ -23,7 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_color"
-            android:text="Cancel" />
+            android:text="Cancel"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
         <TextView
             android:id="@+id/tv_title_id"
@@ -41,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:backgroundTint="@color/main_color"
-            android:text="SAVE" />
+            android:text="SAVE"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
     </com.google.android.material.navigation.NavigationView>
 
@@ -67,6 +69,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/baseline_camera_alt_24"
+                app:tint="@color/main_color"
                 android:id="@+id/btn_capture"
                 android:layout_marginTop="10dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless" />
@@ -98,7 +101,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="Kode QR"
@@ -106,14 +109,14 @@
                                 android:textSize="16dp"
                                 android:textStyle="bold" />
 
-                            <EditText
+                            <TextView
                                 android:id="@+id/tv_qr_update"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Masukkan Nomor Registrasi"
                                 android:background="@drawable/custom_input"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginLeft="60dp"
+                                android:textColorHint="@color/main_color"
+                                android:textColor="@color/main_color"
                                 android:layout_gravity="center"
                                 android:textSize="16dp" />
 
@@ -129,7 +132,7 @@
                             android:layout_marginRight="10dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
@@ -141,9 +144,10 @@
                                 android:id="@+id/update_lokasi"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColorHint="@color/main_color"
+                                android:textColor="@color/main_color"
                                 android:hint="Lokasi APAR"
                                 android:background="@drawable/custom_input"
-                                android:layout_marginLeft="70dp"
                                 android:textSize="16dp"/>
 
                         </LinearLayout>
@@ -158,7 +162,7 @@
                             android:layout_marginRight="10dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textColor="@color/main_color"
@@ -170,7 +174,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_toRightOf="@id/tv_merk"
-                                android:layout_marginLeft="26dp"
+                                android:layout_marginLeft="0dp"
                                 android:entries="@array/merk_apar"
                                 android:id="@+id/update_merk"/>
 
@@ -186,7 +190,7 @@
                             android:layout_marginRight="10dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/main_color"
                                 android:textStyle="bold"
@@ -197,8 +201,10 @@
                                 android:layout_toRightOf="@id/tv_berat"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="30dp"
+                                android:layout_marginLeft="0dp"
                                 android:hint=" Berat (KG)"
+                                android:textColorHint="@color/main_color"
+                                android:textColor="@color/main_color"
                                 android:id="@+id/update_berat"
                                 android:inputType="numberDecimal"
                                 android:background="@drawable/custom_input"/>
@@ -215,7 +221,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/main_color"
                                 android:textSize="16dp"
@@ -225,7 +231,7 @@
                             <Spinner
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="22dp"
+                                android:layout_marginLeft="0dp"
                                 android:entries="@array/jenis_apar"
                                 android:id="@+id/update_jenis"/>
 
@@ -235,7 +241,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:background="@color/main_color"
                         android:layout_margin="10dp"/>
 
@@ -418,7 +424,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:background="@color/main_color"
                         android:layout_margin="10dp"/>
 
@@ -431,6 +437,8 @@
                         android:layout_marginBottom="20dp"
                         android:textAlignment="center"
                         android:textSize="24dp"
+                        android:textColor="@color/main_color"
+                        android:textColorHint="@color/main_color"
                         android:drawableLeft="@drawable/fab_add"
                         android:hint="Keterangan"
                         android:id="@+id/update_keterangan"/>

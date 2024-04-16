@@ -9,7 +9,7 @@
     <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/main_color"
+        android:background="@drawable/splashbg"
         app:titleTextColor="@color/white"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -40,12 +40,14 @@
                 app:tint="@color/white"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
                 android:text="Item ID"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -56,7 +58,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:gravity="center"
                 android:textColor="@color/white"
                 android:text="Pertanggal 12 Apr 2024"
                 android:textSize="10dp"
@@ -115,7 +116,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Kode QR"/>
 
                             <TextView
@@ -125,7 +126,7 @@
                                 android:id="@+id/detail_qr"
                                 android:text="Kode QR"
                                 android:textSize="16dp"
-                                android:textColor="@color/main_color"/>
+                                android:textColor="#8537F4"/>
 
                         </LinearLayout>
 
@@ -143,7 +144,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Lokasi Fisik "
                                 android:id="@+id/tv_lokasi_fisik"/>
 
@@ -151,7 +152,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:textAlignment="textEnd"
                                 android:text="Lokasi"
                                 android:id="@+id/detail_lokasi"
@@ -172,7 +173,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Merk APAR "
                                 android:textStyle="bold"
                                 android:id="@+id/tv_merk"/>
@@ -182,7 +183,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Merk APAR"
                                 android:id="@+id/detail_merk"/>
 
@@ -200,7 +201,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:textStyle="bold"
                                 android:textSize="16dp"
                                 android:text="Berat APAR"/>
@@ -210,7 +211,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Berat"
                                 android:id="@+id/detail_berat"/>
 
@@ -228,7 +229,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
                                 android:text="Jenis APAR "/>
@@ -238,10 +239,9 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Jenis"
                                 android:id="@+id/detail_jenis"/>
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -258,7 +258,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Terakhir di Update "/>
 
                             <TextView
@@ -266,7 +266,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Tanggal"
                                 android:id="@+id/detail_tanggal"/>
 
@@ -276,8 +276,8 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/main_color"
+                        android:layout_height="2dp"
+                        android:background="@drawable/splashbg"
                         android:layout_margin="10dp"/>
 
                     <LinearLayout
@@ -295,7 +295,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Badan Tabung tidak berkarat"
                                 android:id="@+id/tv_parameter1"/>
 
@@ -304,7 +304,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Kondisi"
                                 android:textAlignment="textEnd"/>
 
@@ -320,7 +320,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Posisi tabung tidak terhalangi barang"
                                 android:id="@+id/tv_parameter2"/>
 
@@ -329,7 +329,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="@color/main_color"
+                                android:textColor="#8537F4"
                                 android:text="Posisi"
                                 android:layout_toEndOf="@id/tv_parameter2"
                                 android:textAlignment="textEnd"/>
@@ -484,7 +484,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:background="@color/main_color"
                         android:layout_margin="10dp"/>
 
@@ -512,7 +512,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/bottom_navigation"
         android:layout_alignParentBottom="true"
-        android:background="@color/main_color">
+        android:background="@drawable/splashbg">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -528,6 +528,7 @@
                 android:text="Update"
                 android:textColor="@android:color/white"
                 android:textStyle="normal"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <com.google.android.material.button.MaterialButton
@@ -538,7 +539,7 @@
                 android:text="Delete"
                 android:textColor="@android:color/white"
                 android:textStyle="normal"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                android:background="?attr/selectableItemBackgroundBorderless"/>
 
         </LinearLayout>
 

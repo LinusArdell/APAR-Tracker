@@ -43,7 +43,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/baseline_qr_code_scanner_24"
-                android:background="@color/main_color"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/white"
                 android:id="@+id/searchQr"
                 android:layout_gravity="right|center_horizontal"/>
@@ -92,7 +92,6 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:text="Jumlah APAR" />
-
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
