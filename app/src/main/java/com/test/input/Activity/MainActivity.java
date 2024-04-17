@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,10 +33,15 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     FirebaseAuth mAuth;
     TextView userEmail;
+    FloatingActionButton fabQr;
 
     private boolean isAscendingByName = true;
     private boolean isDescendingByName = false;
@@ -98,9 +105,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if (!isOnboardingCompleted()) {
-//            showOnboarding();
-//        }
+        recyclerView = findViewById(R.id.recyclerView);
+        searchView = findViewById(R.id.search);
+        searchView.clearFocus();
+        jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
+        btnQR = findViewById(R.id.searchQr);
+
+        dataList = new ArrayList<>();
+
+        adapter = new EquipmentAdapter(MainActivity.this, dataList);
+        recyclerView.setAdapter(adapter);
+
+        fabQr = findViewById(R.id.qrScan);
 
         dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.custom_dialog_logout);
@@ -148,6 +164,16 @@ public class MainActivity extends AppCompatActivity {
         MenuItem addNew = menu.findItem(R.id.nav_add);
         MenuItem downloadItem = menu.findItem(R.id.nav_download);
         MenuItem generateQR = menu.findItem(R.id.nav_generate);
+        MenuItem onboard = menu.findItem(R.id.nav_guide);
+
+        onboard.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                showOnboarding();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
 
         generateQR.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -193,12 +219,6 @@ public class MainActivity extends AppCompatActivity {
             userEmail.setText(email);
         }
 
-        recyclerView = findViewById(R.id.recyclerView);
-        searchView = findViewById(R.id.search);
-        searchView.clearFocus();
-        jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
-        btnQR = findViewById(R.id.searchQr);
-
         initActivityResultLaunchers();
 
         findViewById(R.id.qrScan).setOnClickListener(view -> checkPermissionAndShowActivity(this));
@@ -213,10 +233,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        dataList = new ArrayList<>();
 
-        adapter = new EquipmentAdapter(MainActivity.this, dataList);
-        recyclerView.setAdapter(adapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Test");
         dialog.show();
@@ -265,8 +282,63 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+        if (!isOnboardingCompleted()) {
+            showOnboarding();
+        }
 
+    }
 
+    private void showOnboarding() {
+
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(fabQr,"QR Scanner", "Klik untuk memulai semuanya")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60),
+                        TapTarget.forView(searchView,"Search", "Filter data berdasarkan kata kunci")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60)).listener(new TapTargetSequence.Listener() {
+                    @Override
+                    public void onSequenceFinish() {
+                        setOnboardingCompleted();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                }).start();
     }
 
     private boolean isOnboardingCompleted() {

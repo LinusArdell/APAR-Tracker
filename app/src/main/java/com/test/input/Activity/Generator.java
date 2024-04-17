@@ -73,10 +73,6 @@ public class Generator extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        userEmail = headerView.findViewById(R.id.user_email);
-
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

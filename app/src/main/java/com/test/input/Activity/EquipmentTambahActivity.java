@@ -14,8 +14,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,9 +27,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,12 +60,16 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private Spinner merkAPAR, jenisAPAR;
     private Button btnUpload;
     private ImageView uploadGambar;
-    private ImageButton btnImage, btnBack;
+    private ImageButton btnImage, btnBack, btnHelp, btnQR;
     private String imageURL;
     private Uri uri;
+    ScrollView scrollView;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
     private FirebaseAuth firebaseAuth;
+
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -138,6 +147,25 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 saveData();
             }
         });
+
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scrollView.smoothScrollTo(0, 0);
+
+                // Tampilkan onboarding setelah ScrollView selesai digulirkan ke atas
+                scrollView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showOnboarding();
+                    }
+                }, 500);
+            }
+        });
+
+        if (!isOnboardingCompleted()) {
+            showOnboarding();
+        }
     }
 
     private void initializeUI() {
@@ -159,6 +187,9 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         kondisiNozzle = findViewById(R.id.upload_nozzle);
         posisiTabung = findViewById(R.id.upload_posisi);
         btnBack = findViewById(R.id.btn_back);
+        btnHelp = findViewById(R.id.btn_help);
+        btnQR = findViewById(R.id.btn_upload_qr);
+        scrollView = findViewById(R.id.scrollView);
     }
 
     public void saveData() {
@@ -317,5 +348,111 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showOnboarding() {
+
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(uploadGambar,"Pilih", "Pilih gambar dari galeri")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60),
+                        TapTarget.forView(btnImage,"Capture", "Ambil gambar dengan kamera")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60),
+                        TapTarget.forView(btnQR,"Scan QR", "Isi kode QR secara otomatis")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60),
+                        TapTarget.forView(btnUpload,"Simpan", "Klik untuk menyimpan data")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60)).listener(new TapTargetSequence.Listener() {
+                    @Override
+                    public void onSequenceFinish() {
+                        setOnboardingCompleted();
+                        scrollToShowOnboarding();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                }).start();
+    }
+
+    private boolean isOnboardingCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(KEY_ONBOARDING_COMPLETE, false);
+    }
+
+    private void setOnboardingCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
+        editor.apply();
+    }
+
+    private void scrollToShowOnboarding() {
+        // Dapatkan posisi vertikal elemen terakhir yang ditargetkan
+        int lastTargetYPosition = btnUpload.getTop(); // Ganti dengan elemen terakhir yang ditargetkan
+
+        // Gulirkan tampilan ke posisi elemen terakhir yang ditargetkan
+        scrollView.smoothScrollTo(0, lastTargetYPosition);
     }
 }

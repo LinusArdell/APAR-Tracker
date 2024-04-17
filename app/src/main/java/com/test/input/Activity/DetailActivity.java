@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -46,7 +50,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView detailKodeQR, detailTanggal, tvDeleteDialog;
     ImageView detailImage;
     MaterialButton deleteButton, editButton;
-    ImageButton btnQr;
+    ImageButton btnQr, btnHelp;
     Button tbnBack;
     String key = "";
     String imageUrl = "";
@@ -60,6 +64,9 @@ public class DetailActivity extends AppCompatActivity {
     View dialogViewScan;
     Dialog dialog;
     Button btnCancel, btnDelete;
+
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -157,6 +164,17 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showOnboarding();
+            }
+        });
+
+        if (!isOnboardingCompleted()) {
+            showOnboarding();
+        }
     }
 
     private void initializeComponents() {
@@ -182,6 +200,7 @@ public class DetailActivity extends AppCompatActivity {
         posisiTabung = findViewById(R.id.detail_posisi);
         tbnBack = findViewById(R.id.btn_back);
         btnQr = findViewById(R.id.btn_qr);
+        btnHelp = findViewById(R.id.btn_help);
     }
 
     private void fillDataFromIntent() {
@@ -300,5 +319,86 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
         return directory.getAbsolutePath();
+    }
+
+    private void showOnboarding() {
+
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(editButton,"Update", "Perbarui data hasil pemeriksaan")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60),
+                        TapTarget.forView(deleteButton,"Delete", "Klik untuk menghapus data")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60),
+                        TapTarget.forView(btnQr,"Unduh kode QR", "Klik untuk menyimpan kode QR sebagai gambar")
+                                .outerCircleColor(R.color.main_color)
+                                .outerCircleAlpha(0.96f)
+                                .targetCircleColor(R.color.white)
+                                .titleTextSize(26)
+                                .titleTextColor(R.color.white)
+                                .descriptionTextSize(12)
+                                .descriptionTextColor(R.color.white)
+                                .textColor(R.color.white)
+                                .textTypeface(Typeface.SANS_SERIF)
+                                .dimColor(R.color.white)
+                                .drawShadow(true)
+                                .cancelable(false)
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .targetRadius(60)).listener(new TapTargetSequence.Listener() {
+                    @Override
+                    public void onSequenceFinish() {
+                        setOnboardingCompleted();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                }).start();
+    }
+
+    private boolean isOnboardingCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(KEY_ONBOARDING_COMPLETE, false);
+    }
+
+    private void setOnboardingCompleted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
+        editor.apply();
     }
 }

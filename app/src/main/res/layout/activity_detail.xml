@@ -38,6 +38,16 @@
                 android:layout_height="40dp"
                 android:src="@drawable/qr_24"
                 app:tint="@color/white"
+                android:layout_toStartOf="@id/btn_help"
+                android:layout_marginTop="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <ImageButton
+                android:id="@+id/btn_help"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/help_24"
+                app:tint="@color/white"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"

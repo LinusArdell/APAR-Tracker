@@ -44,6 +44,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
         Glide.with(context).load(dataList.get(position).getDataImage()).into(holder.recImage);
         holder.recQr.setText(dataList.get(position).getKodeQR());
         holder.recUser.setText(dataList.get(position).getUser());
+        holder.recLokasi.setText(dataList.get(position).getLokasiTabung());
 //        holder.recDate.setText(dataList.get(position).getDataDate());
         String formattedDate = DateHelper.convertToRelativeDate(dataList.get(position).getDataDate());
         holder.recDate.setText(formattedDate);
@@ -94,10 +95,8 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
 class MyViewHolder extends RecyclerView.ViewHolder{
     ImageView recImage;
-    TextView recQr, recUser, recDate;
+    TextView recQr, recUser, recDate, recLokasi;
     CardView recCard;
-
-    TextView lokasi, merk, berat, jenis, isitabung, tekanan, kesesuaian, kondisiTabung, kondisiSelang, kondisiPin, keterangan;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -106,5 +105,6 @@ class MyViewHolder extends RecyclerView.ViewHolder{
         recQr = itemView.findViewById(R.id.recQr);
         recUser = itemView.findViewById(R.id.tv_user);
         recDate = itemView.findViewById(R.id.tv_date);
+        recLokasi = itemView.findViewById(R.id.recLokasi);
     }
 }
