@@ -21,6 +21,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.service.autofill.UserData;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +41,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -48,6 +53,7 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.DataClass;
 import com.test.input.R;
+import com.test.input.UserClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -244,51 +250,80 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         Boolean posisi = posisiTabung.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
-        String finalUser = users.getEmail();
+        final String[] finalUser = {""}; // Inisialisasi finalUser
 
-        String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        if (users != null) {
+            // Mengambil UID pengguna saat ini
+            String userId = users.getUid();
 
-        if (kodeQR.isEmpty()) {
-            Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (uri == null) {
-            Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            // Mengambil referensi ke data pengguna di Realtime Database
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
-        String isiString = isitabung ? "Baik" : "Beku";
-        String tekananString = tekanan ? "Cukup" : "Kurang";
-        String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
-        String kondisiString = kondisi ? "Baik" : "Berkarat";
-        String selangString = selang ? "Baik" : "Rusak";
-        String pinString = pin ? "Baik" : "Rusak";
-        String nozzleString = nozzle ? "Baik" : "Tersumbat";
-        String posisiString = posisi ? "Baik" : "Terhalang";
+            // Mendengarkan satu kali untuk mendapatkan data pengguna
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // Mengambil data pengguna dari snapshot
+                        UserClass userData = snapshot.getValue(UserClass.class);
+                        if (userData != null) {
+                            // Mengambil nama pengguna dari data pengguna
+                            finalUser[0] = userData.getUsername();
 
-        if (jenisAPAR.equals("Carbondioxide")){
-            kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
-        } else {
-            kesesuaianString = "N/A";
-        }
+                            // Sekarang Anda bisa menggunakan finalUser di sini
+                            // Lanjutkan dengan kode uploadData() di sini
+                            String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                            if (kodeQR.isEmpty()) {
+                                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (uri == null) {
+                                Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
-        DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser, nozzleString, posisiString);
+                            String isiString = isitabung ? "Baik" : "Beku";
+                            String tekananString = tekanan ? "Cukup" : "Kurang";
+                            String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            String kondisiString = kondisi ? "Baik" : "Berkarat";
+                            String selangString = selang ? "Baik" : "Rusak";
+                            String pinString = pin ? "Baik" : "Rusak";
+                            String nozzleString = nozzle ? "Baik" : "Tersumbat";
+                            String posisiString = posisi ? "Baik" : "Terhalang";
 
-        FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    Toast.makeText(EquipmentTambahActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                    finish();
+                            if (jenisAPAR.equals("Carbondioxide")){
+                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            } else {
+                                kesesuaianString = "N/A";
+                            }
+
+                            DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);
+
+                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(EquipmentTambahActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(EquipmentTambahActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
                 }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EquipmentTambahActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Penanganan kesalahan (jika diperlukan)
+                }
+            });
+        }
     }
 
     private void initActivityResultLaunchers() {

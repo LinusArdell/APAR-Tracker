@@ -56,6 +56,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
 import com.test.input.DataClass;
 import com.test.input.R;
+import com.test.input.UserClass;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -80,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     FirebaseAuth mAuth;
-    TextView userEmail;
+    TextView userEmail, username;
     FloatingActionButton fabQr;
+    private DatabaseReference mDatabase;
 
     private boolean isAscendingByName = true;
     private boolean isDescendingByName = false;
@@ -146,11 +148,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         userEmail = headerView.findViewById(R.id.user_email);
+        username = headerView.findViewById(R.id.username);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
@@ -165,6 +169,16 @@ public class MainActivity extends AppCompatActivity {
         MenuItem downloadItem = menu.findItem(R.id.nav_download);
         MenuItem generateQR = menu.findItem(R.id.nav_generate);
         MenuItem onboard = menu.findItem(R.id.nav_guide);
+        MenuItem register = menu.findItem(R.id.nav_register);
+
+        register.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent i = new Intent(MainActivity.this, Register.class);
+                startActivity(i);
+                return false;
+            }
+        });
 
         onboard.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -215,8 +229,26 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
+            String userId = currentUser.getUid();
+
             String email = currentUser.getEmail();
             userEmail.setText(email);
+            mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        UserClass userData = snapshot.getValue(UserClass.class);
+
+                        String username1 = userData.getUsername();
+                        username.setText(username1);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle error
+                }
+            });
         }
 
         initActivityResultLaunchers();
@@ -514,7 +546,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
 
                         intent.putExtra("Key", data.getKodeQR().toString());
-
+                        intent.putExtra("User", data.getUser().toString());
                         intent.putExtra("Image", data.getDataImage());
                         intent.putExtra("KodeQR", data.getKodeQR().toString());
                         intent.putExtra("Tanggal", data.getDataDate().toString());

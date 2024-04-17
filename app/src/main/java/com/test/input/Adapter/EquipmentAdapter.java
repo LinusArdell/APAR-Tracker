@@ -59,7 +59,6 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
                 intent.putExtra("KodeQR", dataList.get(holder.getAdapterPosition()).getKodeQR());
                 intent.putExtra("Tanggal", dataList.get(holder.getAdapterPosition()).getDataDate());
                 intent.putExtra("User", dataList.get(holder.getAdapterPosition()).getUser());
-
                 intent.putExtra("Lokasi", dataList.get(holder.getAdapterPosition()).getLokasiTabung());
                 intent.putExtra("Merk", dataList.get(holder.getAdapterPosition()).getMerkAPAR());
                 intent.putExtra("Berat", dataList.get(holder.getAdapterPosition()).getBeratTabung());

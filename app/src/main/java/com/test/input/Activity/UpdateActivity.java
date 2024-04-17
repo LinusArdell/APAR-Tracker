@@ -34,13 +34,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.test.input.DataClass;
 import com.test.input.R;
+import com.test.input.UserClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -309,57 +313,87 @@ public class UpdateActivity extends AppCompatActivity {
         Boolean posisi = posisiTabung.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
-        String finalUser = users.getEmail();
+        final String[] finalUser = {""}; // Inisialisasi finalUser
 
-        String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        if (users != null) {
+            // Mengambil UID pengguna saat ini
+            String userId = users.getUid();
 
-        if (kodeQr.isEmpty()) {
-            Toast.makeText(UpdateActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            return; // Menghentikan proses upload jika kodeQR kosong
-        }
+            // Mengambil referensi ke data pengguna di Realtime Database
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
-        if (uri == null) {
-            Toast.makeText(UpdateActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            // Mendengarkan satu kali untuk mendapatkan data pengguna
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // Mengambil data pengguna dari snapshot
+                        UserClass userData = snapshot.getValue(UserClass.class);
+                        if (userData != null) {
+                            // Mengambil nama pengguna dari data pengguna
+                            finalUser[0] = userData.getUsername();
 
-        String isiString = isitabung ? "Baik" : "Beku";
-        String tekananString = tekanan ? "Cukup" : "Kurang";
-        String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
-        String kondisiString = kondisi ? "Baik" : "Berkarat";
-        String selangString = selang ? "Baik" : "Rusak";
-        String pinString = pin ? "Baik" : "Rusak";
+                            // Sekarang Anda bisa menggunakan finalUser di sini
+                            // Lanjutkan dengan kode uploadData() di sini
+                            String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
-        String nozzleString = nozzle ? "Baik" : "Tersumbat";
-        String posisiString = posisi ? "Baik" : "Terhalang";
+                            if (kodeQr.isEmpty()) {
+                                Toast.makeText(UpdateActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                                return; // Menghentikan proses upload jika kodeQR kosong
+                            }
 
-        if (jenisAPAR.equals("Carbondioxide")){
-            kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
-        } else {
-            kesesuaianString = "N/A";
-        }
+                            if (uri == null) {
+                                Toast.makeText(UpdateActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
-        DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                kondisiString,selangString, pinString, keterangan, imageUrl, currentDate, finalUser, nozzleString, posisiString);
-        databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
-                    reference.delete();
-                    Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                    // Panggil intent untuk memulai MainActivity di sini setelah data berhasil disimpan
-                    Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish(); // Tambahkan ini jika Anda ingin menutup UpdateActivity setelah memulai MainActivity
+                            String isiString = isitabung ? "Baik" : "Beku";
+                            String tekananString = tekanan ? "Cukup" : "Kurang";
+                            String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            String kondisiString = kondisi ? "Baik" : "Berkarat";
+                            String selangString = selang ? "Baik" : "Rusak";
+                            String pinString = pin ? "Baik" : "Rusak";
+
+                            String nozzleString = nozzle ? "Baik" : "Tersumbat";
+                            String posisiString = posisi ? "Baik" : "Terhalang";
+
+                            if (jenisAPAR.equals("Carbondioxide")) {
+                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            } else {
+                                kesesuaianString = "N/A";
+                            }
+
+                            DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString);
+                            databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
+                                        reference.delete();
+                                        Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                                        // Panggil intent untuk memulai MainActivity di sini setelah data berhasil disimpan
+                                        Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish(); // Tambahkan ini jika Anda ingin menutup UpdateActivity setelah memulai MainActivity
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(UpdateActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
                 }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UpdateActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Penanganan kesalahan (jika diperlukan)
+                }
+            });
+        }
     }
 
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {

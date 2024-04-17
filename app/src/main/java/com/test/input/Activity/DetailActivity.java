@@ -47,7 +47,7 @@ import java.io.IOException;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView detailKodeQR, detailTanggal, tvDeleteDialog;
+    TextView detailKodeQR, detailTanggal, tvDeleteDialog, detailPemeriksa;
     ImageView detailImage;
     MaterialButton deleteButton, editButton;
     ImageButton btnQr, btnHelp;
@@ -201,6 +201,7 @@ public class DetailActivity extends AppCompatActivity {
         tbnBack = findViewById(R.id.btn_back);
         btnQr = findViewById(R.id.btn_qr);
         btnHelp = findViewById(R.id.btn_help);
+        detailPemeriksa = findViewById(R.id.detail_user);
     }
 
     private void fillDataFromIntent() {
@@ -226,6 +227,7 @@ public class DetailActivity extends AppCompatActivity {
             posisiTabung.setText(bundle.getString("Posisi"));
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
+            detailPemeriksa.setText(bundle.getString("User"));
             Glide.with(this).load(bundle.getString("Image")).into(detailImage);
         }
     }
