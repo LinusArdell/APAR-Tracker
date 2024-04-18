@@ -472,6 +472,8 @@
                         android:hint="Keterangan"
                         android:id="@+id/upload_keterangan"/>
 
+                    
+
                 </LinearLayout>
 
             </LinearLayout>

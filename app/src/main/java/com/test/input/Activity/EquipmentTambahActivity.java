@@ -317,7 +317,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(EquipmentTambahActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EquipmentTambahActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -326,7 +326,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Penanganan kesalahan (jika diperlukan)
+                    Toast.makeText(EquipmentTambahActivity.this, "Cannot connect to database", Toast.LENGTH_SHORT).show();
                 }
             });
         }
