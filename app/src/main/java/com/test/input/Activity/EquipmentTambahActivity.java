@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,11 +65,12 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private EditText etResult, etLokasi, etBerat, etketerangan;
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPAR, jenisAPAR;
-    private Button btnUpload;
+    private Button btnUpload, btnClear;
     private ImageView uploadGambar;
     private ImageButton btnImage, btnBack, btnHelp, btnQR;
     private String imageURL;
     private Uri uri;
+    private SignaturePad signaturePad;
     ScrollView scrollView;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
@@ -104,6 +106,13 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signaturePad.clear();
             }
         });
 
@@ -196,6 +205,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         btnHelp = findViewById(R.id.btn_help);
         btnQR = findViewById(R.id.btn_upload_qr);
         scrollView = findViewById(R.id.scrollView);
+        btnClear = findViewById(R.id.btnClearPad);
+        signaturePad = findViewById(R.id.uploadSignature);
     }
 
     public void saveData() {
