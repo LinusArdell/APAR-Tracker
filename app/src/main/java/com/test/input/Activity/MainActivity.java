@@ -12,11 +12,12 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +42,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -105,12 +106,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_main);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
 
         recyclerView = findViewById(R.id.recyclerView);
         searchView = findViewById(R.id.search);
         searchView.clearFocus();
-        jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
+//        jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
         btnQR = findViewById(R.id.searchQr);
 
         dataList = new ArrayList<>();
@@ -277,12 +288,9 @@ public class MainActivity extends AppCompatActivity {
                     dataClass.setKey(itemSnapshot.getKey());
                     dataList.add(dataClass);
                 }
-                restoreSortingStatus();
+                sortDataByDate();
                 dialog.dismiss();
 
-                int totalData = dataList.size();
-                String totalDataString = "Jumlah data: " + totalData;
-                jumlahAPAR.setText(totalDataString);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -458,33 +466,33 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort_name_ascending:
-                isAscendingByName = true;
-                isDescendingByName = false;
-                sortDataByName();
-                return true;
-            case R.id.sort_name_descending:
-                isAscendingByName = false;
-                isDescendingByName = true;
-                sortDataByName();
-                return true;
-            case R.id.sort_date_ascending:
-                isAscendingByDate = true;
-                isDescendingByDate = false;
-                sortDataByDate();
-                return true;
-            case R.id.sort_date_descending:
-                isAscendingByDate = false;
-                isDescendingByDate = true;
-                sortDataByDate();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.sort_name_ascending:
+//                isAscendingByName = true;
+//                isDescendingByName = false;
+//                sortDataByName();
+//                return true;
+//            case R.id.sort_name_descending:
+//                isAscendingByName = false;
+//                isDescendingByName = true;
+//                sortDataByName();
+//                return true;
+//            case R.id.sort_date_ascending:
+//                isAscendingByDate = true;
+//                isDescendingByDate = false;
+//                sortDataByDate();
+//                return true;
+//            case R.id.sort_date_descending:
+//                isAscendingByDate = false;
+//                isDescendingByDate = true;
+//                sortDataByDate();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     public void searchList(String text){
         ArrayList<DataClass> searchList = new ArrayList<>();

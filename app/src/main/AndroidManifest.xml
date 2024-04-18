@@ -41,7 +41,6 @@
         <activity
             android:name=".Activity.DetailActivity"
             android:exported="false"
-            android:parentActivityName=".Activity.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

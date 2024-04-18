@@ -17,15 +17,10 @@ import com.test.input.R;
 
 public class Splash extends AppCompatActivity {
 
-    private Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        setSupportActionBar(toolbar);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

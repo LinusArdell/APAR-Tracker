@@ -27,7 +27,7 @@
         </menu>
     </item>
     <item
-        android:title="Tools">
+        android:title="Alat">
         <menu>
             <item
                 android:id="@+id/nav_generate"
@@ -40,7 +40,7 @@
         </menu>
     </item>
     <item
-        android:title="Account">
+        android:title="Akun">
         <menu>
             <item
                 android:id="@+id/nav_register"

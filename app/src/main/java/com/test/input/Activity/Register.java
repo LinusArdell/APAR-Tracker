@@ -1,14 +1,18 @@
 package com.test.input.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -26,6 +30,7 @@ public class Register extends AppCompatActivity {
 
     EditText etUsername, etEmail, etPassword;
     Button btnRegister;
+    ImageButton btnBack;
     private ProgressDialog processDialog;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
@@ -34,12 +39,19 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_register);
 
         inisialisasiKomponen();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Toolbar toolbar = findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +60,14 @@ public class Register extends AppCompatActivity {
                 registerUser();
             }
         });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     private void inisialisasiKomponen(){
@@ -60,6 +80,7 @@ public class Register extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         auth = FirebaseAuth.getInstance();
         processDialog = new ProgressDialog(this);
+        btnBack = findViewById(R.id.btn_back);
     }
 
     private void registerUser() {

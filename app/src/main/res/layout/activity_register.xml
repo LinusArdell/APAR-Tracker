@@ -8,12 +8,11 @@
     android:background="@drawable/splashbg"
     tools:context=".Activity.Register">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/zxing_transparent"
+        android:background="@drawable/splashbg"
         app:titleTextColor="@color/white"
-        app:title="Tambah akun baru"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,17 +20,48 @@
         app:itemIconTint="@color/main_color"
         app:itemTextColor="@color/main_color">
 
-    </androidx.appcompat.widget.Toolbar>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:tint="@color/white"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="Register new account"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:id="@+id/tv_title"/>
+
+        </RelativeLayout>
+
+    </com.google.android.material.navigation.NavigationView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:background="@drawable/custom_edittext"
+        android:backgroundTint="@color/white"
         android:elevation="30dp"
         app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tool_bar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="30dp">
 
         <RelativeLayout
@@ -105,6 +135,7 @@
                 android:layout_below="@+id/passwordSignUp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="#8736F4"
+                android:textColor="@color/white"
                 android:text="Register"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />

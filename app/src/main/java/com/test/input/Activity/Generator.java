@@ -1,6 +1,7 @@
 package com.test.input.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -23,8 +24,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +55,7 @@ public class Generator extends AppCompatActivity {
     Button btnGenerate, btnClear, btnDownload;
     TextView userEmail;
     private static final int PERMISSION_STORAGE_CODE = 1000;
-
+    ImageButton btnBack;
     public boolean success = false;
     AlertDialog.Builder dialogScan;
     LayoutInflater inflaterScan;
@@ -61,17 +65,23 @@ public class Generator extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generator);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        setContentView(R.layout.activity_generator);
+        btnBack = findViewById(R.id.btn_back);
         tvGenerator = findViewById(R.id.et_qr);
         qrCode = findViewById(R.id.iv_qr);
         btnGenerate = findViewById(R.id.btn_generate);
         btnClear = findViewById(R.id.btn_clear);
         btnDownload = findViewById(R.id.btn_download);
 
-        Toolbar toolbar = findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
 
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +91,13 @@ public class Generator extends AppCompatActivity {
 
                 // Menghapus gambar di qrCode
                 qrCode.setImageDrawable(null);
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
 

@@ -12,14 +12,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:backgroundTint="@color/white">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.navigation.NavigationView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/main_color"
+            android:background="@drawable/splashbg"
             app:titleTextColor="@color/white"
-            app:title="QR Generator"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,13 +27,44 @@
             app:itemIconTint="@color/main_color"
             app:itemTextColor="@color/main_color">
 
-        </androidx.appcompat.widget.Toolbar>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/baseline_arrow_back_24"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:tint="@color/white"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="QR Generator"
+                    android:textSize="26dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/tv_title"/>
+
+            </RelativeLayout>
+
+        </com.google.android.material.navigation.NavigationView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:id="@+id/container">
+            android:id="@+id/container"
+            android:background="@color/white">
 
             <TextView
                 android:layout_margin="10dp"
@@ -42,7 +73,8 @@
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:text="Masukkan Teks"
-                android:id="@+id/tv_generate"/>
+                android:id="@+id/tv_generate"
+                android:textColor="@color/main_color"/>
 
             <EditText
                 android:id="@+id/et_qr"
@@ -70,7 +102,8 @@
                     android:drawableLeft="@drawable/qr_24"
                     android:drawableTint="@color/white"
                     android:backgroundTint="@color/main_color"
-                    android:text="generate" />
+                    android:text="generate"
+                    android:textColor="@color/white"/>
 
             </RelativeLayout>
 
@@ -95,7 +128,8 @@
                     android:drawableTint="@color/white"
                     android:backgroundTint="@color/main_color"
                     android:text="download"
-                    android:id="@+id/btn_download"/>
+                    android:id="@+id/btn_download"
+                    android:textColor="@color/white"/>
 
                 <Button
                     android:id="@+id/btn_clear"
@@ -106,7 +140,8 @@
                     android:drawableLeft="@drawable/baseline_clear_24"
                     android:drawableTint="@color/white"
                     android:backgroundTint="@color/main_color"
-                    android:text="clear" />
+                    android:text="clear"
+                    android:textColor="@color/white"/>
 
             </RelativeLayout>
 
