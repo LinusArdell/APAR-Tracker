@@ -2,6 +2,7 @@ package com.test.input.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,13 @@ import com.test.input.Activity.DetailActivity;
 import com.test.input.Experimental.DateHelper;
 import com.test.input.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
@@ -41,11 +47,21 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        String dateString = dataList.get(position).getDataDate();
+        int backgroundColor = getBackgroundColor(dateString);
+        holder.itemView.setBackgroundColor(backgroundColor);
+
+        int textColor = getTextColor(backgroundColor);
+        holder.recQr.setTextColor(textColor);
+        holder.recUser.setTextColor(textColor);
+        holder.recDate.setTextColor(textColor);
+        holder.recLokasi.setTextColor(textColor);
+        holder.tvSpace.setTextColor(textColor);
+
         Glide.with(context).load(dataList.get(position).getDataImage()).into(holder.recImage);
         holder.recQr.setText(dataList.get(position).getKodeQR());
         holder.recUser.setText(dataList.get(position).getUser());
         holder.recLokasi.setText(dataList.get(position).getLokasiTabung());
-//        holder.recDate.setText(dataList.get(position).getDataDate());
         String formattedDate = DateHelper.convertToRelativeDate(dataList.get(position).getDataDate());
         holder.recDate.setText(formattedDate);
 
@@ -90,11 +106,44 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
         dataList = searchList;
         notifyDataSetChanged();
     }
+
+    private int getBackgroundColor(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+        try {
+            Date date = sdf.parse(dateString);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+
+            Calendar today = Calendar.getInstance();
+            long diffInMillis = today.getTimeInMillis() - calendar.getTimeInMillis();
+            long diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
+
+            if (diffInDays <= 21) {
+                return Color.GREEN; // Warna hijau jika tanggal tidak lebih dari 3 minggu yang lalu
+            } else if (diffInDays <= 28) {
+                return Color.WHITE; // Warna default (putih) jika tanggal antara 3 dan 4 minggu yang lalu
+            } else {
+                return Color.RED; // Warna merah jika tanggal lebih dari 4 minggu yang lalu
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Color.WHITE; // Jika parsing gagal, kembalikan warna default (putih)
+        }
+    }
+
+    private int getTextColor(int backgroundColor) {
+        if (backgroundColor == Color.GREEN || backgroundColor == Color.WHITE) {
+            return Color.BLACK; // Jika latar belakang hijau atau putih, warna teksnya hitam
+        } else {
+            return Color.WHITE; // Jika latar belakang merah, warna teksnya putih
+        }
+    }
+
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder{
     ImageView recImage;
-    TextView recQr, recUser, recDate, recLokasi;
+    TextView recQr, recUser, recDate, recLokasi, tvSpace;
     CardView recCard;
 
     public MyViewHolder(@NonNull View itemView) {
@@ -105,5 +154,6 @@ class MyViewHolder extends RecyclerView.ViewHolder{
         recUser = itemView.findViewById(R.id.tv_user);
         recDate = itemView.findViewById(R.id.tv_date);
         recLokasi = itemView.findViewById(R.id.recLokasi);
+        tvSpace = itemView.findViewById(R.id.recSpace);
     }
 }

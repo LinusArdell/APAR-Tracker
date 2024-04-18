@@ -242,7 +242,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void performDeleteAction() {
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Server");
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
         storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {

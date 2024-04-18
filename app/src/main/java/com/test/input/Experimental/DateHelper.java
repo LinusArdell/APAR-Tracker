@@ -1,5 +1,7 @@
 package com.test.input.Experimental;
 
+import android.graphics.Color;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

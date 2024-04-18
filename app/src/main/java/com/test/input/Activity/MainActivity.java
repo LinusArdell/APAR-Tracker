@@ -265,9 +265,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Test");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Server");
         dialog.show();
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -394,10 +392,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restoreSortingStatus() {
-        isAscendingByName = sharedPreferences.getBoolean("ascending_by_name", true);
-        isDescendingByName = sharedPreferences.getBoolean("descending_by_name", false);
         isAscendingByDate = sharedPreferences.getBoolean("ascending_by_date", true);
         isDescendingByDate = sharedPreferences.getBoolean("descending_by_date", false);
+        isAscendingByName = sharedPreferences.getBoolean("ascending_by_name", true);
+        isDescendingByName = sharedPreferences.getBoolean("descending_by_name", false);
 
         if (isAscendingByName || isDescendingByName) {
             sortDataByName();
@@ -408,10 +406,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveSortingStatus() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("ascending_by_name", isAscendingByName);
-        editor.putBoolean("descending_by_name", isDescendingByName);
         editor.putBoolean("ascending_by_date", isAscendingByDate);
         editor.putBoolean("descending_by_date", isDescendingByDate);
+        editor.putBoolean("ascending_by_name", isAscendingByName);
+        editor.putBoolean("descending_by_name", isDescendingByName);
         editor.apply();
     }
 
@@ -638,7 +636,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadFile() {
-        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlBkOtlUi_8ROqZxxeID4-pniUSl4s9plF5WVtonEEep3EJRBC1VOFvVhOnSngu8pCOaNQJaepMBdk/pub?output=xlsx";
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTtGD6FDZ-6jYW7bpV7R8QNSGu6NghtHaUgBJ4lBeXhyctfPD5OhL7lt-2EPYX1Yj7eUF8S7kJZOeWd/pub?output=xlsx";
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle("File Spreadsheet");

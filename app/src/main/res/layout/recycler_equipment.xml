@@ -30,22 +30,24 @@
             android:layout_height="30dp"
             android:id="@+id/recQr"
             android:text="Kode QR"
-            android:textColor="@color/main_color"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/recImage"/>
+            android:layout_toEndOf="@id/recImage"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:id="@+id/recSpace"
             android:text=" / "
-            android:textColor="@color/main_color"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="0dp"
-            android:layout_toEndOf="@id/recQr"/>
+            android:layout_toEndOf="@id/recQr"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/recLokasi"
@@ -55,36 +57,38 @@
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/recSpace"
             android:text="Lokasi"
-            android:textColor="@color/main_color"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tv_date"
             android:text="Tanggal"
             android:layout_toEndOf="@id/tv_user"
             android:layout_marginStart="50dp"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:textColor="@color/main_color"
-            android:textSize="16sp"
-            android:layout_below="@id/recLokasi"/>
+            android:layout_marginEnd="10dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_below="@id/recLokasi"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_user"
             android:text="User"
-            android:drawableLeft="@drawable/baseline_person_24"
             android:gravity="center_vertical"
-            android:textColor="@color/main_color"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_toEndOf="@id/recImage"
             android:layout_below="@id/recQr"
             android:layout_marginStart="10dp"
             android:maxLines="1"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

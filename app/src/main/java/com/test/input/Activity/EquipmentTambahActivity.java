@@ -204,7 +204,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             return;
         }
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images server")
                 .child(uri.getLastPathSegment());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
@@ -277,6 +277,12 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                                 Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
                                 return;
                             }
+
+                            if (containsIllegalCharacters(kodeQR)) {
+                                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             if (uri == null) {
                                 Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
                                 return;
@@ -300,7 +306,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
                                     kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);
 
-                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            FirebaseDatabase.getInstance().getReference("Server").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
@@ -324,6 +330,10 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private boolean containsIllegalCharacters(String kodeQR) {
+        return kodeQR.contains(".") || kodeQR.contains("#") || kodeQR.contains("$") || kodeQR.contains("[") || kodeQR.contains("]");
     }
 
     private void initActivityResultLaunchers() {

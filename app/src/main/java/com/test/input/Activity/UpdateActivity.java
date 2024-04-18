@@ -217,7 +217,7 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Server").child(key);
 
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,7 +268,7 @@ public class UpdateActivity extends AppCompatActivity {
             return; // Menghentikan proses jika URI gambar kosong
         }
 
-        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
+        storageReference = FirebaseStorage.getInstance().getReference().child("Images Server").child(uri.getLastPathSegment());
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
