@@ -21,8 +21,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.service.autofill.UserData;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,7 +66,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private Button btnUpload, btnClear;
     private ImageView uploadGambar;
     private ImageButton btnImage, btnBack, btnHelp, btnQR;
-    private String imageURL;
+    private String imageURL, signatureUrl;
     private Uri uri;
     private SignaturePad signaturePad;
     ScrollView scrollView;
@@ -109,12 +107,12 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             }
         });
 
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signaturePad.clear();
-            }
-        });
+//        btnClear.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                signaturePad.clear();
+//            }
+//        });
 
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -160,6 +158,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 saveData();
+//                uploadSignature();
             }
         });
 
@@ -167,8 +166,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 scrollView.smoothScrollTo(0, 0);
-
-                // Tampilkan onboarding setelah ScrollView selesai digulirkan ke atas
                 scrollView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -205,8 +202,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         btnHelp = findViewById(R.id.btn_help);
         btnQR = findViewById(R.id.btn_upload_qr);
         scrollView = findViewById(R.id.scrollView);
-        btnClear = findViewById(R.id.btnClearPad);
-        signaturePad = findViewById(R.id.uploadSignature);
+//        btnClear = findViewById(R.id.btnClearPad);
+//        signaturePad = findViewById(R.id.uploadSignature);
     }
 
     public void saveData() {
@@ -242,6 +239,46 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         });
     }
 
+//    private void uploadSignature(){
+//        if (signaturePad.isEmpty()) {
+//            Toast.makeText(this, "Paraf harus diisi", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        String signatureId = UUID.randomUUID().toString();
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Signature server");
+//        StorageReference signatureRef = storageReference.child(signatureId + ".png");
+//
+//        Bitmap signatureBitmap = signaturePad.getSignatureBitmap();
+//
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+//        byte[] data = byteArrayOutputStream.toByteArray();
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
+//        builder.setCancelable(false);
+//        builder.setView(R.layout.progress_layout);
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//
+//        signatureRef.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+//                while (!uriTask.isComplete());
+//                Uri urlSignature = uriTask.getResult();
+//                signatureUrl = urlSignature.toString();
+//                uploadData();
+//                dialog.dismiss();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                dialog.dismiss();
+//            }
+//        });
+//    }
+
     private void uploadData() {
         String kodeQR = etResult.getText().toString().trim();
         String lokasi = etLokasi.getText().toString();
@@ -264,25 +301,16 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         final String[] finalUser = {""}; // Inisialisasi finalUser
 
         if (users != null) {
-            // Mengambil UID pengguna saat ini
             String userId = users.getUid();
-
-            // Mengambil referensi ke data pengguna di Realtime Database
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-
-            // Mendengarkan satu kali untuk mendapatkan data pengguna
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        // Mengambil data pengguna dari snapshot
                         UserClass userData = snapshot.getValue(UserClass.class);
                         if (userData != null) {
-                            // Mengambil nama pengguna dari data pengguna
                             finalUser[0] = userData.getUsername();
 
-                            // Sekarang Anda bisa menggunakan finalUser di sini
-                            // Lanjutkan dengan kode uploadData() di sini
                             String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
                             if (kodeQR.isEmpty()) {
                                 Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
@@ -315,7 +343,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);
+                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);//signatureUrl
 
                             FirebaseDatabase.getInstance().getReference("Server").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -353,8 +381,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             public void onActivityResult(Boolean isGranted) {
                 if (isGranted) {
                     showCamera();
-                } else {
-                    // Handle permission not granted
                 }
             }
         });
@@ -505,10 +531,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     }
 
     private void scrollToShowOnboarding() {
-        // Dapatkan posisi vertikal elemen terakhir yang ditargetkan
-        int lastTargetYPosition = btnUpload.getTop(); // Ganti dengan elemen terakhir yang ditargetkan
-
-        // Gulirkan tampilan ke posisi elemen terakhir yang ditargetkan
+        int lastTargetYPosition = btnUpload.getTop();
         scrollView.smoothScrollTo(0, lastTargetYPosition);
     }
 }

@@ -472,28 +472,6 @@
                         android:hint="Keterangan"
                         android:id="@+id/upload_keterangan"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/main_color"
-                        android:layout_margin="10dp"/>
-
-                    <com.github.gcacace.signaturepad.views.SignaturePad
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_marginBottom="10dp"
-                        android:id="@+id/uploadSignature"/>
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="CLEAR PAD"
-                        android:id="@+id/btnClearPad"
-                        android:drawableLeft="@drawable/baseline_clear_24"
-                        android:drawableTint="@color/white"
-                        android:background="@drawable/custom_button_bg"/>
-
                 </LinearLayout>
 
             </LinearLayout>

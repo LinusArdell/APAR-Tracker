@@ -9,6 +9,7 @@ public class DataClass implements Serializable {
     private String dataDate;
     private String key;
     private String user;
+    private String signatureUrl;
     private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
     private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
 
@@ -28,7 +29,7 @@ public class DataClass implements Serializable {
                       String dataDate,
                       String user,
                       String kondisiNozzle,
-                      String posisiTabung){
+                      String posisiTabung){ //String signatureUrl
 
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
@@ -45,12 +46,15 @@ public class DataClass implements Serializable {
         this.dataDate = dataDate;
         this.dataImage = dataImage;
         this.kondisiNozzle = kondisiNozzle;
-        this.posisiTabung = posisiTabung;
-
+        this.posisiTabung = posisiTabung; //   this.signatureUrl = signatureUrl;
         this.user = user;
     }
 
     public DataClass(){
+    }
+
+    public String getSignatureUrl() {
+        return signatureUrl;
     }
 
     public String getKondisiNozzle() {

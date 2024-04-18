@@ -55,16 +55,13 @@ public class UpdateActivity extends AppCompatActivity {
     ImageView updateImage;
     Button updateButton, btnCancel, btnSave;
     ImageButton btnCapture;
-    EditText updateQr;
     String kodeQr;
     String imageUrl;
     String key, oldImageURL;
     Uri uri;
     DatabaseReference databaseReference;
     StorageReference storageReference;
-
     private FirebaseAuth firebaseAuth;
-    SwitchMaterial switchKondisi;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
@@ -108,7 +105,6 @@ public class UpdateActivity extends AppCompatActivity {
 
         tvQR = findViewById(R.id.tv_qr_update);
         tvID = findViewById(R.id.tv_title_id);
-
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,8 +152,6 @@ public class UpdateActivity extends AppCompatActivity {
             tvQR.setText(bundle.getString("KodeQR"));
 
             Glide.with(UpdateActivity.this).load(bundle.getString("Image")).into(updateImage);
-
-//            updateQr.setText(bundle.getString("KodeQR"));
 
             etLokasi.setText(bundle.getString("Lokasi"));
             etBerat.setText(bundle.getString("Berat"));
@@ -237,7 +231,6 @@ public class UpdateActivity extends AppCompatActivity {
 
         btnCapture.setOnClickListener(View -> dispatchTakePictureIntent(takePictureLauncher));
 
-        // Inisialisasi ActivityResultLauncher untuk izin kamera
         requestPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
@@ -364,7 +357,7 @@ public class UpdateActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString);
+                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString); //signatureUrl
                             databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
