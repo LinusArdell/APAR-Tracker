@@ -127,7 +127,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return Color.WHITE; // Jika parsing gagal, kembalikan warna default (putih)
+            return Color.GREEN; // Jika parsing gagal, kembalikan warna default (putih)
         }
     }
 

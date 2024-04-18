@@ -52,7 +52,6 @@ public class Register extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +101,12 @@ public class Register extends AppCompatActivity {
 
         if (password.isEmpty()) {
             etPassword.setError("Password is required");
+            etPassword.requestFocus();
+            return;
+        }
+
+        if (password.length() < 8) {
+            etPassword.setError("Password must be at least 8 characters long");
             etPassword.requestFocus();
             return;
         }

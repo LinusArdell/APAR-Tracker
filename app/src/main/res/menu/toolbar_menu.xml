@@ -9,26 +9,26 @@
 <!--        android:id="@+id/menuSearch"/>-->
 
     <group>
-<!--        <item-->
-<!--            android:id="@+id/sort_name_ascending"-->
-<!--            android:icon="@drawable/baseline_sort_24"-->
-<!--            android:title="Sort By Name A-Z"-->
-<!--            app:showAsAction="withText"/>-->
+        <item
+            android:id="@+id/sort_name_ascending"
+            android:icon="@drawable/baseline_sort_24"
+            android:title="Sort By Name A-Z"
+            app:showAsAction="withText"/>
 
-<!--        <item-->
-<!--            android:id="@+id/sort_name_descending"-->
-<!--            android:icon="@drawable/baseline_sort_24"-->
-<!--            android:title="Sort By Name Z-A" />-->
+        <item
+            android:id="@+id/sort_name_descending"
+            android:icon="@drawable/baseline_sort_24"
+            android:title="Sort By Name Z-A" />
 
-<!--        <item-->
-<!--            android:id="@+id/sort_date_descending"-->
-<!--            android:icon="@drawable/baseline_sort_24"-->
-<!--            android:title="Recently Uploaded" />-->
+        <item
+            android:id="@+id/sort_date_descending"
+            android:icon="@drawable/baseline_sort_24"
+            android:title="Recently Uploaded" />
 
-<!--        <item-->
-<!--            android:id="@+id/sort_date_ascending"-->
-<!--            android:icon="@drawable/baseline_sort_24"-->
-<!--            android:title="Sort by Date" />-->
+        <item
+            android:id="@+id/sort_date_ascending"
+            android:icon="@drawable/baseline_sort_24"
+            android:title="Sort by Date" />
 
     </group>
 </menu>

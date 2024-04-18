@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -24,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -50,7 +52,7 @@ import java.io.IOException;
 
 public class Generator extends AppCompatActivity {
 
-    EditText tvGenerator;
+    EditText tvGenerator, etFilename;
     ImageView qrCode;
     Button btnGenerate, btnClear, btnDownload;
     TextView userEmail;
@@ -58,6 +60,8 @@ public class Generator extends AppCompatActivity {
     ImageButton btnBack;
     public boolean success = false;
     AlertDialog.Builder dialogScan;
+    Button btnOk;
+    Dialog dialog;
     LayoutInflater inflaterScan;
     View dialogViewScan;
 
@@ -131,21 +135,27 @@ public class Generator extends AppCompatActivity {
                         folder.mkdirs();
 
                     if (success){
-                        dialogScan  = new AlertDialog.Builder(Generator.this,
-                                androidx.appcompat.R.style.Base_Theme_AppCompat_Light_Dialog);
 
-                        inflaterScan = getLayoutInflater();
-                        dialogViewScan = inflaterScan.inflate(R.layout.dialog_name_file,null);
+                        dialog = new Dialog(Generator.this);
+                        dialog.setContentView(R.layout.dialog_name_file);
+                        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+                        dialog.setCancelable(false);
 
-                        Button okButton = dialogViewScan.findViewById(R.id.btn_ok);
-                        TextInputEditText filename = dialogViewScan.findViewById(R.id.file_name);
-                        dialogScan.setView(dialogViewScan);
-                        dialogScan.setCancelable(true);
+                        btnOk = dialog.findViewById(R.id.btn_ok);
+                        etFilename = dialog.findViewById(R.id.file_name);
 
-                        final AlertDialog show = dialogScan.show();
-                        okButton.setOnClickListener(new View.OnClickListener() {
+                        dialog.show();
+                        btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                String filename = etFilename.getText().toString().trim();
+                                if (filename.isEmpty()){
+                                    etFilename.setError("Nama file harus diisi");
+                                    etFilename.requestFocus();
+                                    return;
+                                }
+
                                 try {
                                     MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                                     try {
@@ -153,13 +163,13 @@ public class Generator extends AppCompatActivity {
                                         BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                                         Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
 
-                                        saveImageToInternalStorage(bitmap, folder.getAbsolutePath(), filename.getText().toString());
+                                        saveImageToInternalStorage(bitmap, folder.getAbsolutePath(), etFilename.getText().toString());
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                    show.dismiss();
-                                    Toast.makeText(Generator.this, "File pdf has been saved", Toast.LENGTH_SHORT).show();
-                                    OpenFolder(folder.getAbsolutePath(), filename.getText().toString()+".jpg");
+                                    dialog.dismiss();
+                                    Toast.makeText(Generator.this, "Gambar berhasil disimpan", Toast.LENGTH_SHORT).show();
+                                    OpenFolder(folder.getAbsolutePath(), etFilename.getText().toString()+".jpg");
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }

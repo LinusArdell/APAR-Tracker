@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Server");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Test");
         dialog.show();
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -289,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
                     dataList.add(dataClass);
                 }
                 sortDataByDate();
+                restoreSortingStatus();
                 dialog.dismiss();
 
             }
@@ -466,33 +467,33 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.sort_name_ascending:
-//                isAscendingByName = true;
-//                isDescendingByName = false;
-//                sortDataByName();
-//                return true;
-//            case R.id.sort_name_descending:
-//                isAscendingByName = false;
-//                isDescendingByName = true;
-//                sortDataByName();
-//                return true;
-//            case R.id.sort_date_ascending:
-//                isAscendingByDate = true;
-//                isDescendingByDate = false;
-//                sortDataByDate();
-//                return true;
-//            case R.id.sort_date_descending:
-//                isAscendingByDate = false;
-//                isDescendingByDate = true;
-//                sortDataByDate();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_name_ascending:
+                isAscendingByName = true;
+                isDescendingByName = false;
+                sortDataByName();
+                return true;
+            case R.id.sort_name_descending:
+                isAscendingByName = false;
+                isDescendingByName = true;
+                sortDataByName();
+                return true;
+            case R.id.sort_date_ascending:
+                isAscendingByDate = true;
+                isDescendingByDate = false;
+                sortDataByDate();
+                return true;
+            case R.id.sort_date_descending:
+                isAscendingByDate = false;
+                isDescendingByDate = true;
+                sortDataByDate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void searchList(String text){
         ArrayList<DataClass> searchList = new ArrayList<>();
@@ -644,7 +645,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadFile() {
-        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTtGD6FDZ-6jYW7bpV7R8QNSGu6NghtHaUgBJ4lBeXhyctfPD5OhL7lt-2EPYX1Yj7eUF8S7kJZOeWd/pub?output=xlsx";
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlBkOtlUi_8ROqZxxeID4-pniUSl4s9plF5WVtonEEep3EJRBC1VOFvVhOnSngu8pCOaNQJaepMBdk/pub?output=xlsx";
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle("File Spreadsheet");

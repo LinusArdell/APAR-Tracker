@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ import java.io.IOException;
 public class DetailActivity extends AppCompatActivity {
 
     TextView detailKodeQR, detailTanggal, tvDeleteDialog, detailPemeriksa;
+    EditText etFilename;
     ImageView detailImage;
     MaterialButton deleteButton, editButton;
     ImageButton btnQr, btnHelp;
@@ -66,8 +68,8 @@ public class DetailActivity extends AppCompatActivity {
     AlertDialog.Builder dialogScan;
     LayoutInflater inflaterScan;
     View dialogViewScan;
-    Dialog dialog;
-    Button btnCancel, btnDelete;
+    Dialog dialog, dialogs;
+    Button btnCancel, btnDelete, btnOk;
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
@@ -139,19 +141,28 @@ public class DetailActivity extends AppCompatActivity {
                         folder.mkdirs();
 
                     if (success){
-                        dialogScan  = new AlertDialog.Builder(DetailActivity.this,
-                                androidx.appcompat.R.style.Base_Theme_AppCompat_Light_Dialog);
-                        inflaterScan = getLayoutInflater();
-                        dialogViewScan = inflaterScan.inflate(R.layout.dialog_name_file,null);
-                        Button okButton = dialogViewScan.findViewById(R.id.btn_ok);
-                        TextInputEditText filename = dialogViewScan.findViewById(R.id.file_name);
-                        dialogScan.setView(dialogViewScan);
-                        dialogScan.setCancelable(true);
 
-                        final AlertDialog show = dialogScan.show();
-                        okButton.setOnClickListener(new View.OnClickListener() {
+                        dialogs = new Dialog(DetailActivity.this);
+                        dialogs.setContentView(R.layout.dialog_name_file);
+                        dialogs.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        dialogs.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+                        dialogs.setCancelable(false);
+
+                        btnOk = dialogs.findViewById(R.id.btn_ok);
+                        etFilename = dialogs.findViewById(R.id.file_name);
+
+
+                        dialogs.show();
+                        btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                String filename = etFilename.getText().toString().trim();
+                                if (filename.isEmpty()){
+                                    etFilename.setError("Nama file harus diisi");
+                                    etFilename.requestFocus();
+                                    return;
+                                }
+
                                 try {
                                     MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                                     try {
@@ -159,13 +170,13 @@ public class DetailActivity extends AppCompatActivity {
                                         BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                                         Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
 
-                                        saveImageToInternalStorage(bitmap, folder.getAbsolutePath(), filename.getText().toString());
+                                        saveImageToInternalStorage(bitmap, folder.getAbsolutePath(), etFilename.getText().toString());
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                    show.dismiss();
+                                    dialogs.dismiss();
                                     Toast.makeText(DetailActivity.this, "Gambar berhasil disimpan", Toast.LENGTH_SHORT).show();
-                                    OpenFolder(folder.getAbsolutePath(), filename.getText().toString()+".jpg");
+                                    OpenFolder(folder.getAbsolutePath(), etFilename.getText().toString()+".jpg");
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }
@@ -256,7 +267,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void performDeleteAction() {
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Server");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
         storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {

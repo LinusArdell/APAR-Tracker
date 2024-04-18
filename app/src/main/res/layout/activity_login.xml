@@ -48,7 +48,7 @@
                 android:padding="8dp"
                 android:textColorHighlight="#2E46DA"
                 android:layout_marginTop="40dp"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:id="@+id/emailSignIn"/>
 
             <EditText

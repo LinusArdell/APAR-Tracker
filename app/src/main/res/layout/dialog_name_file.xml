@@ -1,28 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
-    android:layout_height="match_parent"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="5dp"
-    android:orientation="vertical">
+    app:cardElevation="10dp"
+    app:cardCornerRadius="16dp"
+    android:background="@color/white">
 
-    <com.google.android.material.textfield.TextInputLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Save as picture"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/file_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Simpan dengan nama file baru"
-            android:id="@+id/file_name"/>
+            android:layout_margin="15dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_confirm"
+            app:layout_constraintStart_toStartOf="@+id/tv_confirm"
+            app:layout_constraintTop_toBottomOf="@+id/tv_confirm" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:layout_margin="20dp"
+            android:background="@drawable/custom_button_bg"
+            app:layout_constraintEnd_toEndOf="@+id/file_name"
+            app:layout_constraintStart_toStartOf="@+id/file_name"
+            app:layout_constraintTop_toBottomOf="@+id/file_name" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_ok"
-        android:text="OK"
-        android:layout_below="@id/file_name"/>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>
