@@ -18,7 +18,7 @@
         <com.google.android.material.navigation.NavigationView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/splashbg"
+            android:background="@color/main_color"
             app:titleTextColor="@color/white"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"

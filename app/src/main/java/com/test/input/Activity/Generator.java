@@ -60,7 +60,7 @@ public class Generator extends AppCompatActivity {
     ImageButton btnBack;
     public boolean success = false;
     AlertDialog.Builder dialogScan;
-    Button btnOk;
+    Button btnOk, btnNo;
     Dialog dialog;
     LayoutInflater inflaterScan;
     View dialogViewScan;
@@ -143,9 +143,17 @@ public class Generator extends AppCompatActivity {
                         dialog.setCancelable(false);
 
                         btnOk = dialog.findViewById(R.id.btn_ok);
+                        btnNo = dialog.findViewById(R.id.btn_no);
                         etFilename = dialog.findViewById(R.id.file_name);
 
                         dialog.show();
+
+                        btnNo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
                         btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

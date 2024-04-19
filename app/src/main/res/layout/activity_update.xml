@@ -464,7 +464,8 @@
             android:layout_height="match_parent"
             android:text="Update &amp; Close"
             android:backgroundTint="@color/main_color"
-            android:id="@+id/btn_update"/>
+            android:id="@+id/btn_update"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

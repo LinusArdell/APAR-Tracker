@@ -9,7 +9,7 @@
     <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/splashbg"
+        android:background="@color/main_color"
         app:titleTextColor="@color/white"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -92,7 +92,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/baseline_camera_alt_24"
-                app:tint="#8537F4"
+                app:tint="@color/main_color"
                 android:id="@+id/btn_capture"
                 android:layout_marginTop="10dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless" />
@@ -128,7 +128,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="Kode QR"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:textSize="16dp"
                                 android:textStyle="bold" />
 
@@ -136,11 +136,12 @@
                                 android:id="@+id/upload_qr"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColorHint="#8537F4"
+                                android:textColorHint="@color/main_color"
                                 android:hint="Masukkan Nomor Registrasi "
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:background="@drawable/custom_input"
                                 android:layout_gravity="center"
+                                android:maxLines="1"
                                 android:layout_marginRight="2dp"
                                 android:textSize="16dp" />
 
@@ -149,7 +150,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center|right"
-                                android:background="#8537F4"
+                                android:background="@color/main_color"
                                 android:src="@drawable/baseline_qr_code_scanner_24"
                                 app:tint="@color/white" />
 
@@ -169,16 +170,16 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Lokasi "
                                 android:id="@+id/tv_lokasi_fisik"/>
 
                             <EditText
                                 android:id="@+id/upload_lokasi"
-                                android:textColorHint="#8537F4"
+                                android:textColorHint="@color/main_color"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:hint="Lokasi APAR"
                                 android:background="@drawable/custom_input"
                                 android:textSize="16dp"/>
@@ -198,7 +199,7 @@
                                 android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Merk APAR "
                                 android:textStyle="bold"
                                 android:id="@+id/tv_merk"/>
@@ -224,7 +225,7 @@
                             <TextView
                                 android:layout_width="130dp"
                                 android:layout_height="wrap_content"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:textStyle="bold"
                                 android:textSize="16dp"
                                 android:text="Berat APAR"
@@ -234,7 +235,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColorHint="#8537F4"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:hint=" Berat (KG)"
                                 android:id="@+id/upload_berat"
                                 android:inputType="numberDecimal"
@@ -254,7 +255,7 @@
                             <TextView
                                 android:layout_width="130dp"
                                 android:layout_height="wrap_content"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
                                 android:text="Jenis APAR "/>
@@ -272,7 +273,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="#8537F4"
+                        android:background="@color/main_color"
                         android:layout_margin="10dp"/>
 
                     <LinearLayout
@@ -290,7 +291,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Badan Tabung tidak berkarat"
                                 android:id="@+id/tv_parameter1"/>
 
@@ -312,7 +313,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Posisi tabung tidak terhalangi barang"
                                 android:id="@+id/tv_parameter2"/>
 
@@ -334,7 +335,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Kondisi selang" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -354,7 +355,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Segel pin terpasang"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -376,7 +377,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Mulut nozzle tidak tersumbat"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -397,7 +398,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Jarum indikator menunjukkan tekanan cukup"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -418,7 +419,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Powder tidak mengendap"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -439,7 +440,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Selisih berat tabung &lt; 10%"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -455,7 +456,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="#8537F4"
+                        android:background="@color/main_color"
                         android:layout_margin="10dp"/>
 
                     <EditText
@@ -466,8 +467,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="20dp"
                         android:textAlignment="center"
-                        android:textColor="#8537F4"
-                        android:textColorHint="#8537F4"
+                        android:textColor="@color/main_color"
+                        android:textColorHint="@color/main_color"
                         android:textSize="24dp"
                         android:drawableLeft="@drawable/fab_add"
                         android:hint="Keterangan"
@@ -486,13 +487,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/splashbg">
+        android:background="@color/main_color">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Save &amp; Close"
-            android:background="@drawable/splashbg"
+            android:background="@color/main_color"
             android:id="@+id/btn_upload"/>
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>

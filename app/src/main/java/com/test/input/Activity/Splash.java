@@ -4,18 +4,25 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.test.input.R;
 
 public class Splash extends AppCompatActivity {
+
+    Button btnOk, btnNo;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +45,26 @@ public class Splash extends AppCompatActivity {
                     HDL.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+
+                            dialog = new Dialog(Splash.this);
+                            dialog.setContentView(R.layout.dialog_no_internet);
+                            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+                            dialog.setCancelable(false);
+
+                            btnOk = dialog.findViewById(R.id.noInternetOk);
+
+                            dialog.show();
+
+                            btnOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+
                             Toast.makeText(Splash.this, "Tidak ada akses internet", Toast.LENGTH_LONG).show();
-                            finish();
                         }
 
                     },1000);

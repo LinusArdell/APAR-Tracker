@@ -14,6 +14,10 @@
                     android:id="@+id/nav_add"
                     android:icon="@drawable/fab_add"
                     android:title="Add new item"/>
+                <item
+                    android:id="@+id/nav_draft"
+                    android:icon="@drawable/draft_24"
+                    android:title="Draft"/>
             </group>
         </menu>
     </item>

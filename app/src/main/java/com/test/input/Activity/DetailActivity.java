@@ -69,7 +69,7 @@ public class DetailActivity extends AppCompatActivity {
     LayoutInflater inflaterScan;
     View dialogViewScan;
     Dialog dialog, dialogs;
-    Button btnCancel, btnDelete, btnOk;
+    Button btnCancel, btnDelete, btnOk, btnNo;
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
@@ -149,10 +149,17 @@ public class DetailActivity extends AppCompatActivity {
                         dialogs.setCancelable(false);
 
                         btnOk = dialogs.findViewById(R.id.btn_ok);
+                        btnNo = dialogs.findViewById(R.id.btn_no);
                         etFilename = dialogs.findViewById(R.id.file_name);
 
 
                         dialogs.show();
+                        btnNo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialogs.dismiss();
+                            }
+                        });
                         btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

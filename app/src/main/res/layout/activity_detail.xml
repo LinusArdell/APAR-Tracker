@@ -9,7 +9,7 @@
     <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/splashbg"
+        android:background="@color/main_color"
         app:titleTextColor="@color/white"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -127,7 +127,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Kode QR"/>
 
                             <TextView
@@ -137,7 +137,7 @@
                                 android:id="@+id/detail_qr"
                                 android:text="Kode QR"
                                 android:textSize="16dp"
-                                android:textColor="#8537F4"/>
+                                android:textColor="@color/main_color"/>
 
                         </LinearLayout>
 
@@ -155,7 +155,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Lokasi Fisik "
                                 android:id="@+id/tv_lokasi_fisik"/>
 
@@ -163,7 +163,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:textAlignment="textEnd"
                                 android:text="Lokasi"
                                 android:id="@+id/detail_lokasi"
@@ -184,7 +184,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Merk APAR "
                                 android:textStyle="bold"
                                 android:id="@+id/tv_merk"/>
@@ -194,7 +194,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Merk APAR"
                                 android:id="@+id/detail_merk"/>
 
@@ -212,7 +212,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:textStyle="bold"
                                 android:textSize="16dp"
                                 android:text="Berat APAR"/>
@@ -222,7 +222,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Berat"
                                 android:id="@+id/detail_berat"/>
 
@@ -240,7 +240,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
                                 android:text="Jenis APAR "/>
@@ -250,10 +250,16 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Jenis"
                                 android:id="@+id/detail_jenis"/>
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="@color/main_color"
+                            android:layout_margin="10dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -269,7 +275,9 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
+                                android:drawableLeft="@drawable/baseline_person_24"
+                                android:drawableTint="@color/main_color"
                                 android:text="Pemeriksa "/>
 
                             <TextView
@@ -277,7 +285,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="User"
                                 android:id="@+id/detail_user"/>
 
@@ -297,15 +305,17 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textStyle="bold"
-                                android:textColor="#8537F4"
-                                android:text="Terakhir di Update "/>
+                                android:textColor="@color/main_color"
+                                android:text="Pemeriksaan terakhir "
+                                android:drawableLeft="@drawable/calendar_24"
+                                android:drawableTint="@color/main_color"/>
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:textAlignment="textEnd"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Tanggal"
                                 android:id="@+id/detail_tanggal"/>
 
@@ -316,7 +326,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="@drawable/splashbg"
+                        android:background="@color/main_color"
                         android:layout_margin="10dp"/>
 
                     <LinearLayout
@@ -334,7 +344,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Badan Tabung tidak berkarat"
                                 android:id="@+id/tv_parameter1"/>
 
@@ -343,7 +353,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Kondisi"
                                 android:textAlignment="textEnd"/>
 
@@ -359,7 +369,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Posisi tabung tidak terhalangi barang"
                                 android:id="@+id/tv_parameter2"/>
 
@@ -368,7 +378,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
-                                android:textColor="#8537F4"
+                                android:textColor="@color/main_color"
                                 android:text="Posisi"
                                 android:layout_toEndOf="@id/tv_parameter2"
                                 android:textAlignment="textEnd"/>
@@ -551,7 +561,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/bottom_navigation"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/splashbg">
+        android:background="@color/main_color">
 
         <LinearLayout
             android:layout_width="match_parent"

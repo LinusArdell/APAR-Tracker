@@ -10,5 +10,8 @@
 
 
 
-    <color name="main_color">#8537F4</color>
+<!--    <color name="main_color">#8537F4</color>-->
+    <color name="main_color">#067dff</color>
+    <color name="red_color">#F44336</color>
+
 </resources>

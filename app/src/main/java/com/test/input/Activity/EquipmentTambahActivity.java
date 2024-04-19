@@ -13,16 +13,20 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -35,7 +39,6 @@ import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,13 +69,13 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private EditText etResult, etLokasi, etBerat, etketerangan;
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPAR, jenisAPAR;
-    private Button btnUpload, btnClear;
+    private Button btnUpload, btnBuang, btnSimpan;
     private ImageView uploadGambar;
     private ImageButton btnImage, btnBack, btnHelp, btnQR;
-    private String imageURL, signatureUrl;
+    private String imageURL;
     private Uri uri;
-    private SignaturePad signaturePad;
     ScrollView scrollView;
+    Dialog dialog;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
     private FirebaseAuth firebaseAuth;
@@ -92,7 +95,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_equipment_tambah);
 
@@ -121,13 +124,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-//        btnClear.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                signaturePad.clear();
-//            }
-//        });
 
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -172,7 +168,39 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveData();
+                if (isNetworkStatusAvialable(getApplicationContext())){
+                    saveData();
+                }
+                else {
+                    dialog = new Dialog(EquipmentTambahActivity.this);
+                    dialog.setContentView(R.layout.dialog_no_internet_upload);
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+                    dialog.setCancelable(false);
+
+                    btnBuang = dialog.findViewById(R.id.btnBuang);
+                    btnSimpan = dialog.findViewById(R.id.btnDraft);
+
+                    dialog.show();
+
+                    btnBuang.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    });
+
+                    btnSimpan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                            saveDraft();
+                            finish();
+                        }
+                    });
+                }
+
 //                uploadSignature();
             }
         });
@@ -193,6 +221,32 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         if (!isOnboardingCompleted()) {
             showOnboarding();
         }
+    }
+
+    private void saveDraft() {
+        SharedPreferences sharedPreferences = getSharedPreferences("draft_data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("kodeQR", etResult.getText().toString().trim());
+        editor.putString("lokasi", etLokasi.getText().toString());
+        editor.putString("berat", etBerat.getText().toString());
+        editor.putString("keterangan", etketerangan.getText().toString());
+
+        editor.putString("MerkAPAR", merkAPAR.getSelectedItem().toString());
+        editor.putString("JenisAPAR", jenisAPAR.getSelectedItem().toString());
+
+        editor.putBoolean("isiTabung", isiTabung.isChecked());
+        editor.putBoolean("tekanan", tekananTabung.isChecked());
+        editor.putBoolean("kesesuaian", kesesuaianBerat.isChecked());
+        editor.putBoolean("kondisi", kondisiTabung.isChecked());
+        editor.putBoolean("selang", kondisiSelang.isChecked());
+        editor.putBoolean("pin", kondisiPin.isChecked());
+        editor.putBoolean("nozzle", kondisiNozzle.isChecked());
+        editor.putBoolean("posisi", posisiTabung.isChecked());
+
+//        editor.putString("ImageUri", imageUri.toString());
+
+        editor.apply();
     }
 
     private void initializeUI() {
@@ -217,8 +271,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         btnHelp = findViewById(R.id.btn_help);
         btnQR = findViewById(R.id.btn_upload_qr);
         scrollView = findViewById(R.id.scrollView);
-//        btnClear = findViewById(R.id.btnClearPad);
-//        signaturePad = findViewById(R.id.uploadSignature);
     }
 
     public void saveData() {
@@ -254,46 +306,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         });
     }
 
-//    private void uploadSignature(){
-//        if (signaturePad.isEmpty()) {
-//            Toast.makeText(this, "Paraf harus diisi", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        String signatureId = UUID.randomUUID().toString();
-//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Signature server");
-//        StorageReference signatureRef = storageReference.child(signatureId + ".png");
-//
-//        Bitmap signatureBitmap = signaturePad.getSignatureBitmap();
-//
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-//        byte[] data = byteArrayOutputStream.toByteArray();
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
-//        builder.setCancelable(false);
-//        builder.setView(R.layout.progress_layout);
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//
-//        signatureRef.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-//                while (!uriTask.isComplete());
-//                Uri urlSignature = uriTask.getResult();
-//                signatureUrl = urlSignature.toString();
-//                uploadData();
-//                dialog.dismiss();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                dialog.dismiss();
-//            }
-//        });
-//    }
-
     private void uploadData() {
         String kodeQR = etResult.getText().toString().trim();
         String lokasi = etLokasi.getText().toString();
@@ -318,6 +330,23 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         if (users != null) {
             String userId = users.getUid();
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
+            if (kodeQR.isEmpty()) {
+                etResult.setError("Kode QR tidak boleh kosong");
+                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (containsIllegalCharacters(kodeQR)) {
+                etResult.setError("Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'");
+                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (uri == null) {
+                Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
+                return;
+            }
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -327,20 +356,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             finalUser[0] = userData.getUsername();
 
                             String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-                            if (kodeQR.isEmpty()) {
-                                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            if (containsIllegalCharacters(kodeQR)) {
-                                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            if (uri == null) {
-                                Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
 
                             String isiString = isitabung ? "Baik" : "Beku";
                             String tekananString = tekanan ? "Cukup" : "Kurang";
@@ -384,6 +399,17 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 }
             });
         }
+
+    }
+
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
     }
 
     private boolean containsIllegalCharacters(String kodeQR) {
