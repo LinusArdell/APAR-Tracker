@@ -130,7 +130,9 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                 }
 
                 if (inputStream != null) {
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
+//                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+
                             .child(uri.getLastPathSegment());
 
                     storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -141,9 +143,11 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                             Uri urlImage = uriTask.getResult();
                             imageURL = urlImage.toString();
 
-                            DraftClass dataClass = new DraftClass(kodeQR, lokasi, berat, MerkAPAR,  JenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin, keterangan, imageURL, tanggal, user, nozzle, posisi);
+                            DraftClass dataClass = new DraftClass(kodeQR, lokasi,  MerkAPAR, berat,  JenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin, keterangan, imageURL, tanggal, user, nozzle, posisi);
 
-                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+//                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     dialog.dismiss();

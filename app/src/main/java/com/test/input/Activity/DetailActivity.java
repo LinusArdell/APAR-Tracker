@@ -1,5 +1,6 @@
 package com.test.input.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -259,6 +262,7 @@ public class DetailActivity extends AppCompatActivity {
             etketerangan.setText(bundle.getString("Keterangan"));
             kondisiNozzle.setText(bundle.getString("Nozzle"));
             posisiTabung.setText(bundle.getString("Posisi"));
+//            key = bundle.getString("Key");
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
             detailPemeriksa.setText(bundle.getString("User"));
@@ -270,16 +274,22 @@ public class DetailActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                performDeleteAction();
                 dialog.show();
             }
         });
     }
 
     private void performDeleteAction() {
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Draft");
-//        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
+//        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Draft");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
+
+        Log.d("DetailActivity", "Key: " + key);
+        Log.d("DetailActivity", "Reference: " + reference.toString());
+        Log.d("DetailActivity", "ImageUrl: " + imageUrl);
+
         storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -287,6 +297,12 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(DetailActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(DetailActivity.this, "Update data terlebih dahulu kemudian hapus", Toast.LENGTH_SHORT).show();
             }
         });
     }

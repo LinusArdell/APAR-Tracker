@@ -53,7 +53,7 @@ public class UpdateOffline extends AppCompatActivity {
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
-    private Spinner merkAPAR, jenisAPAR;
+    private Spinner merkAPARs, jenisAPAR;
     private EditText etLokasi, etBerat, etketerangan;
     private TextView tvQR, tvID;
 
@@ -88,7 +88,7 @@ public class UpdateOffline extends AppCompatActivity {
 
                 String kodeQR = tvQR.getText().toString();
                 String lokasiTabung = etLokasi.getText().toString();
-                String merkAPAr = merkAPAR.getSelectedItem().toString();
+                String merkAPAR = merkAPARs.getSelectedItem().toString();
                 String beratTabung = etBerat.getText().toString();
                 String jenisAPAr = jenisAPAR.getSelectedItem().toString();
 
@@ -118,7 +118,7 @@ public class UpdateOffline extends AppCompatActivity {
                     String nozzleString = nozzles ? "Baik" : "Tersumbat";
                     String posisiString = posisi ? "Baik" : "Terhalang";
 
-                    saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
+                    saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
                             kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
 
                     Toast.makeText(UpdateOffline.this, "Data tersimpan", Toast.LENGTH_SHORT).show();
@@ -182,9 +182,9 @@ public class UpdateOffline extends AppCompatActivity {
             String jenisAparValue = bundle.getString("Jenis");
 
             if (merkAparValue != null) {
-                int merkAparPosition = getIndexSpinner(merkAPAR, merkAparValue);
+                int merkAparPosition = getIndexSpinner(merkAPARs, merkAparValue);
                 if (merkAparPosition != -1) {
-                    merkAPAR.setSelection(merkAparPosition);
+                    merkAPARs.setSelection(merkAparPosition);
                 }
             }
 
@@ -248,7 +248,7 @@ public class UpdateOffline extends AppCompatActivity {
 
                 String kodeQR = tvQR.getText().toString();
                 String lokasiTabung = etLokasi.getText().toString();
-                String merkAPAr = merkAPAR.getSelectedItem().toString();
+                String merkAPAR = merkAPARs.getSelectedItem().toString();
                 String beratTabung = etBerat.getText().toString();
                 String jenisAPAr = jenisAPAR.getSelectedItem().toString();
 
@@ -278,7 +278,7 @@ public class UpdateOffline extends AppCompatActivity {
                     String nozzleString = nozzles ? "Baik" : "Tersumbat";
                     String posisiString = posisi ? "Baik" : "Terhalang";
 
-                    saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
+                    saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
                             kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
 
                     Toast.makeText(UpdateOffline.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
@@ -314,7 +314,7 @@ public class UpdateOffline extends AppCompatActivity {
     }
 
     private void iniSialisasiUi() {
-        merkAPAR = findViewById(R.id.update_merk);
+        merkAPARs = findViewById(R.id.update_merk);
         jenisAPAR = findViewById(R.id.update_jenis);
         etLokasi = findViewById(R.id.update_lokasi);
         etBerat = findViewById(R.id.update_berat);

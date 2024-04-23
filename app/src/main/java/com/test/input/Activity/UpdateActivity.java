@@ -224,15 +224,16 @@ public class UpdateActivity extends AppCompatActivity {
 
             kondisiNozzle.setChecked(nozzleBoolean);
             posisiTabung.setChecked(posisiBoolean);
+            key = bundle.getString("KodeQR");
 
-            key = bundle.getString("Key");
+//            key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
 
             tvID.setText("Update " + bundle.getString("KodeQR"));
         }
 
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
-        databaseReference = FirebaseDatabase.getInstance().getReference("Draft").child(key);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Draft").child(key);
 
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,7 +336,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void saveData(){
-        Log.d("EquipmentTambahActivity", "URI: " + uri);
+        Log.d("UpdateActivity", "URI: " + uri);
 
         // Memeriksa apakah URI gambar tidak null
         if (uri == null) {
@@ -343,8 +344,8 @@ public class UpdateActivity extends AppCompatActivity {
             return; // Menghentikan proses jika URI gambar kosong
         }
 
-//        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
-        storageReference = FirebaseStorage.getInstance().getReference().child("Image Test").child(uri.getLastPathSegment());
+        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
+//        storageReference = FirebaseStorage.getInstance().getReference().child("Image Test").child(uri.getLastPathSegment());
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);

@@ -219,8 +219,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             return;
         }
 
-//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
                 .child(uri.getLastPathSegment());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
@@ -316,9 +316,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
                                     kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);//signatureUrl
 
-//                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){

@@ -329,8 +329,8 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Test");
-        databaseReference = FirebaseDatabase.getInstance().getReference("Draft");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Test");
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Draft");
         dialog.show();
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
