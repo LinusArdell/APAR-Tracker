@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
@@ -70,14 +71,19 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
         DraftClass dataList = dataLists.get(position);
         String KodeQr = dataLists.get(position).getKodeQR();
 
-        holder.recImage12.setImageURI(Uri.parse(dataList.getDataImage()));
+        Glide.with(contexts)
+                .load(dataList.getDataImage())
+                .into(holder.recImage12);
+
         holder.recQr12.setText(dataLists.get(position).getKodeQR());
         holder.recUser12.setText(dataLists.get(position).getUser());
         holder.recLokasi12.setText(dataLists.get(position).getLokasiTabung());
 
         holder.tvMerk12.setText(dataLists.get(position).getMerkAPAR());
         holder.tvBerat12.setText(dataLists.get(position).getBeratTabung());
+
         holder.tvJenis12.setText(dataLists.get(position).getJenisAPAR());
+
         holder.tvTanggal12.setText(dataLists.get(position).getDataDate());
         holder.tvKondisiTabung12.setText(dataLists.get(position).getKondisiTabung());
         holder.tvPosisi12.setText(dataLists.get(position).getPosisiTabung());
@@ -99,13 +105,17 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                 dialog.show();
                 DraftClass draft = dataLists.get(holder.getAdapterPosition());
 
+//                final int takeFlags = intent.getFlags()
+//                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+//                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
                 String kodeQR = draft.getKodeQR();
                 String lokasi = draft.getLokasiTabung();
                 String berat = draft.getBeratTabung();
                 String keterangan = draft.getKeterangan();
 
                 String MerkAPAR = draft.getMerkAPAR();
-                String JenisAPAR = draft.getJenisAPAR();
+                String jenisAPAR = draft.getJenisAPAR();
 
                 String isitabung = draft.getIsiTabung();
                 String tekanan = draft.getTekananTabung();
@@ -122,6 +132,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                 Uri uri = Uri.parse(draft.getDataImage());
 
                 ContentResolver contentResolver = view.getContext().getContentResolver();
+
                 InputStream inputStream = null;
                 try {
                     inputStream = contentResolver.openInputStream(uri);
@@ -143,7 +154,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                             Uri urlImage = uriTask.getResult();
                             imageURL = urlImage.toString();
 
-                            DraftClass dataClass = new DraftClass(kodeQR, lokasi,  MerkAPAR, berat,  JenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin, keterangan, imageURL, tanggal, user, nozzle, posisi);
+                            DraftClass dataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin, keterangan, imageURL, tanggal, user, nozzle, posisi);
 
                             FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
 
@@ -185,7 +196,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
             Log.d("SharedPreferencesData", entry.getKey() + ": " + entry.getValue().toString());
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -257,10 +267,10 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 class DraftViewHolder extends RecyclerView.ViewHolder {
 
     ImageView recImage12;
-    TextView recQr12, recUser12, recLokasi12, tvMerk12, tvBerat12, tvJenis12, tvTanggal12, tvKondisiTabung12, tvPosisi12, tvKondisiSelang12, tvPin12,
+    TextView recQr12, recUser12, recLokasi12, tvMerk12, tvBerat12, tvTanggal12, tvKondisiTabung12, tvPosisi12, tvKondisiSelang12, tvPin12,
             tvNozzle12, tvJarum12, tvPowder12, tvSelisih12, tvKeterangan12;
     CardView recCard12;
-
+    TextView tvJenis12;
     Button btnUploadDraft, btnDeleteDraft;
 
     public DraftViewHolder(@NonNull View itemView){

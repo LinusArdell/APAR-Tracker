@@ -1,12 +1,17 @@
 package com.test.input.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -34,6 +39,7 @@ public class Preview extends AppCompatActivity {
     private List<DraftClass> dataList;
     private DraftAdapter adapter;
     ImageButton btnBack;
+    private static final int REQUEST_PERMISSIONS = 100;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -65,6 +71,8 @@ public class Preview extends AppCompatActivity {
         adapter = new DraftAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        requestStoragePermissions();
     }
 
     private List<DraftClass> getAllImageDataFromSharedPreferences(){
@@ -83,7 +91,7 @@ public class Preview extends AppCompatActivity {
                 String lokasiKey = key + "Lokasi";
                 String merkKey = key + "Merk";
                 String beratKey = key + "Berat";
-                String jenisKey = key + "jenis";
+                String jenisKey = key + "Jenis";
                 String tekananKey = key + "Tekanan";
                 String kondisiPinKey = key + "KondisiPin";
                 String userKey = key + "User";
@@ -121,6 +129,33 @@ public class Preview extends AppCompatActivity {
             }
         }
         return dataLists;
+    }
+
+
+    private void requestStoragePermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS) {
+            // Jika izin diberikan
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Lakukan tindakan yang perlu dilakukan setelah izin diberikan
+            } else {
+                // Izin ditolak, mungkin berikan penjelasan mengapa izin tersebut diperlukan
+            }
+        }
     }
 }
 

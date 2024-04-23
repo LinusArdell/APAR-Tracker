@@ -69,6 +69,7 @@ public class TambahOffline extends AppCompatActivity {
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
     private FirebaseAuth firebaseAuth;
+    private static final int PICK_FILE_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +132,9 @@ public class TambahOffline extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                photoPicker.addCategory(Intent.CATEGORY_OPENABLE);
                 photoPicker.setType("image/*");
+                startActivityForResult(photoPicker, PICK_FILE_REQUEST_CODE);
                 activityResultLauncher.launch(photoPicker);
             }
         });

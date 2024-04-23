@@ -79,6 +79,15 @@ public class DetailActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Pastikan dialog tidak lagi menempel pada activity saat activity ditutup
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +132,33 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Membuat dan menampilkan dialog konfirmasi
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
+                builder.setTitle("Konfirmasi");
+                builder.setMessage("Apakah Anda yakin ingin menghapus item ini?");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Eksekusi aksi penghapusan
+                        performDeleteAction();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Tidak melakukan apa-apa jika tombol cancel ditekan
+                        dialogInterface.dismiss();
+                    }
+                });
+                // Membuat dan menampilkan dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -271,13 +307,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setupDeleteButtonListener() {
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                performDeleteAction();
-                dialog.show();
-            }
-        });
+
     }
 
     private void performDeleteAction() {
@@ -302,7 +332,7 @@ public class DetailActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(DetailActivity.this, "Update data terlebih dahulu kemudian hapus", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailActivity.this, "Error! : Update data terlebih dahulu dan perbaharui gambar!", Toast.LENGTH_SHORT).show();
             }
         });
     }

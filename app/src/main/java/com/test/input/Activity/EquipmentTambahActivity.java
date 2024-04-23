@@ -238,6 +238,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 imageURL = urlImage.toString();
                 uploadData();
                 dialog.dismiss();
+                Log.d("URI_Log", "URI: " + uri.toString());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -322,6 +323,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
                                         Toast.makeText(EquipmentTambahActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                                        Log.d(String.valueOf(uri), "Uri");
                                         finish();
                                     }
                                 }
