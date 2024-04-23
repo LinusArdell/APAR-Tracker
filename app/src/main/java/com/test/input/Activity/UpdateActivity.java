@@ -8,13 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -46,9 +48,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.test.input.DataClass;
+import com.test.input.Class.DataClass;
 import com.test.input.R;
-import com.test.input.UserClass;
+import com.test.input.Class.UserClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -84,12 +86,12 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_update);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -129,7 +131,12 @@ public class UpdateActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveData();
+
+                if (isNetworkStatusAvialable(getApplicationContext())){
+                    saveData();
+                } else {
+                    saveAsDraft();
+                }
             }
         });
 
@@ -224,13 +231,13 @@ public class UpdateActivity extends AppCompatActivity {
             tvID.setText("Update " + bundle.getString("KodeQR"));
         }
 
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Draft").child(key);
 
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent photoPicker = new Intent(Intent.ACTION_PICK);
+                Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 photoPicker.setType("image/*");
                 activityResultLauncher.launch(photoPicker);
             }
@@ -239,7 +246,11 @@ public class UpdateActivity extends AppCompatActivity {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveData();
+                if (isNetworkStatusAvialable(getApplicationContext())){
+                    saveData();
+                } else {
+                    saveAsDraft();
+                }
             }
         });
 
@@ -255,6 +266,63 @@ public class UpdateActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void saveAsDraft() {
+        SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String kodeQR = tvQR.getText().toString();
+        String lokasiTabung = etLokasi.getText().toString();
+        String merkAPAr = merkAPAR.getSelectedItem().toString();
+        String beratTabung = etBerat.getText().toString();
+        String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+
+        Boolean isiTabungs = isiTabung.isChecked();
+        Boolean Tekanan = tekananTabung.isChecked();
+        Boolean skesesuaianBerat = kesesuaianBerat.isChecked();
+        Boolean skondisiTabung = kondisiTabung.isChecked();
+        Boolean skondisiSelang = kondisiSelang.isChecked();
+        Boolean kondisiPins = kondisiPin.isChecked();
+        Boolean nozzles = kondisiNozzle.isChecked();
+        Boolean posisi = posisiTabung.isChecked();
+
+        String keterangan = etketerangan.getText().toString();
+
+        String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
+        String username = getUsernameLocally();
+
+        if (username != null && uri != null) {
+            // Lanjutkan menyimpan data ke SharedPreferences dengan nama pengguna yang diperoleh
+            String isiString = isiTabungs ? "Baik" : "Beku";
+            String tekananString = Tekanan ? "Cukup" : "Kurang";
+            String kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
+            String kondisiString = skondisiTabung ? "Baik" : "Berkarat";
+            String selangString = skondisiSelang ? "Baik" : "Rusak";
+            String pinString = kondisiPins ? "Baik" : "Rusak";
+            String nozzleString = nozzles ? "Baik" : "Tersumbat";
+            String posisiString = posisi ? "Baik" : "Terhalang";
+
+            saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
+                    kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
+
+            Toast.makeText(UpdateActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+
+            boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
+            if (isSaved) {
+                Log.d("DataSave", "Data saved successfully");
+            } else {
+                Log.d("DataSave", "Failed to save data");
+            }
+
+            Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(UpdateActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(UpdateActivity.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private int getIndexSpinner(Spinner spinner, String value) {
@@ -275,7 +343,8 @@ public class UpdateActivity extends AppCompatActivity {
             return; // Menghentikan proses jika URI gambar kosong
         }
 
-        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
+//        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
+        storageReference = FirebaseStorage.getInstance().getReference().child("Image Test").child(uri.getLastPathSegment());
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
@@ -410,5 +479,50 @@ public class UpdateActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+    }
+
+    private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,
+                                             String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang,
+                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String uniqueKey = "imageUri_" + kodeQR + "_";
+        editor.putString(uniqueKey, dataImage.toString());
+
+        editor.putString(uniqueKey + "KodeQR", kodeQR);
+        editor.putString(uniqueKey + "Lokasi", lokasiTabung);
+        editor.putString(uniqueKey + "Merk", merkAPAR);
+        editor.putString(uniqueKey + "Berat",beratTabung);
+        editor.putString(uniqueKey + "Jenis",jenisAPAR);
+        editor.putString(uniqueKey + "IsiTabung",isiTabung);
+        editor.putString(uniqueKey + "Tekanan",Tekanan);
+        editor.putString(uniqueKey + "Kesesuaian",kesesuaianBerat);
+        editor.putString(uniqueKey + "KondisiTabung",kondisiTabung);
+        editor.putString(uniqueKey + "KondisiSelang",kondisiSelang);
+        editor.putString(uniqueKey + "KondisiPin",kondisiPin);
+        editor.putString(uniqueKey + "Keterangan",keterangan);
+        editor.putString(uniqueKey + "Tanggal",dataDate);
+        editor.putString(uniqueKey + "User",user);
+        editor.putString(uniqueKey + "Nozzle",kondisiNozzle);
+        editor.putString(uniqueKey + "Posisi",posisiTabung);
+
+        editor.apply();
+    }
+
+    private String getUsernameLocally() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        return sharedPreferences.getString("username", "");
     }
 }

@@ -1,4 +1,4 @@
-package com.test.input;
+package com.test.input.Class;
 
 public class UserClass {
 

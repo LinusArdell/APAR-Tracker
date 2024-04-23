@@ -1,35 +1,33 @@
-package com.test.input;
+package com.test.input.Class;
 
-import java.io.Serializable;
+import android.net.Uri;
 
-public class DataClass implements Serializable {
-
+public class DraftClass {
     private String kodeQR;
     private String dataImage;
     private String dataDate;
     private String key;
     private String user;
-    private String signatureUrl;
     private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
     private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
 
-    public DataClass (String kodeQR,
-                      String lokasiTabung,
-                      String merkAPAR,
-                      String beratTabung,
-                      String jenisAPAR,
-                      String isiTabung,
-                      String Tekanan,
-                      String kesesuaianBerat,
-                      String kondisiTabung,
-                      String kondisiSelang,
-                      String kondisiPin,
-                      String keterangan,
-                      String dataImage,
-                      String dataDate,
-                      String user,
-                      String kondisiNozzle,
-                      String posisiTabung){ //String signatureUrl
+    public DraftClass(String kodeQR,
+                            String lokasiTabung,
+                            String merkAPAR,
+                            String beratTabung,
+                            String jenisAPAR,
+                            String isiTabung,
+                            String tekananTabung,
+                            String kesesuaianBerat,
+                            String kondisiTabung,
+                            String kondisiSelang,
+                            String kondisiPin,
+                            String keterangan,
+                            String dataImage,
+                            String dataDate,
+                            String user,
+                            String kondisiNozzle,
+                            String posisiTabung){
 
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
@@ -37,7 +35,7 @@ public class DataClass implements Serializable {
         this.beratTabung = beratTabung;
         this.jenisAPAR = jenisAPAR;
         this.isiTabung = isiTabung;
-        this.tekananTabung = Tekanan;
+        this.tekananTabung = tekananTabung;
         this.kesesuaianBerat = kesesuaianBerat;
         this.kondisiTabung = kondisiTabung;
         this.kondisiSelang = kondisiSelang;
@@ -46,15 +44,9 @@ public class DataClass implements Serializable {
         this.dataDate = dataDate;
         this.dataImage = dataImage;
         this.kondisiNozzle = kondisiNozzle;
-        this.posisiTabung = posisiTabung; //   this.signatureUrl = signatureUrl;
+        this.posisiTabung = posisiTabung;
         this.user = user;
-    }
 
-    public DataClass(){
-    }
-
-    public String getSignatureUrl() {
-        return signatureUrl;
     }
 
     public String getKondisiNozzle() {

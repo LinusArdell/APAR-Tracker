@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recycler_equipment_draft12"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/Image12"
+            android:src="@drawable/baseline_image_24"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/KodeQR12"
+            android:text="Kode QR"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/Image12"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/recSpace"
+            android:text=" / "
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/KodeQR12"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/Lokasi12"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/recSpace"
+            android:layout_toStartOf="@+id/btn_delete_draft"
+            android:layout_marginEnd="10dp"
+            android:maxLines="1"
+            android:text="Lokasi"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="12dp"
+            android:text="upload"
+            android:textSize="10sp"
+            android:id="@+id/btn_upload_draft"
+            android:layout_alignParentRight="true"/>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/red_color"
+            android:text="remove"
+            android:textSize="10sp"
+            android:id="@+id/btn_delete_draft"
+            android:layout_toStartOf="@id/btn_upload_draft"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Tanggal12"
+            android:text="Tanggal"
+            android:layout_toEndOf="@id/User12"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="10dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/User12"
+            android:text="User"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_toEndOf="@id/Image12"
+            android:layout_below="@id/KodeQR12"
+            android:layout_marginStart="10dp"
+            android:maxLines="1"
+            android:layout_marginBottom="12dp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Tekanan12"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/KondisiPin12"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/KondisiSelang12"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/IsiTabung12"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Berat12"
+            android:visibility="gone"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Keterangan12"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Merk12"
+            android:visibility="gone"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Nozzle12"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Posisi12"
+            android:visibility="gone"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Jenis12"
+            android:visibility="gone"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/Kesesuaian12"
+            android:visibility="gone"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
+            android:id="@+id/KondisiTabung12"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

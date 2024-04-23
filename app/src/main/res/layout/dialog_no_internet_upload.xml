@@ -17,11 +17,11 @@
             android:id="@+id/tv_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_marginTop="25dp"
             android:text="No Internet"
+            android:textColor="@color/black"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:layout_marginTop="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,34 +30,34 @@
             android:id="@+id/tv_conf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Simpan sebagai draft?"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="24dp"
+            android:text="Masuk kedalam mode Offline?"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="@+id/tv_confirm"
             app:layout_constraintStart_toStartOf="@+id/tv_confirm"
             app:layout_constraintTop_toBottomOf="@+id/tv_confirm" />
 
         <Button
-            android:id="@+id/btnDraft"
+            android:id="@+id/btnYa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:backgroundTint="#067dff"
-            android:text="Simpan"
+            android:layout_marginStart="10dp"
+            android:text="YA"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_conf" />
 
         <Button
-            android:id="@+id/btnBuang"
+            android:id="@+id/btnBatal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:backgroundTint="#F44336"
-            android:text="Buang"
-            app:layout_constraintEnd_toStartOf="@+id/btnDraft"
+            android:text="Batal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_conf" />
 

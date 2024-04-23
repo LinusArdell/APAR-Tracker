@@ -21,10 +21,23 @@
         android:theme="@style/Theme.Input"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.UpdateOffline"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Preview"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.TambahOffline"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity.MainActivity" />
+        </activity>
+        <activity
             android:name=".Activity.Register"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Activity.MainActivity"/>
+            android:parentActivityName=".Activity.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.Generator"
             android:exported="false"

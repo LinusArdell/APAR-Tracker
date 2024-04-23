@@ -13,7 +13,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,11 +24,12 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -56,9 +56,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
-import com.test.input.DataClass;
+import com.test.input.Class.DataClass;
 import com.test.input.R;
-import com.test.input.UserClass;
+import com.test.input.Class.UserClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -67,15 +67,15 @@ import java.util.Calendar;
 public class EquipmentTambahActivity extends AppCompatActivity {
 
     private EditText etResult, etLokasi, etBerat, etketerangan;
-    private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
+    private SwitchMaterial tekananTabung, kesesuaianBerat, isiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPAR, jenisAPAR;
-    private Button btnUpload, btnBuang, btnSimpan;
+    private SwitchMaterial kondisiTabung;
+    private Button btnUpload;
     private ImageView uploadGambar;
     private ImageButton btnImage, btnBack, btnHelp, btnQR;
     private String imageURL;
     private Uri uri;
     ScrollView scrollView;
-    Dialog dialog;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher;
     private FirebaseAuth firebaseAuth;
@@ -83,24 +83,17 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
 
-    private Uri getImageUri(Context context, Bitmap bitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
-    }
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_equipment_tambah);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -155,7 +148,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         uploadGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent photoPicker = new Intent(Intent.ACTION_PICK);
+                Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 photoPicker.setType("image/*");
                 activityResultLauncher.launch(photoPicker);
             }
@@ -168,40 +161,13 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (isNetworkStatusAvialable(getApplicationContext())){
                     saveData();
-                }
-                else {
-                    dialog = new Dialog(EquipmentTambahActivity.this);
-                    dialog.setContentView(R.layout.dialog_no_internet_upload);
-                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
-                    dialog.setCancelable(false);
-
-                    btnBuang = dialog.findViewById(R.id.btnBuang);
-                    btnSimpan = dialog.findViewById(R.id.btnDraft);
-
-                    dialog.show();
-
-                    btnBuang.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    });
-
-                    btnSimpan.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                            saveDraft();
-                            finish();
-                        }
-                    });
+                } else {
+                    saveAsDraft();
                 }
 
-//                uploadSignature();
             }
         });
 
@@ -221,32 +187,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         if (!isOnboardingCompleted()) {
             showOnboarding();
         }
-    }
-
-    private void saveDraft() {
-        SharedPreferences sharedPreferences = getSharedPreferences("draft_data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString("kodeQR", etResult.getText().toString().trim());
-        editor.putString("lokasi", etLokasi.getText().toString());
-        editor.putString("berat", etBerat.getText().toString());
-        editor.putString("keterangan", etketerangan.getText().toString());
-
-        editor.putString("MerkAPAR", merkAPAR.getSelectedItem().toString());
-        editor.putString("JenisAPAR", jenisAPAR.getSelectedItem().toString());
-
-        editor.putBoolean("isiTabung", isiTabung.isChecked());
-        editor.putBoolean("tekanan", tekananTabung.isChecked());
-        editor.putBoolean("kesesuaian", kesesuaianBerat.isChecked());
-        editor.putBoolean("kondisi", kondisiTabung.isChecked());
-        editor.putBoolean("selang", kondisiSelang.isChecked());
-        editor.putBoolean("pin", kondisiPin.isChecked());
-        editor.putBoolean("nozzle", kondisiNozzle.isChecked());
-        editor.putBoolean("posisi", posisiTabung.isChecked());
-
-//        editor.putString("ImageUri", imageUri.toString());
-
-        editor.apply();
     }
 
     private void initializeUI() {
@@ -279,7 +219,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             return;
         }
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
                 .child(uri.getLastPathSegment());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
@@ -375,7 +316,9 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
                                     kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);//signatureUrl
 
-                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
@@ -402,6 +345,63 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
     }
 
+    private void saveAsDraft() {
+        SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String kodeQR = etResult.getText().toString();
+        String lokasiTabung = etLokasi.getText().toString();
+        String merkAPAr = merkAPAR.getSelectedItem().toString();
+        String beratTabung = etBerat.getText().toString();
+        String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+
+        Boolean isiTabungs = isiTabung.isChecked();
+        Boolean Tekanan = tekananTabung.isChecked();
+        Boolean skesesuaianBerat = kesesuaianBerat.isChecked();
+        Boolean skondisiTabung = kondisiTabung.isChecked();
+        Boolean skondisiSelang = kondisiSelang.isChecked();
+        Boolean kondisiPins = kondisiPin.isChecked();
+        Boolean nozzles = kondisiNozzle.isChecked();
+        Boolean posisi = posisiTabung.isChecked();
+
+        String keterangan = etketerangan.getText().toString();
+
+        String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
+        String username = getUsernameLocally();
+
+        if (username != null && uri != null) {
+            // Lanjutkan menyimpan data ke SharedPreferences dengan nama pengguna yang diperoleh
+            String isiString = isiTabungs ? "Baik" : "Beku";
+            String tekananString = Tekanan ? "Cukup" : "Kurang";
+            String kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
+            String kondisiString = skondisiTabung ? "Baik" : "Berkarat";
+            String selangString = skondisiSelang ? "Baik" : "Rusak";
+            String pinString = kondisiPins ? "Baik" : "Rusak";
+            String nozzleString = nozzles ? "Baik" : "Tersumbat";
+            String posisiString = posisi ? "Baik" : "Terhalang";
+
+            saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
+                    kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
+
+            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan kedalam draft", Toast.LENGTH_SHORT).show();
+
+            boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
+            if (isSaved) {
+                Log.d("DataSave", "Data saved successfully");
+            } else {
+                Log.d("DataSave", "Failed to save data");
+            }
+
+            Intent intent = new Intent(EquipmentTambahActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(EquipmentTambahActivity.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public static boolean isNetworkStatusAvialable (Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -410,6 +410,41 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
 
+    }
+
+    private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,
+                                             String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang,
+                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String uniqueKey = "imageUri_" + kodeQR + "_";
+        editor.putString(uniqueKey, dataImage.toString());
+
+        editor.putString(uniqueKey + "KodeQR", kodeQR);
+        editor.putString(uniqueKey + "Lokasi", lokasiTabung);
+        editor.putString(uniqueKey + "Merk", merkAPAR);
+        editor.putString(uniqueKey + "Berat",beratTabung);
+        editor.putString(uniqueKey + "Jenis",jenisAPAR);
+        editor.putString(uniqueKey + "IsiTabung",isiTabung);
+        editor.putString(uniqueKey + "Tekanan",Tekanan);
+        editor.putString(uniqueKey + "Kesesuaian",kesesuaianBerat);
+        editor.putString(uniqueKey + "KondisiTabung",kondisiTabung);
+        editor.putString(uniqueKey + "KondisiSelang",kondisiSelang);
+        editor.putString(uniqueKey + "KondisiPin",kondisiPin);
+        editor.putString(uniqueKey + "Keterangan",keterangan);
+        editor.putString(uniqueKey + "Tanggal",dataDate);
+        editor.putString(uniqueKey + "User",user);
+        editor.putString(uniqueKey + "Nozzle",kondisiNozzle);
+        editor.putString(uniqueKey + "Posisi",posisiTabung);
+
+        editor.apply();
+    }
+
+    private String getUsernameLocally() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        return sharedPreferences.getString("username", "");
     }
 
     private boolean containsIllegalCharacters(String kodeQR) {
@@ -574,5 +609,12 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private void scrollToShowOnboarding() {
         int lastTargetYPosition = btnUpload.getTop();
         scrollView.smoothScrollTo(0, lastTargetYPosition);
+    }
+
+    private Uri getImageUri(Context context, Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
     }
 }

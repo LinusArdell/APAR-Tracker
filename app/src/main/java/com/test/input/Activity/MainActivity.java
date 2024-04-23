@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -55,9 +57,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
-import com.test.input.DataClass;
+import com.test.input.Class.DataClass;
 import com.test.input.R;
-import com.test.input.UserClass;
+import com.test.input.Class.UserClass;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher, qrCodeLaunchers;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     Dialog dialog;
-    Button btnCancel, btnLogout;
+    Button btnCancel, btnLogout, btnBatal, btnYa;
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
@@ -106,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_main);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -121,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         searchView = findViewById(R.id.search);
         searchView.clearFocus();
-//        jumlahAPAR = findViewById(R.id.tv_jumlahAPAR);
         btnQR = findViewById(R.id.searchQr);
 
         dataList = new ArrayList<>();
@@ -181,6 +182,26 @@ public class MainActivity extends AppCompatActivity {
         MenuItem generateQR = menu.findItem(R.id.nav_generate);
         MenuItem onboard = menu.findItem(R.id.nav_guide);
         MenuItem register = menu.findItem(R.id.nav_register);
+        MenuItem draft = menu.findItem(R.id.nav_draft);
+//        MenuItem offlineAdd = menu.findItem(R.id.nav_add_offline);
+
+//        offlineAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+//                Intent i = new Intent(MainActivity.this, TambahOffline.class);
+//                startActivity(i);
+//                return false;
+//            }
+//        });
+
+        draft.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent i = new Intent(MainActivity.this, Preview.class);
+                startActivity(i);
+                return false;
+            }
+        });
 
         register.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -232,8 +253,38 @@ public class MainActivity extends AppCompatActivity {
         addNew.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
-                startActivity(intent);
+                if (isNetworkStatusAvialable(getApplicationContext())){
+                    Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    dialog = new Dialog(MainActivity.this);
+                    dialog.setContentView(R.layout.dialog_no_internet_upload);
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+                    dialog.setCancelable(false);
+
+                    btnBatal = dialog.findViewById(R.id.btnBatal);
+                    btnYa = dialog.findViewById(R.id.btnYa);
+
+                    dialog.show();
+
+                    btnBatal.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnYa.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(MainActivity.this, TambahOffline.class);
+                            startActivity(i);
+                            dialog.dismiss();
+                        }
+                    });
+                }
                 return false;
             }
         });
@@ -252,6 +303,8 @@ public class MainActivity extends AppCompatActivity {
 
                         String username1 = userData.getUsername();
                         username.setText(username1);
+
+                        saveUserLocally(username1);
                     }
                 }
 
@@ -276,7 +329,8 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Test");
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Test");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Draft");
         dialog.show();
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -307,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchList(newText);
-                return true;
+                return false;
             }
         });
 
@@ -495,9 +549,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void searchList(String text){
+    public void searchList(String text) {
         ArrayList<DataClass> searchList = new ArrayList<>();
-        for (DataClass dataClass: dataList){
+        for (DataClass dataClass : dataList) {
             if (dataClass.getKodeQR().toLowerCase().contains(text.toLowerCase())
                     || dataClass.getLokasiTabung().toLowerCase().contains(text.toLowerCase())
                     || dataClass.getUser().toLowerCase().contains(text.toLowerCase())
@@ -506,6 +560,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         adapter.searchDataList(searchList);
+        restoreSortingStatus();
     }
 
     private void initActivityResultLaunchers() {
@@ -668,5 +723,22 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+    }
+
+    private void saveUserLocally(String username) {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("username", username);
+        editor.apply();
     }
 }

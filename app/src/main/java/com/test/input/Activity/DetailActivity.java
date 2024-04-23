@@ -14,6 +14,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -69,7 +71,7 @@ public class DetailActivity extends AppCompatActivity {
     LayoutInflater inflaterScan;
     View dialogViewScan;
     Dialog dialog, dialogs;
-    Button btnCancel, btnDelete, btnOk, btnNo;
+    Button btnCancel, btnDelete, btnOk, btnNo, btnBatal, btnYa;
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
@@ -78,12 +80,12 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_detail);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -274,7 +276,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void performDeleteAction() {
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Draft");
+//        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
         storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -292,13 +295,65 @@ public class DetailActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startUpdateActivity();
+//                startUpdateActivity();
+                if (isNetworkStatusAvialable(getApplicationContext())){
+                    startUpdateActivity();
+                }
+                else {
+                    dialog = new Dialog(DetailActivity.this);
+                    dialog.setContentView(R.layout.dialog_no_internet_upload);
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
+                    dialog.setCancelable(false);
+
+                    btnBatal = dialog.findViewById(R.id.btnBatal);
+                    btnYa = dialog.findViewById(R.id.btnYa);
+
+                    dialog.show();
+
+                    btnBatal.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnYa.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startUpdateOfflineActivity();
+                            dialog.dismiss();
+                        }
+                    });
+                }
             }
         });
     }
 
     private void startUpdateActivity() {
         Intent intent = new Intent(DetailActivity.this, UpdateActivity.class)
+                .putExtra("KodeQR", detailKodeQR.getText().toString())
+                .putExtra("Tanggal", detailTanggal.getText().toString())
+                .putExtra("Lokasi", etLokasi.getText().toString())
+                .putExtra("Merk", merkAPAR.getText().toString())
+                .putExtra("Berat", etBerat.getText().toString())
+                .putExtra("Jenis", jenisAPAR.getText().toString())
+                .putExtra("IsiTabung", isiTabung.getText().toString())
+                .putExtra("Tekanan", tekananTabung.getText().toString())
+                .putExtra("Kesesuaian", kesesuaianBerat.getText().toString())
+                .putExtra("KondisiTabung", kondisiTabung.getText().toString())
+                .putExtra("KondisiSelang", kondisiSelang.getText().toString())
+                .putExtra("KondisiPin", kondisiPin.getText().toString())
+                .putExtra("Keterangan", etketerangan.getText().toString())
+                .putExtra("Nozzle", kondisiNozzle.getText().toString())
+                .putExtra("Posisi", posisiTabung.getText().toString())
+                .putExtra("Image", imageUrl)
+                .putExtra("Key", key);
+        startActivity(intent);
+    }
+
+    private void startUpdateOfflineActivity() {
+        Intent intent = new Intent(DetailActivity.this, UpdateOffline.class)
                 .putExtra("KodeQR", detailKodeQR.getText().toString())
                 .putExtra("Tanggal", detailTanggal.getText().toString())
                 .putExtra("Lokasi", etLokasi.getText().toString())
@@ -434,5 +489,15 @@ public class DetailActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
         editor.apply();
+    }
+
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
     }
 }
