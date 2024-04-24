@@ -20,8 +20,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btn_back"
@@ -56,10 +55,13 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/btn_back"
+                android:layout_toStartOf="@id/btn_qr"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
+                android:textAlignment="center"
                 android:text="Item ID"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -67,9 +69,12 @@
                 android:id="@+id/tc_title_detail"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_toEndOf="@id/btn_back"
+                android:layout_toStartOf="@id/btn_qr"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:text="Pertanggal 12 Apr 2024"
                 android:textSize="10dp"

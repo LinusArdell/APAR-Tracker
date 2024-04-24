@@ -492,8 +492,10 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:text="Save &amp; Close"
-            android:background="@color/main_color"
+            android:textColor="@color/white"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/btn_upload"/>
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
