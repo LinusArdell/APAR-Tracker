@@ -509,6 +509,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private void showCamera() {
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES);
         options.setPrompt("Scan QR Code");
         options.setCameraId(0);
         options.setBeepEnabled(false);
