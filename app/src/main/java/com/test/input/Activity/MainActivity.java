@@ -156,6 +156,52 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Toolbar toolbar = findViewById(R.id.tool_bar);
+        Menu item = toolbar.getMenu();
+        MenuItem sortByAz = item.findItem(R.id.sort_name_ascending);
+        MenuItem sortByZa = item.findItem(R.id.sort_name_descending);
+        MenuItem sortByRecent = item.findItem(R.id.sort_date_ascending);
+        MenuItem sortByDate = item.findItem(R.id.sort_date_descending);
+
+        sortByAz.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                isAscendingByName = true;
+                isDescendingByName = false;
+                sortDataByName();
+                return true;
+            }
+        });
+
+        sortByZa.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                isAscendingByName = false;
+                isDescendingByName = true;
+                sortDataByName();
+                return true;
+            }
+        });
+
+        sortByRecent.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                isAscendingByDate = true;
+                isDescendingByDate = false;
+                sortDataByDate();
+                return true;
+            }
+        });
+
+        sortByDate.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                isAscendingByDate = false;
+                isDescendingByDate = true;
+                sortDataByDate();
+                return true;
+            }
+        });
+
 //        setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

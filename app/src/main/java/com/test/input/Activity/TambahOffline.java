@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -51,7 +52,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 public class TambahOffline extends AppCompatActivity {
@@ -88,6 +91,34 @@ public class TambahOffline extends AppCompatActivity {
         }
 
         initializeUI();
+
+        List<String> mList = Arrays.asList("Appron",
+                "Yamato",
+                "Garra Fire",
+                "321 Stop",
+                "Gunnebo",
+                "Hercules",
+                "Chubb",
+                "Pyrosafe",
+                "Pina",
+                "Altek",
+                "Holly Fire",
+                "Chubb Fire",
+                "Tonanta");
+
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_merk, mList);
+        mArrayAdapter.setDropDownViewResource(R.layout.spinner_list_merk);
+        merkapar.setAdapter(mArrayAdapter);
+
+        List<String> aList = Arrays.asList("Multi Purpose Dry Chemical",
+                "Carbondioxide",
+                "Halotron",
+                "HF 11",
+                "Dry chemical powder",
+                "Abc Chemical multi purpose");
+        ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
+        aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
+        jenisApar.setAdapter(aArrayAdapter);
 
         firebaseAuth = FirebaseAuth.getInstance();
         findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));

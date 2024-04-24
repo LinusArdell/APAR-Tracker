@@ -38,7 +38,8 @@
             android:name=".Activity.Register"
             android:exported="false"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".Activity.Generator"
             android:exported="false"

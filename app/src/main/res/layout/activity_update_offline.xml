@@ -24,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_color"
+            android:textColor="@color/white"
             android:text="Cancel"
             android:background="?attr/selectableItemBackgroundBorderless"/>
 
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:backgroundTint="@color/main_color"
+            android:textColor="@color/white"
             android:text="SAVE"
             android:background="?attr/selectableItemBackgroundBorderless"/>
 
@@ -176,8 +178,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_toRightOf="@id/tv_merk"
                                 android:layout_marginLeft="0dp"
-                                android:entries="@array/merk_apar"
                                 android:id="@+id/update_merk"/>
+<!--                            android:entries="@array/merk_apar"-->
 
                         </LinearLayout>
 
@@ -233,8 +235,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="0dp"
-                                android:entries="@array/jenis_apar"
                                 android:id="@+id/update_jenis"/>
+<!--                            android:entries="@array/jenis_apar"-->
 
                         </LinearLayout>
 
@@ -465,6 +467,7 @@
             android:text="Update &amp; Close"
             android:backgroundTint="@color/main_color"
             android:id="@+id/btn_update"
+            android:textColor="@color/white"
             android:background="?attr/selectableItemBackgroundBorderless"/>
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>

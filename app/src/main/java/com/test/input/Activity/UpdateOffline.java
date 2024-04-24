@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,7 +37,9 @@ import com.test.input.R;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class UpdateOffline extends AppCompatActivity {
 
@@ -72,6 +75,35 @@ public class UpdateOffline extends AppCompatActivity {
         }
 
         iniSialisasiUi();
+
+        merkAPARs = findViewById(R.id.update_merk);
+        List<String> mList = Arrays.asList("Appron",
+                "Yamato",
+                "Garra Fire",
+                "321 Stop",
+                "Gunnebo",
+                "Hercules",
+                "Chubb",
+                "Pyrosafe",
+                "Pina",
+                "Altek",
+                "Holly Fire",
+                "Chubb Fire",
+                "Tonanta");
+
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_merk, mList);
+        mArrayAdapter.setDropDownViewResource(R.layout.spinner_list_merk);
+        merkAPARs.setAdapter(mArrayAdapter);
+
+        List<String> aList = Arrays.asList("Multi Purpose Dry Chemical",
+                "Carbondioxide",
+                "Halotron",
+                "HF 11",
+                "Dry chemical powder",
+                "Abc Chemical multi purpose");
+        ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
+        aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
+        jenisAPAR.setAdapter(aArrayAdapter);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

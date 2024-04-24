@@ -176,7 +176,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_toRightOf="@id/tv_merk"
                                 android:layout_marginLeft="0dp"
-                                android:entries="@array/merk_apar"
+
                                 android:id="@+id/update_merk"/>
 
                         </LinearLayout>
@@ -233,7 +233,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="0dp"
-                                android:entries="@array/jenis_apar"
+
                                 android:id="@+id/update_jenis"/>
 
                         </LinearLayout>

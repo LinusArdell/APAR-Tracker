@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -62,7 +63,9 @@ import com.test.input.Class.UserClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class EquipmentTambahActivity extends AppCompatActivity {
 
@@ -103,6 +106,34 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         initializeUI();
+
+        List<String> mList = Arrays.asList("Appron",
+                "Yamato",
+                "Garra Fire",
+                "321 Stop",
+                "Gunnebo",
+                "Hercules",
+                "Chubb",
+                "Pyrosafe",
+                "Pina",
+                "Altek",
+                "Holly Fire",
+                "Chubb Fire",
+                "Tonanta");
+
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_merk, mList);
+        mArrayAdapter.setDropDownViewResource(R.layout.spinner_list_merk);
+        merkAPAR.setAdapter(mArrayAdapter);
+
+        List<String> aList = Arrays.asList("Multi Purpose Dry Chemical",
+                "Carbondioxide",
+                "Halotron",
+                "HF 11",
+                "Dry chemical powder",
+                "Abc Chemical multi purpose");
+        ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
+        aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
+        jenisAPAR.setAdapter(aArrayAdapter);
 
         findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));
 
