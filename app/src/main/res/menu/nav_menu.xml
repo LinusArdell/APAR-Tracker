@@ -13,11 +13,11 @@
                 <item
                     android:id="@+id/nav_add"
                     android:icon="@drawable/fab_add"
-                    android:title="Add new item"/>
+                    android:title="Tambah item baru"/>
                 <item
                     android:id="@+id/nav_draft"
                     android:icon="@drawable/draft_24"
-                    android:title="Draft"/>
+                    android:title="Penyimpanan Lokal"/>
             </group>
         </menu>
     </item>
@@ -27,7 +27,7 @@
             <item
                 android:id="@+id/nav_download"
                 android:icon="@drawable/baseline_download_24"
-                android:title="Download Excel"/>
+                android:title="Unduh Excel"/>
         </menu>
     </item>
     <item
@@ -48,7 +48,7 @@
         <menu>
             <item
                 android:id="@+id/nav_register"
-                android:title="Register new Acount"
+                android:title="Daftar pengguna baru"
                 android:icon="@drawable/baseline_person_24"/>
             <item
                 android:id="@+id/nav_logout"

@@ -11,6 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="@color/white"
         android:layout_margin="10dp">
 
         <TextView
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="Save as picture"
+            android:text="Simpan gambar"
             android:textSize="30sp"
             android:textStyle="bold"
             android:layout_marginTop="25dp"
@@ -43,6 +44,7 @@
             android:layout_margin="10dp"
             android:backgroundTint="#067dff"
             android:text="Simpan"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/file_name" />
 
@@ -52,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:backgroundTint="#F44336"
+            android:textColor="@color/white"
             android:text="Batal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/file_name" />

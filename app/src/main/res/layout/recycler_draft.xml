@@ -73,6 +73,7 @@
             android:layout_marginTop="12dp"
             android:text="upload"
             android:textSize="10sp"
+            android:textColor="@color/white"
             android:id="@+id/btn_upload_draft"
             android:layout_alignParentRight="true"/>
 
@@ -83,8 +84,9 @@
             android:layout_marginEnd="10dp"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/red_color"
-            android:text="remove"
+            android:text="hapus"
             android:textSize="10sp"
+            android:textColor="@color/white"
             android:id="@+id/btn_delete_draft"
             android:layout_toStartOf="@id/btn_upload_draft"/>
         <TextView

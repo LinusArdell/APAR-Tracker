@@ -85,6 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
+                    android:textColorHint="@color/main_color"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/help_24"
                     android:drawableRight="@drawable/help_24"

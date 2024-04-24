@@ -91,8 +91,9 @@
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="#8537F4"
-                android:hint="Username"
+                android:hint="Nama Lengkap"
                 android:inputType="textPersonName"
+                android:textColorHint="@color/main_color"
                 android:padding="8dp"
                 android:textColor="@color/main_color" />
 
@@ -108,6 +109,7 @@
                 android:drawableTint="@color/main_color"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
+                android:textColorHint="@color/main_color"
                 android:padding="8dp"
                 android:textColor="@color/main_color" />
 
@@ -123,6 +125,7 @@
                 android:drawableTint="@color/main_color"
                 android:hint="Password"
                 android:inputType="textPassword"
+                android:textColorHint="@color/main_color"
                 android:padding="8dp"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
