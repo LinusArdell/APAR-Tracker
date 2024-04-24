@@ -42,7 +42,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="Register new account"
+                android:text="Buat akun"
                 android:textSize="26dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -113,27 +113,39 @@
                 android:padding="8dp"
                 android:textColor="@color/main_color" />
 
-            <EditText
-                android:id="@+id/passwordSignUp"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                app:passwordToggleTint="@color/main_color"
+                android:layout_marginTop="10dp"
+                app:passwordToggleEnabled="true"
+                android:id="@+id/textInputLayout"
                 android:layout_below="@+id/emailSignUp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edittext"
-                android:drawableLeft="@drawable/baseline_password_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/main_color"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:textColorHint="@color/main_color"
-                android:padding="8dp"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/emailSignUp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableStart="@drawable/baseline_password_24"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/main_color"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:textColorHint="@color/main_color"
+                    android:textColor="@color/main_color"
+                    android:padding="8dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/register"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@+id/passwordSignUp"
+                android:layout_below="@+id/textInputLayout"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/main_color"
                 android:textColor="@color/white"
