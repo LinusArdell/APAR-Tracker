@@ -23,10 +23,12 @@
         tools:targetApi="31">
         <activity
             android:name=".Activity.DetailHistory"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity.History"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity.UpdateOffline"
             android:exported="false"

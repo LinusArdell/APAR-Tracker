@@ -505,7 +505,7 @@ public class UpdateActivity extends AppCompatActivity {
                             String nozzleString = nozzle ? "Baik" : "Tersumbat";
                             String posisiString = posisi ? "Baik" : "Terhalang";
 
-                            if (jenisAPAR.equals("Carbondioxide")) {
+                            if (JenisAPAR.equals("Carbondioxide")) {
                                 kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
                             } else {
                                 kesesuaianString = "N/A";

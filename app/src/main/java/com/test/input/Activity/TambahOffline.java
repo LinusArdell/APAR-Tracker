@@ -216,6 +216,12 @@ public class TambahOffline extends AppCompatActivity {
                     String nozzleString = nozzle ? "Baik" : "Tersumbat";
                     String posisiString = posisi ? "Baik" : "Terhalang";
 
+                    if (jenisAPAR.equals("Carbondioxide")){
+                        kesesuaianString = kesesuaianBerat ? "Cukup" : "Kurang";
+                    } else {
+                        kesesuaianString = "N/A";
+                    }
+
                     saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAR, isiString, tekananString, kesesuaianString,
                             kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 

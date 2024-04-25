@@ -290,7 +290,7 @@ public class UpdateOffline extends AppCompatActivity {
                 String lokasiTabung = etLokasi.getText().toString();
                 String merkAPAR = merkAPARs.getSelectedItem().toString();
                 String beratTabung = etBerat.getText().toString();
-                String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+                String JenisAPArs = jenisAPAR.getSelectedItem().toString();
                 String SatuanBerat = satuanBerat.getSelectedItem().toString();
 
                 Boolean isiTabungs = isiTabung.isChecked();
@@ -319,7 +319,13 @@ public class UpdateOffline extends AppCompatActivity {
                     String nozzleString = nozzles ? "Baik" : "Tersumbat";
                     String posisiString = posisi ? "Baik" : "Terhalang";
 
-                    saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
+                    if (JenisAPArs.equals("Carbondioxide")){
+                        kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
+                    } else {
+                        kesesuaianString = "N/A";
+                    }
+
+                    saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
                             kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
                     Toast.makeText(UpdateOffline.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();

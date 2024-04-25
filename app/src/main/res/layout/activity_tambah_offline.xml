@@ -230,7 +230,8 @@
                                 android:textStyle="bold"
                                 android:textSize="16dp"
                                 android:text="Berat APAR"
-                                android:id="@+id/tv_berat"/>
+                                android:id="@+id/tv_berat"
+                                android:layout_centerVertical="true"/>
 
                             <EditText
                                 android:layout_width="wrap_content"
@@ -242,13 +243,15 @@
                                 android:hint=" Berat (KG)"
                                 android:id="@+id/upload_berat"
                                 android:inputType="numberDecimal"
-                                android:background="@drawable/custom_input"/>
+                                android:background="@drawable/custom_input"
+                                android:layout_centerVertical="true"/>
 
                             <Spinner
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/upload_satuan"
-                                android:layout_alignParentRight="true" />
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"/>
 
                         </RelativeLayout>
 

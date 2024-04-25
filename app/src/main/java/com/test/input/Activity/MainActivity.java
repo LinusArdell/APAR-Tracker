@@ -414,7 +414,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showOnboarding() {
-
         new TapTargetSequence(this)
                 .targets(
                         TapTarget.forView(fabQr,"QR Scanner", "Klik untuk memulai semuanya")
@@ -586,7 +585,7 @@ public class MainActivity extends AppCompatActivity {
         for (DataClass dataClass : dataList) {
             if (dataClass.getKodeQR().toLowerCase().contains(text.toLowerCase())
                     || dataClass.getLokasiTabung().toLowerCase().contains(text.toLowerCase())
-                    || dataClass.getUser().toLowerCase().contains(text.toLowerCase())
+                    || dataClass.getJenisAPAR().toLowerCase().contains(text.toLowerCase())
                     || dataClass.getDataDate().toLowerCase().contains(text.toLowerCase())) {
                 searchList.add(dataClass);
             }
