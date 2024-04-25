@@ -114,9 +114,9 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="20dp"
                             android:layout_marginRight="10dp"
@@ -126,11 +126,12 @@
                             <TextView
                                 android:layout_width="130dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
+                                android:layout_alignParentLeft="true"
                                 android:text="Kode QR"
                                 android:textColor="@color/main_color"
                                 android:textSize="16dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:id="@+id/tv_off_qr"/>
 
                             <EditText
                                 android:id="@+id/upload_qr"
@@ -140,7 +141,8 @@
                                 android:hint="Masukkan Nomor Registrasi "
                                 android:textColor="@color/main_color"
                                 android:background="@drawable/custom_input"
-                                android:layout_gravity="center"
+                                android:layout_toEndOf="@id/tv_off_qr"
+                                android:layout_toStartOf="@id/btn_upload_qr"
                                 android:maxLines="1"
                                 android:layout_marginRight="2dp"
                                 android:textSize="16dp" />
@@ -149,12 +151,12 @@
                                 android:id="@+id/btn_upload_qr"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center|right"
+                                android:layout_alignParentRight="true"
                                 android:background="@color/main_color"
                                 android:src="@drawable/baseline_qr_code_scanner_24"
                                 app:tint="@color/white" />
 
-                        </LinearLayout>
+                        </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -234,7 +236,7 @@
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColorHint="#8537F4"
+                                android:textColorHint="@color/main_color"
                                 android:textColor="@color/main_color"
                                 android:hint=" Berat (KG)"
                                 android:id="@+id/upload_berat"

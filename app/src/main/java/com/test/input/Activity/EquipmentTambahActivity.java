@@ -63,6 +63,7 @@ import com.test.input.Class.UserClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -76,7 +77,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     private Button btnUpload;
     private ImageView uploadGambar;
     private ImageButton btnImage, btnBack, btnHelp, btnQR;
-    private String imageURL;
+    private String imageURL, historyImageUrl;
     private Uri uri;
     ScrollView scrollView;
     private ActivityResultLauncher<String> requestPermissionLauncher;
@@ -250,8 +251,9 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             return;
         }
 
+        StorageReference historyStorage = FirebaseStorage.getInstance().getReference().child("History Images").child(uri.getLastPathSegment());
+
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
-//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
                 .child(uri.getLastPathSegment());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
@@ -259,6 +261,18 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        historyStorage.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uriTask.isComplete());
+                Uri urlImages = uriTask.getResult();
+                historyImageUrl = urlImages.toString();
+                uploadData();
+                dialog.dismiss();
+            }
+        });
 
         storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -346,13 +360,22 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);//signatureUrl
+                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);
 
+                            DataClass historyData = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString);
                             FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
 //                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                                        Calendar calendar = Calendar.getInstance();
+                                        String currentDate = dateFormat.format(calendar.getTime());
+
+                                        String childKey = currentDate + kodeQR;
+                                        FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyData);
+
                                         Toast.makeText(EquipmentTambahActivity.this, "Saved", Toast.LENGTH_SHORT).show();
                                         Log.d(String.valueOf(uri), "Uri");
                                         finish();

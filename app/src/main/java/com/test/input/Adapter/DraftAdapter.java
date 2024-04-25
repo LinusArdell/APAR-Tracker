@@ -40,6 +40,8 @@ import com.test.input.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +49,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
     private Context contexts;
     private List<DraftClass> dataLists;
-    String imageURL;
+    String imageURL, historyImageURl;
     private ProgressDialog progressDialog;
 
 
@@ -141,10 +143,36 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                 }
 
                 if (inputStream != null) {
-//                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                    Calendar calendar = Calendar.getInstance();
+                    String currentDate = dateFormat.format(calendar.getTime());
 
-                            .child(uri.getLastPathSegment());
+                    String childKey = currentDate + kodeQR;
+
+                    String fileName = "image_" + childKey;
+
+                    StorageReference historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
+//                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
+
+                    historyStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uriTask.isComplete());
+                            Uri urlImage = uriTask.getResult();
+                            historyImageURl = urlImage.toString();
+
+                            DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin, keterangan, historyImageURl, tanggal, user, nozzle, posisi);
+
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                            Calendar calendar = Calendar.getInstance();
+                            String currentDate = dateFormat.format(calendar.getTime());
+
+                            String childKey = currentDate + KodeQr;
+                            FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyDataClass);
+                        }
+                    });
 
                     storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -261,7 +289,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
         Log.d("keyAfterDelete", keys);
         logSharedPreferencesData();
     }
-
 }
 
 class DraftViewHolder extends RecyclerView.ViewHolder {
@@ -275,14 +302,11 @@ class DraftViewHolder extends RecyclerView.ViewHolder {
 
     public DraftViewHolder(@NonNull View itemView){
         super(itemView);
-
         recCard12 = itemView.findViewById(R.id.recycler_equipment_draft12);
-
         recImage12 = itemView.findViewById(R.id.Image12);
         recQr12 = itemView.findViewById(R.id.KodeQR12);
         recUser12 = itemView.findViewById(R.id.User12);
         recLokasi12 = itemView.findViewById(R.id.Lokasi12);
-
         tvMerk12 = itemView.findViewById(R.id.Merk12);
         tvBerat12 = itemView.findViewById(R.id.Berat12);
         tvJenis12 = itemView.findViewById(R.id.Jenis12);
@@ -296,9 +320,7 @@ class DraftViewHolder extends RecyclerView.ViewHolder {
         tvPowder12 = itemView.findViewById(R.id.IsiTabung12);
         tvSelisih12 = itemView.findViewById(R.id.Kesesuaian12);
         tvKeterangan12 = itemView.findViewById(R.id.Keterangan12);
-
         btnUploadDraft = itemView.findViewById(R.id.btn_upload_draft);
         btnDeleteDraft = itemView.findViewById(R.id.btn_delete_draft);
     }
 }
-

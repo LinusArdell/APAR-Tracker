@@ -55,6 +55,7 @@ import com.test.input.Class.UserClass;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -65,11 +66,11 @@ public class UpdateActivity extends AppCompatActivity {
     Button updateButton, btnCancel, btnSave;
     ImageButton btnCapture;
     String kodeQr;
-    String imageUrl;
+    String imageUrl, historyImageUrl;
     String key, oldImageURL;
     Uri uri;
-    DatabaseReference databaseReference;
-    StorageReference storageReference;
+    DatabaseReference databaseReference, historyDatabaseReference;
+    StorageReference storageReference, historyStorageReference;
     private FirebaseAuth firebaseAuth;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
@@ -375,13 +376,37 @@ public class UpdateActivity extends AppCompatActivity {
             return; // Menghentikan proses jika URI gambar kosong
         }
 
+        String kodeQRi = tvQR.getText().toString().trim();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = dateFormat.format(calendar.getTime());
+
+        String childKey = currentDate + kodeQRi;
+
+        String fileName = "image_" + childKey;
+
+        historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
+
         storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
-//        storageReference = FirebaseStorage.getInstance().getReference().child("Image Test").child(uri.getLastPathSegment());
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        historyStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uriTask.isComplete());
+                Uri urlImage = uriTask.getResult();
+                historyImageUrl = urlImage.toString();
+                updateData();
+                dialog.dismiss();
+            }
+        });
+
         storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -472,18 +497,29 @@ public class UpdateActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString); //signatureUrl
+                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString);
+
+                            DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString);
+
                             databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                                        Calendar calendar = Calendar.getInstance();
+                                        String currentDate = dateFormat.format(calendar.getTime());
+
+                                        String childKey = currentDate + kodeQr;
+                                        FirebaseDatabase.getInstance().getReference("History").child(kodeQr).child(childKey).setValue(historyData);
+
                                         StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
                                         reference.delete();
                                         Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
                                         // Panggil intent untuk memulai MainActivity di sini setelah data berhasil disimpan
                                         Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
                                         startActivity(intent);
-                                        finish(); // Tambahkan ini jika Anda ingin menutup UpdateActivity setelah memulai MainActivity
+                                        finish();
                                     }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {

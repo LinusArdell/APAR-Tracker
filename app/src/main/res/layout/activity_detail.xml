@@ -555,6 +555,14 @@
                         android:textSize="24dp"
                         android:textColor="@color/main_color"/>
 
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="History"
+                        android:backgroundTint="@color/main_color"
+                        android:textColor="@color/white"
+                        android:id="@+id/btnHistory"/>
+
                 </LinearLayout>
 
             </LinearLayout>
