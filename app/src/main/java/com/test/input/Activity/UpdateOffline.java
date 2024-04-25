@@ -275,6 +275,7 @@ public class UpdateOffline extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                photoPicker.addCategory(Intent.CATEGORY_OPENABLE);
                 photoPicker.setType("image/*");
                 activityResultLauncher.launch(photoPicker);
             }
