@@ -61,10 +61,10 @@ public class TambahOffline extends AppCompatActivity {
 
     private EditText etResult, etLokasi, etBerat, etketerangan;
     private SwitchMaterial oIsiTabung, oTekananTabung, oKesesuaianBerat, oKondisiTabung, oKondisiSelang, oKondisiPin, oKondisiNozzle, oPosisiTabung;
-    private Spinner merkapar, jenisApar;
-    private Button btnSimpan;
+    private Spinner merkapar, jenisApar, satuanBerat;
+    private Button btnSimpan, btnBack;
     private ImageView uploadGambar;
-    private ImageButton btnImage, btnBack, btnHelp, btnQR;
+    private ImageButton btnImage, btnHelp, btnQR;
     private String imageURL;
     private Uri uri;
     ScrollView scrollView;
@@ -119,6 +119,11 @@ public class TambahOffline extends AppCompatActivity {
         ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
         aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
         jenisApar.setAdapter(aArrayAdapter);
+
+        List<String> bList = Arrays.asList("Kilogram", "Liter");
+        ArrayAdapter<String> bArrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_list_satuan, bList);
+        bArrayAdapter.setDropDownViewResource(R.layout.spinner_list_satuan);
+        satuanBerat.setAdapter(bArrayAdapter);
 
         firebaseAuth = FirebaseAuth.getInstance();
         findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));
@@ -369,5 +374,6 @@ public class TambahOffline extends AppCompatActivity {
         btnHelp = findViewById(R.id.btn_help);
         btnQR = findViewById(R.id.btn_upload_qr);
         scrollView = findViewById(R.id.scrollView);
+        satuanBerat = findViewById(R.id.upload_satuan);
     }
 }

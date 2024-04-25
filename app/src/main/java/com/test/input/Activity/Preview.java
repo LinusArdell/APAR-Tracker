@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class Preview extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<DraftClass> dataList;
     private DraftAdapter adapter;
-    ImageButton btnBack;
+    Button btnBack;
     private static final int REQUEST_PERMISSIONS = 100;
 
     @SuppressLint("MissingInflatedId")

@@ -57,7 +57,7 @@ public class Generator extends AppCompatActivity {
     Button btnGenerate, btnClear, btnDownload;
     TextView userEmail;
     private static final int PERMISSION_STORAGE_CODE = 1000;
-    ImageButton btnBack;
+    Button btnBack;
     public boolean success = false;
     AlertDialog.Builder dialogScan;
     Button btnOk, btnNo;

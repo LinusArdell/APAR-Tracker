@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.test.input.R;
 
@@ -39,6 +40,7 @@ public class DetailHistory extends AppCompatActivity {
         setContentView(R.layout.activity_detail_history);
 
         initializeComponents();
+        fillDataFromIntent();
 
         tbnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,5 +71,33 @@ public class DetailHistory extends AppCompatActivity {
         posisiTabung = findViewById(R.id.detail_posisi);
         tbnBack = findViewById(R.id.btn_back);
         detailPemeriksa = findViewById(R.id.detail_user);
+    }
+
+    private void fillDataFromIntent() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            tvTitleDetail.setText("Preview Pemeriksaan " + bundle.getString("KodeQR"));
+            tvDate.setText("Pertanggal " + bundle.getString("Tanggal"));
+
+            detailKodeQR.setText(bundle.getString("KodeQR"));
+            detailTanggal.setText(bundle.getString("Tanggal"));
+            isiTabung.setText(bundle.getString("IsiTabung"));
+            tekananTabung.setText(bundle.getString("Tekanan"));
+            kesesuaianBerat.setText(bundle.getString("Kesesuaian"));
+            kondisiTabung.setText(bundle.getString("KondisiTabung"));
+            kondisiSelang.setText(bundle.getString("KondisiSelang"));
+            kondisiPin.setText(bundle.getString("KondisiPin"));
+            merkAPAR.setText(bundle.getString("Merk"));
+            jenisAPAR.setText(bundle.getString("Jenis"));
+            etLokasi.setText(bundle.getString("Lokasi"));
+            etBerat.setText(bundle.getString("Berat"));
+            etketerangan.setText(bundle.getString("Keterangan"));
+            kondisiNozzle.setText(bundle.getString("Nozzle"));
+            posisiTabung.setText(bundle.getString("Posisi"));
+            key = bundle.getString("Key");
+            imageUrl = bundle.getString("Image");
+            detailPemeriksa.setText(bundle.getString("User"));
+            Glide.with(this).load(bundle.getString("Image")).into(detailImage);
+        }
     }
 }

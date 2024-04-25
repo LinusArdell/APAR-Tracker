@@ -64,6 +64,7 @@ import com.test.input.Class.UserClass;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -72,11 +73,11 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
     private EditText etResult, etLokasi, etBerat, etketerangan;
     private SwitchMaterial tekananTabung, kesesuaianBerat, isiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
-    private Spinner merkAPAR, jenisAPAR;
+    private Spinner merkAPAR, jenisAPAR, satuanBerat;
     private SwitchMaterial kondisiTabung;
-    private Button btnUpload;
+    private Button btnUpload, btnBack;
     private ImageView uploadGambar;
-    private ImageButton btnImage, btnBack, btnHelp, btnQR;
+    private ImageButton btnImage, btnHelp, btnQR;
     private String imageURL, historyImageUrl;
     private Uri uri;
     ScrollView scrollView;
@@ -135,6 +136,11 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
         aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
         jenisAPAR.setAdapter(aArrayAdapter);
+
+        List<String> bList = Arrays.asList("Kilogram", "Liter");
+        ArrayAdapter<String> bArrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_list_satuan, bList);
+        bArrayAdapter.setDropDownViewResource(R.layout.spinner_list_satuan);
+        satuanBerat.setAdapter(bArrayAdapter);
 
         findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));
 
@@ -243,6 +249,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         btnHelp = findViewById(R.id.btn_help);
         btnQR = findViewById(R.id.btn_upload_qr);
         scrollView = findViewById(R.id.scrollView);
+        satuanBerat = findViewById(R.id.upload_satuan);
     }
 
     public void saveData() {

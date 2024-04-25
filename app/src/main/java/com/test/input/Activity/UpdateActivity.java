@@ -75,7 +75,7 @@ public class UpdateActivity extends AppCompatActivity {
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
-    private Spinner merkAPAR, jenisAPAR;
+    private Spinner merkAPAR, jenisAPAR, satuanBerat;
     private EditText etLokasi, etBerat, etketerangan;
     private TextView tvQR, tvID;
 
@@ -119,7 +119,7 @@ public class UpdateActivity extends AppCompatActivity {
         updateImage = findViewById(R.id.update_image);
         btnCancel = findViewById(R.id.btn_cancel);
         btnSave = findViewById(R.id.btn_save);
-
+        satuanBerat = findViewById(R.id.upload_satuan);
         kondisiNozzle = findViewById(R.id.update_nozzle);
         posisiTabung = findViewById(R.id.update_posisi);
 
@@ -153,6 +153,11 @@ public class UpdateActivity extends AppCompatActivity {
         ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
         aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
         jenisAPAR.setAdapter(aArrayAdapter);
+
+        List<String> bList = Arrays.asList("Kilogram", "Liter");
+        ArrayAdapter<String> bArrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_list_satuan, bList);
+        bArrayAdapter.setDropDownViewResource(R.layout.spinner_list_satuan);
+        satuanBerat.setAdapter(bArrayAdapter);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

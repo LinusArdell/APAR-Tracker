@@ -29,7 +29,7 @@ public class Register extends AppCompatActivity {
 
     EditText etUsername, etEmail, etPassword;
     Button btnRegister;
-    ImageButton btnBack;
+    Button btnBack;
     private ProgressDialog processDialog;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
