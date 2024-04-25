@@ -73,11 +73,11 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    DatabaseReference databaseReference;
-    ValueEventListener eventListener;
-    RecyclerView recyclerView;
-    List<DataClass> dataList;
-    EquipmentAdapter adapter;
+    private DatabaseReference databaseReference;
+    private ValueEventListener eventListener;
+    private RecyclerView recyclerView;
+    private List<DataClass> dataList;
+    private EquipmentAdapter adapter;
     SearchView searchView;
     TextView jumlahAPAR;
     ImageButton btnQR;
@@ -202,9 +202,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -229,16 +226,6 @@ public class MainActivity extends AppCompatActivity {
         MenuItem onboard = menu.findItem(R.id.nav_guide);
         MenuItem register = menu.findItem(R.id.nav_register);
         MenuItem draft = menu.findItem(R.id.nav_draft);
-//        MenuItem offlineAdd = menu.findItem(R.id.nav_add_offline);
-
-//        offlineAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-//                Intent i = new Intent(MainActivity.this, TambahOffline.class);
-//                startActivity(i);
-//                return false;
-//            }
-//        });
 
         draft.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -424,7 +411,6 @@ public class MainActivity extends AppCompatActivity {
         if (!isOnboardingCompleted()) {
             showOnboarding();
         }
-
     }
 
     private void showOnboarding() {

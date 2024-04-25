@@ -74,7 +74,7 @@ public class DetailActivity extends AppCompatActivity {
     LayoutInflater inflaterScan;
     View dialogViewScan;
     Dialog dialog, dialogs;
-    Button btnCancel, btnDelete, btnOk, btnNo, btnBatal, btnYa;
+    Button btnCancel, btnDelete, btnOk, btnNo, btnBatal, btnYa, btnHistory;
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
@@ -106,7 +106,6 @@ public class DetailActivity extends AppCompatActivity {
 
         initializeComponents();
         fillDataFromIntent();
-        setupDeleteButtonListener();
         setupEditButtonListener();
 
         dialog = new Dialog(DetailActivity.this);
@@ -248,6 +247,14 @@ public class DetailActivity extends AppCompatActivity {
         if (!isOnboardingCompleted()) {
             showOnboarding();
         }
+
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DetailActivity.this, History.class).putExtra("KodeQR", detailKodeQR.getText().toString());
+                startActivity(i);
+            }
+        });
     }
 
     private void initializeComponents() {
@@ -275,6 +282,7 @@ public class DetailActivity extends AppCompatActivity {
         btnQr = findViewById(R.id.btn_qr);
         btnHelp = findViewById(R.id.btn_help);
         detailPemeriksa = findViewById(R.id.detail_user);
+        btnHistory = findViewById(R.id.btnHistory);
     }
 
     private void fillDataFromIntent() {
@@ -298,16 +306,11 @@ public class DetailActivity extends AppCompatActivity {
             etketerangan.setText(bundle.getString("Keterangan"));
             kondisiNozzle.setText(bundle.getString("Nozzle"));
             posisiTabung.setText(bundle.getString("Posisi"));
-//            key = bundle.getString("Key");
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
             detailPemeriksa.setText(bundle.getString("User"));
             Glide.with(this).load(bundle.getString("Image")).into(detailImage);
         }
-    }
-
-    private void setupDeleteButtonListener() {
-
     }
 
     private void performDeleteAction() {

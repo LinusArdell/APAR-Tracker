@@ -30,11 +30,6 @@ import java.util.Map;
 
 public class Preview extends AppCompatActivity {
 
-    TextView textViewKodeQR, textViewLokasi, textViewMerk, textViewBerat, textViewJenis, tvTekanan, tvKondisiPin,
-            tvKondisiSelang, tvIsiTabung, tKeterangan, tNozzle, tTanggal, tPosisi, tKesesuaian, tKondisiTabung, tvUser;
-
-    ImageView tvImage;
-
     private RecyclerView recyclerView;
     private List<DraftClass> dataList;
     private DraftAdapter adapter;

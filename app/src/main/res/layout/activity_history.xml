@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="@color/white"
-    tools:context=".Activity.Preview"
+    tools:context=".Activity.History"
     android:orientation="vertical">
 
     <com.google.android.material.navigation.NavigationView
@@ -41,21 +41,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
-                android:text="Penyimpanan lokal"
+                android:text="History Title"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:id="@+id/tv_title"/>
+                android:id="@+id/t_history_title"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:text="Data tersimpan dalam penyimpanan lokal"
+                android:text="Riwayat"
                 android:textSize="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@id/tv_title"/>
+                android:layout_below="@id/t_history_title"/>
         </RelativeLayout>
 
     </com.google.android.material.navigation.NavigationView>
@@ -64,7 +64,7 @@
         android:layout_below="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyDraft"
+        android:id="@+id/recyHistorya"
         android:scrollbars="vertical"/>
 
 </RelativeLayout>
