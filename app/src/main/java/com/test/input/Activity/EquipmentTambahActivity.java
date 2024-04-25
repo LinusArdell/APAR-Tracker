@@ -306,6 +306,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         String berat = etBerat.getText().toString();
         String keterangan = etketerangan.getText().toString();
 
+        String SatuanBerat = satuanBerat.getSelectedItem().toString();
         String MerkAPAR = merkAPAR.getSelectedItem().toString();
         String JenisAPAR = jenisAPAR.getSelectedItem().toString();
 
@@ -367,10 +368,10 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString);
+                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
 
                             DataClass historyData = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString);
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
                             FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
 //                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

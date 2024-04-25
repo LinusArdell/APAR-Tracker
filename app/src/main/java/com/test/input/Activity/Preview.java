@@ -99,6 +99,7 @@ public class Preview extends AppCompatActivity {
                 String posisiKey = key + "Posisi";
                 String kesesuaianKey = key + "Kesesuaian";
                 String kondisiTabungKey = key + "KondisiTabung";
+                String satuanBerat = key + "Satuan";
 
                 String kodeQR = sharedPreferences.getString(kodeQRkey, "");
                 String lokasi = sharedPreferences.getString(lokasiKey, "");
@@ -117,10 +118,12 @@ public class Preview extends AppCompatActivity {
                 String Posisi = sharedPreferences.getString(posisiKey, "");
                 String Kesesuaian = sharedPreferences.getString(kesesuaianKey, "");
                 String KondisiTabung = sharedPreferences.getString(kondisiTabungKey, "");
+
+                String SatuanBerat = sharedPreferences.getString(satuanBerat, "");
                 if (!TextUtils.isEmpty(kodeQR)) {
                     dataLists.add(new DraftClass(kodeQR,  lokasi,  merk,  berat,  jenis,
                             IsiTabung,  Tekanan,  Kesesuaian,  KondisiTabung,  KondisiSelang,
-                            KondisiPin,  Keterangan,  uriString,  Tanggal,  User,  Nozzle,  Posisi));
+                            KondisiPin,  Keterangan,  uriString,  Tanggal,  User,  Nozzle,  Posisi, SatuanBerat));
                 }
             }
         }

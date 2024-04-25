@@ -40,6 +40,7 @@ import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class UpdateOffline extends AppCompatActivity {
 
@@ -50,8 +51,6 @@ public class UpdateOffline extends AppCompatActivity {
     String imageUrl;
     String key, oldImageURL;
     Uri uri;
-    DatabaseReference databaseReference;
-    StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
@@ -63,11 +62,7 @@ public class UpdateOffline extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_update_offline);
-
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -128,6 +123,7 @@ public class UpdateOffline extends AppCompatActivity {
                 String merkAPAR = merkAPARs.getSelectedItem().toString();
                 String beratTabung = etBerat.getText().toString();
                 String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+                String SatuanBerat = satuanBerat.getSelectedItem().toString();
 
                 Boolean isiTabungs = isiTabung.isChecked();
                 Boolean Tekanan = tekananTabung.isChecked();
@@ -156,12 +152,13 @@ public class UpdateOffline extends AppCompatActivity {
                     String posisiString = posisi ? "Baik" : "Terhalang";
 
                     saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
-                            kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
+                            kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
                     Toast.makeText(UpdateOffline.this, "Data tersimpan", Toast.LENGTH_SHORT).show();
 
                     boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
                     if (isSaved) {
+
                         Log.d("DataSave", "Data saved successfully");
                     } else {
                         Log.d("DataSave", "Failed to save data");
@@ -196,9 +193,7 @@ public class UpdateOffline extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Bundle extras = result.getData().getExtras();
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        // Menampilkan gambar di ImageView
                         updateImage.setImageBitmap(imageBitmap);
-                        // Mengonversi Bitmap ke Uri
                         uri = getImageUri(this, imageBitmap);
                     } else {
                         Toast.makeText(UpdateOffline.this, "No Image Selected", Toast.LENGTH_SHORT).show();
@@ -217,6 +212,7 @@ public class UpdateOffline extends AppCompatActivity {
 
             String merkAparValue = bundle.getString("Merk");
             String jenisAparValue = bundle.getString("Jenis");
+            String satuanBeratValue = bundle.getString("Satuan");
 
             if (merkAparValue != null) {
                 int merkAparPosition = getIndexSpinner(merkAPARs, merkAparValue);
@@ -229,6 +225,13 @@ public class UpdateOffline extends AppCompatActivity {
                 int jenisAparPosition = getIndexSpinner(jenisAPAR, jenisAparValue);
                 if (jenisAparPosition != -1) {
                     jenisAPAR.setSelection(jenisAparPosition);
+                }
+            }
+
+            if (satuanBeratValue != null) {
+                int satuanBeratPosition = getIndexSpinner(satuanBerat, satuanBeratValue);
+                if (satuanBeratPosition != -1) {
+                    satuanBerat.setSelection(satuanBeratPosition);
                 }
             }
 
@@ -288,6 +291,7 @@ public class UpdateOffline extends AppCompatActivity {
                 String merkAPAR = merkAPARs.getSelectedItem().toString();
                 String beratTabung = etBerat.getText().toString();
                 String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+                String SatuanBerat = satuanBerat.getSelectedItem().toString();
 
                 Boolean isiTabungs = isiTabung.isChecked();
                 Boolean Tekanan = tekananTabung.isChecked();
@@ -316,12 +320,14 @@ public class UpdateOffline extends AppCompatActivity {
                     String posisiString = posisi ? "Baik" : "Terhalang";
 
                     saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
-                            kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
+                            kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
                     Toast.makeText(UpdateOffline.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+                    displayAllDataFromSharedPreferences();
 
-                    boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
+                    boolean isSaved = editor.commit();
                     if (isSaved) {
+
                         Log.d("DataSave", "Data saved successfully");
                     } else {
                         Log.d("DataSave", "Failed to save data");
@@ -394,7 +400,7 @@ public class UpdateOffline extends AppCompatActivity {
 
     private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,
                                              String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang,
-                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung) {
+                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung, String satuanBerat) {
 
         SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -418,6 +424,7 @@ public class UpdateOffline extends AppCompatActivity {
         editor.putString(uniqueKey + "User",user);
         editor.putString(uniqueKey + "Nozzle",kondisiNozzle);
         editor.putString(uniqueKey + "Posisi",posisiTabung);
+        editor.putString(uniqueKey + "Satuan", satuanBerat);
 
         editor.apply();
     }
@@ -433,6 +440,14 @@ public class UpdateOffline extends AppCompatActivity {
             takePictureLauncher.launch(takePictureIntent);
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayAllDataFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            Log.d("SharedPreferencesData", entry.getKey() + ": " + entry.getValue().toString());
         }
     }
 }

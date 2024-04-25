@@ -6,7 +6,7 @@ public class DraftUploadClass {
 
     private String kodeQR;
     private String dataImage;
-    private String dataDate;
+    private String dataDate, satuanBerat;
     private String key;
     private String user;
     private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
@@ -28,7 +28,8 @@ public class DraftUploadClass {
                             String dataDate,
                             String user,
                             String kondisiNozzle,
-                            String posisiTabung){
+                            String posisiTabung,
+                            String satuanBerat){
 
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
@@ -47,6 +48,7 @@ public class DraftUploadClass {
         this.kondisiNozzle = kondisiNozzle;
         this.posisiTabung = posisiTabung;
         this.user = user;
+        this.satuanBerat = satuanBerat;
     }
 
     public String getKodeQR() {
@@ -119,5 +121,9 @@ public class DraftUploadClass {
 
     public String getKondisiPin() {
         return kondisiPin;
+    }
+
+    public String getSatuanBerat() {
+        return satuanBerat;
     }
 }

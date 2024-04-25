@@ -68,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
     String imageUrl = "";
     private TextView isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
     private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
-    private TextView etLokasi, etBerat, etketerangan, tvTitleDetail, tvDate;
+    private TextView etLokasi, etBerat, etketerangan, tvTitleDetail, tvDate, tvSatuan;
     public boolean success = false;
     AlertDialog.Builder dialogScan;
     LayoutInflater inflaterScan;
@@ -283,6 +283,7 @@ public class DetailActivity extends AppCompatActivity {
         btnHelp = findViewById(R.id.btn_help);
         detailPemeriksa = findViewById(R.id.detail_user);
         btnHistory = findViewById(R.id.btnHistory);
+        tvSatuan = findViewById(R.id.detail_satuan);
     }
 
     private void fillDataFromIntent() {
@@ -306,6 +307,7 @@ public class DetailActivity extends AppCompatActivity {
             etketerangan.setText(bundle.getString("Keterangan"));
             kondisiNozzle.setText(bundle.getString("Nozzle"));
             posisiTabung.setText(bundle.getString("Posisi"));
+            tvSatuan.setText(bundle.getString("Satuan"));
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
             detailPemeriksa.setText(bundle.getString("User"));
@@ -397,6 +399,7 @@ public class DetailActivity extends AppCompatActivity {
                 .putExtra("Nozzle", kondisiNozzle.getText().toString())
                 .putExtra("Posisi", posisiTabung.getText().toString())
                 .putExtra("Image", imageUrl)
+                .putExtra("Satuan", tvSatuan.getText().toString())
                 .putExtra("Key", key);
         startActivity(intent);
     }
@@ -419,6 +422,7 @@ public class DetailActivity extends AppCompatActivity {
                 .putExtra("Nozzle", kondisiNozzle.getText().toString())
                 .putExtra("Posisi", posisiTabung.getText().toString())
                 .putExtra("Image", imageUrl)
+                .putExtra("Satuan", tvSatuan.getText().toString())
                 .putExtra("Key", key);
         startActivity(intent);
     }

@@ -6,7 +6,7 @@ public class DraftClass {
     private String kodeQR;
     private String dataImage;
     private String dataDate;
-    private String key;
+    private String key, satuanBerat;
     private String user;
     private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
     private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
@@ -27,7 +27,8 @@ public class DraftClass {
                             String dataDate,
                             String user,
                             String kondisiNozzle,
-                            String posisiTabung){
+                            String posisiTabung,
+                            String satuanBerat){
 
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
@@ -45,8 +46,8 @@ public class DraftClass {
         this.dataImage = dataImage;
         this.kondisiNozzle = kondisiNozzle;
         this.posisiTabung = posisiTabung;
+        this.satuanBerat = satuanBerat;
         this.user = user;
-
     }
 
     public String getKondisiNozzle() {
@@ -126,5 +127,9 @@ public class DraftClass {
 
     public String getDataDate() {
         return dataDate;
+    }
+
+    public String getSatuanBerat() {
+        return satuanBerat;
     }
 }

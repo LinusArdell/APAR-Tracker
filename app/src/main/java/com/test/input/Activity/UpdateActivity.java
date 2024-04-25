@@ -217,6 +217,7 @@ public class UpdateActivity extends AppCompatActivity {
 
             String merkAparValue = bundle.getString("Merk");
             String jenisAparValue = bundle.getString("Jenis");
+            String satuanBeratValue = bundle.getString("Satuan");
 
             if (merkAparValue != null) {
                 int merkAparPosition = getIndexSpinner(merkAPAR, merkAparValue);
@@ -229,6 +230,13 @@ public class UpdateActivity extends AppCompatActivity {
                 int jenisAparPosition = getIndexSpinner(jenisAPAR, jenisAparValue);
                 if (jenisAparPosition != -1) {
                     jenisAPAR.setSelection(jenisAparPosition);
+                }
+            }
+
+            if (satuanBeratValue != null){
+                int satuanBeratPosition = getIndexSpinner(satuanBerat, satuanBeratValue);
+                if (satuanBeratPosition != -1){
+                    satuanBerat.setSelection(satuanBeratPosition);
                 }
             }
 
@@ -315,6 +323,7 @@ public class UpdateActivity extends AppCompatActivity {
         String merkAPAr = merkAPAR.getSelectedItem().toString();
         String beratTabung = etBerat.getText().toString();
         String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+        String SatuanBerat = satuanBerat.getSelectedItem().toString();
 
         Boolean isiTabungs = isiTabung.isChecked();
         Boolean Tekanan = tekananTabung.isChecked();
@@ -343,7 +352,7 @@ public class UpdateActivity extends AppCompatActivity {
             String posisiString = posisi ? "Baik" : "Terhalang";
 
             saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
-                    kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
+                    kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
             Toast.makeText(UpdateActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
 
@@ -439,6 +448,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         String MerkAPAR = merkAPAR.getSelectedItem().toString();
         String JenisAPAR = jenisAPAR.getSelectedItem().toString();
+        String SatuanBerat = satuanBerat.getSelectedItem().toString();
 
         Boolean isitabung = isiTabung.isChecked();
         Boolean tekanan = tekananTabung.isChecked();
@@ -502,10 +512,10 @@ public class UpdateActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString);
+                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
 
                             DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString);
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
 
                             databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -566,7 +576,7 @@ public class UpdateActivity extends AppCompatActivity {
 
     private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,
                                              String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang,
-                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung) {
+                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung, String satuanBerat) {
 
         SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -590,7 +600,7 @@ public class UpdateActivity extends AppCompatActivity {
         editor.putString(uniqueKey + "User",user);
         editor.putString(uniqueKey + "Nozzle",kondisiNozzle);
         editor.putString(uniqueKey + "Posisi",posisiTabung);
-
+        editor.putString(uniqueKey + "Satuan", satuanBerat);
         editor.apply();
     }
 

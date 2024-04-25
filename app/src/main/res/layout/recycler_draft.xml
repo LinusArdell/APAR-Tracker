@@ -172,6 +172,14 @@
             android:layout_height="wrap_content"
             android:text="Text"
             android:textSize="25dp"
+            android:id="@+id/satuan"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="25dp"
             android:id="@+id/Berat12"
             android:visibility="gone"/>
         <TextView

@@ -83,9 +83,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
         holder.tvMerk12.setText(dataLists.get(position).getMerkAPAR());
         holder.tvBerat12.setText(dataLists.get(position).getBeratTabung());
-
+        holder.satuan12.setText(dataLists.get(position).getSatuanBerat());
         holder.tvJenis12.setText(dataLists.get(position).getJenisAPAR());
-
         holder.tvTanggal12.setText(dataLists.get(position).getDataDate());
         holder.tvKondisiTabung12.setText(dataLists.get(position).getKondisiTabung());
         holder.tvPosisi12.setText(dataLists.get(position).getPosisiTabung());
@@ -107,10 +106,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                 dialog.show();
                 DraftClass draft = dataLists.get(holder.getAdapterPosition());
 
-//                final int takeFlags = intent.getFlags()
-//                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-//                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
                 String kodeQR = draft.getKodeQR();
                 String lokasi = draft.getLokasiTabung();
                 String berat = draft.getBeratTabung();
@@ -118,6 +113,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
                 String MerkAPAR = draft.getMerkAPAR();
                 String jenisAPAR = draft.getJenisAPAR();
+                String satuanBerat = draft.getSatuanBerat();
 
                 String isitabung = draft.getIsiTabung();
                 String tekanan = draft.getTekananTabung();
@@ -146,11 +142,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
                     Calendar calendar = Calendar.getInstance();
                     String currentDate = dateFormat.format(calendar.getTime());
-
                     String childKey = currentDate + kodeQR;
-
                     String fileName = "image_" + childKey;
-
                     StorageReference historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
 //                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
@@ -163,7 +156,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                             Uri urlImage = uriTask.getResult();
                             historyImageURl = urlImage.toString();
 
-                            DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin, keterangan, historyImageURl, tanggal, user, nozzle, posisi);
+                            DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian,
+                                    kondisi, selang, pin, keterangan, historyImageURl, tanggal, user, nozzle, posisi, satuanBerat);
 
                             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
                             Calendar calendar = Calendar.getInstance();
@@ -182,10 +176,12 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                             Uri urlImage = uriTask.getResult();
                             imageURL = urlImage.toString();
 
-                            DraftClass dataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin, keterangan, imageURL, tanggal, user, nozzle, posisi);
+                            logSharedPreferencesData();
+
+                            DraftClass dataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin,
+                                    keterangan, imageURL, tanggal, user, nozzle, posisi, satuanBerat);
 
                             FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
-
 //                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -231,7 +227,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
     }
 
     private void deleteItem(int position) {
-        // Ambil data yang sesuai dari shared preferences
         DraftClass dataToDelete = dataLists.get(position);
         String uniqueKey = dataToDelete.getKodeQR();
 
@@ -253,6 +248,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
         String reTanggal = keys + "Tanggal";
         String reKondisi = keys + "KondisiTabung";
         String reUser = keys + "User";
+        String reSatuanBerat = keys + "Satuan";
 
         // Cetak kunci unik sebelum penghapusan
         Log.d("UniqueKeyBeforeDelete", uniqueKey);
@@ -278,6 +274,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
         editor.remove(reTanggal).commit();
         editor.remove(reKondisi).commit();
         editor.remove(reUser).commit();
+        editor.remove(reSatuanBerat).commit();
 
         // Hapus data dari list RecyclerView
         dataLists.remove(position);
@@ -297,7 +294,7 @@ class DraftViewHolder extends RecyclerView.ViewHolder {
     TextView recQr12, recUser12, recLokasi12, tvMerk12, tvBerat12, tvTanggal12, tvKondisiTabung12, tvPosisi12, tvKondisiSelang12, tvPin12,
             tvNozzle12, tvJarum12, tvPowder12, tvSelisih12, tvKeterangan12;
     CardView recCard12;
-    TextView tvJenis12;
+    TextView tvJenis12, satuan12;
     Button btnUploadDraft, btnDeleteDraft;
 
     public DraftViewHolder(@NonNull View itemView){
@@ -322,5 +319,6 @@ class DraftViewHolder extends RecyclerView.ViewHolder {
         tvKeterangan12 = itemView.findViewById(R.id.Keterangan12);
         btnUploadDraft = itemView.findViewById(R.id.btn_upload_draft);
         btnDeleteDraft = itemView.findViewById(R.id.btn_delete_draft);
+        satuan12 = itemView.findViewById(R.id.satuan);
     }
 }
