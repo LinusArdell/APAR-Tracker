@@ -417,6 +417,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         String merkAPAr = merkAPAR.getSelectedItem().toString();
         String beratTabung = etBerat.getText().toString();
         String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+        String satuanberat = satuanBerat.getSelectedItem().toString();
 
         Boolean isiTabungs = isiTabung.isChecked();
         Boolean Tekanan = tekananTabung.isChecked();
@@ -444,8 +445,14 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             String nozzleString = nozzles ? "Baik" : "Tersumbat";
             String posisiString = posisi ? "Baik" : "Terhalang";
 
+            if (jenisAPAr.equals("Carbondioxide")) {
+                kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
+            } else {
+                kesesuaianString = "N/A";
+            }
+
             saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
-                    kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString);
+                    kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, satuanberat);
 
             Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan kedalam draft", Toast.LENGTH_SHORT).show();
 
@@ -477,7 +484,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
     private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,
                                              String isiTabung, String Tekanan, String kesesuaianBerat, String kondisiTabung, String kondisiSelang,
-                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung) {
+                                             String kondisiPin, String keterangan, Uri dataImage, String dataDate, String user, String kondisiNozzle, String posisiTabung, String SatuanBerat) {
 
         SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -501,6 +508,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         editor.putString(uniqueKey + "User",user);
         editor.putString(uniqueKey + "Nozzle",kondisiNozzle);
         editor.putString(uniqueKey + "Posisi",posisiTabung);
+        editor.putString(uniqueKey + "Satuan", SatuanBerat);
 
         editor.apply();
     }

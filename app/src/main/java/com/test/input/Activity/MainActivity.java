@@ -57,6 +57,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
+import com.test.input.BuildConfig;
 import com.test.input.Class.DataClass;
 import com.test.input.R;
 import com.test.input.Class.UserClass;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     FirebaseAuth mAuth;
-    TextView userEmail, username;
+    TextView userEmail, username, tvAppVersion;
     FloatingActionButton fabQr;
     private DatabaseReference mDatabase;
 
@@ -226,6 +227,11 @@ public class MainActivity extends AppCompatActivity {
         MenuItem onboard = menu.findItem(R.id.nav_guide);
         MenuItem register = menu.findItem(R.id.nav_register);
         MenuItem draft = menu.findItem(R.id.nav_draft);
+        MenuItem version = menu.findItem(R.id.nav_version);
+
+        String versionApp = BuildConfig.VERSION_NAME;
+
+        version.setTitle("Versi : " + versionApp);
 
         draft.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override

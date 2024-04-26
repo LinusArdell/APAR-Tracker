@@ -48,6 +48,7 @@
             android:backgroundTint="#067dff"
             android:layout_marginStart="10dp"
             android:text="YA"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_conf" />
 
@@ -58,6 +59,7 @@
             android:layout_margin="10dp"
             android:backgroundTint="#F44336"
             android:text="Batal"
+            android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_conf" />
 

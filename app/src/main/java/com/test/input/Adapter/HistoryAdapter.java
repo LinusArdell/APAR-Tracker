@@ -74,6 +74,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<MyHistoryHolder>{
 
                 intent.putExtra("Nozzle", dataList.get(holder.getAdapterPosition()).getKondisiNozzle());
                 intent.putExtra("Posisi", dataList.get(holder.getAdapterPosition()).getPosisiTabung());
+                intent.putExtra("Satuan", dataList.get(holder.getAdapterPosition()).getSatuanBerat());
 
                 intent.putExtra("Key", dataList.get(holder.getAdapterPosition()).getKey());
 

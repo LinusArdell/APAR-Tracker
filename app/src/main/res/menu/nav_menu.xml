@@ -59,4 +59,14 @@
 <!--                android:title="add offline"/>-->
         </menu>
     </item>
+
+
+    <item
+        android:title="Versi aplikasi">
+        <menu>
+            <item
+                android:id="@+id/nav_version"
+                android:title="Versi aplikasi " />
+        </menu>
+    </item>
 </menu>

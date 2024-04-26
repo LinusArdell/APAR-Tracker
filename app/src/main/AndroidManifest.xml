@@ -10,9 +10,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -20,24 +21,27 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/bluelogo"
         android:label="Prototype"
-        tools:replace="android:label"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Input"
-        android:requestLegacyExternalStorage="true"
+        tools:replace="android:label"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity.FeedBack"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity.DetailHistory"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.History"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.UpdateOffline"
             android:exported="false"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Activity.Preview"
             android:exported="false"
@@ -121,4 +125,5 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
+
 </manifest>

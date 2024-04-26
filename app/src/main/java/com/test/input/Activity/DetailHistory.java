@@ -2,6 +2,7 @@ package com.test.input.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -15,24 +16,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textview.MaterialTextView;
 import com.test.input.R;
 
 public class DetailHistory extends AppCompatActivity {
 
     TextView detailKodeQR, detailTanggal, tvDeleteDialog, detailPemeriksa;
-    EditText etFilename;
+    TextView detailSatuan;
     ImageView detailImage;
-    MaterialButton deleteButton, editButton;
-    ImageButton btnQr, btnHelp;
     Button tbnBack;
     String key = "";
     String imageUrl = "";
     private TextView isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
     private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
     private TextView etLokasi, etBerat, etketerangan, tvTitleDetail, tvDate;
-    public boolean success = false;
-    AlertDialog.Builder dialogScan;
-    LayoutInflater inflaterScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +47,7 @@ public class DetailHistory extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("WrongViewCast")
     private void initializeComponents() {
         isiTabung = findViewById(R.id.detail_isi);
         tekananTabung = findViewById(R.id.detail_tekanan);
@@ -71,6 +69,7 @@ public class DetailHistory extends AppCompatActivity {
         posisiTabung = findViewById(R.id.detail_posisi);
         tbnBack = findViewById(R.id.btn_back);
         detailPemeriksa = findViewById(R.id.detail_user);
+        detailSatuan = findViewById(R.id.detail_satuan);
     }
 
     private void fillDataFromIntent() {
@@ -97,6 +96,7 @@ public class DetailHistory extends AppCompatActivity {
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
             detailPemeriksa.setText(bundle.getString("User"));
+            detailSatuan.setText(bundle.getString("Satuan"));
             Glide.with(this).load(bundle.getString("Image")).into(detailImage);
         }
     }

@@ -320,9 +320,9 @@ public class UpdateActivity extends AppCompatActivity {
 
         String kodeQR = tvQR.getText().toString();
         String lokasiTabung = etLokasi.getText().toString();
-        String merkAPAr = merkAPAR.getSelectedItem().toString();
+        String MerkAPAR = merkAPAR.getSelectedItem().toString();
         String beratTabung = etBerat.getText().toString();
-        String jenisAPAr = jenisAPAR.getSelectedItem().toString();
+        String JenisAPArs = jenisAPAR.getSelectedItem().toString();
         String SatuanBerat = satuanBerat.getSelectedItem().toString();
 
         Boolean isiTabungs = isiTabung.isChecked();
@@ -351,22 +351,29 @@ public class UpdateActivity extends AppCompatActivity {
             String nozzleString = nozzles ? "Baik" : "Tersumbat";
             String posisiString = posisi ? "Baik" : "Terhalang";
 
-            saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
+            if (JenisAPArs.equals("Carbondioxide")){
+                kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
+            } else {
+                kesesuaianString = "N/A";
+            }
+
+            saveDataToSharedPreferences(kodeQR, lokasiTabung, MerkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
             Toast.makeText(UpdateActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
 
-            boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
+            boolean isSaved = editor.commit();
             if (isSaved) {
+
                 Log.d("DataSave", "Data saved successfully");
             } else {
                 Log.d("DataSave", "Failed to save data");
             }
 
             Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
             finish();
-            Toast.makeText(UpdateActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(UpdateActivity.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
         }
