@@ -12,8 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -36,10 +38,14 @@ import com.google.firebase.storage.StorageReference;
 import com.test.input.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class UpdateOffline extends AppCompatActivity {
@@ -180,6 +186,8 @@ public class UpdateOffline extends AppCompatActivity {
                     public void onActivityResult(ActivityResult o) {
                         if (o.getResultCode() == Activity.RESULT_OK) {
                             Intent data = o.getData();
+                            final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                             uri= data.getData();
                             updateImage.setImageURI(uri);
                         } else {
@@ -274,7 +282,10 @@ public class UpdateOffline extends AppCompatActivity {
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                Intent photoPicker = new Intent();
+                photoPicker.setAction(Intent.ACTION_OPEN_DOCUMENT);
+
+                photoPicker.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 photoPicker.addCategory(Intent.CATEGORY_OPENABLE);
                 photoPicker.setType("image/*");
                 activityResultLauncher.launch(photoPicker);
@@ -341,6 +352,7 @@ public class UpdateOffline extends AppCompatActivity {
                     }
 
                     Intent intent = new Intent(UpdateOffline.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivity(intent);
                     finish();
                 } else {

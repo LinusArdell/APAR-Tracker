@@ -14,6 +14,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -50,6 +53,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.ortiz.touchview.TouchImageView;
 import com.test.input.R;
 
 import java.io.File;
@@ -60,7 +64,7 @@ public class DetailActivity extends AppCompatActivity {
 
     TextView detailKodeQR, detailTanggal, tvDeleteDialog, detailPemeriksa;
     EditText etFilename;
-    ImageView detailImage;
+    TouchImageView detailImage;
     MaterialButton deleteButton, editButton;
     ImageButton btnQr, btnHelp;
     Button tbnBack;
@@ -401,6 +405,7 @@ public class DetailActivity extends AppCompatActivity {
                 .putExtra("Image", imageUrl)
                 .putExtra("Satuan", tvSatuan.getText().toString())
                 .putExtra("Key", key);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 
@@ -424,6 +429,7 @@ public class DetailActivity extends AppCompatActivity {
                 .putExtra("Image", imageUrl)
                 .putExtra("Satuan", tvSatuan.getText().toString())
                 .putExtra("Key", key);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 
@@ -444,19 +450,32 @@ public class DetailActivity extends AppCompatActivity {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 
+        String label = detailKodeQR.getText().toString();
+
         File myPath = new File(folder, filename + ".jpg");
+
+        // Menggambar teks pada bitmap dengan koordinat yang disesuaikan
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(24);
+
+        // Mengatur posisi teks sedikit ke bawah
+        int xPos = 40; // Koordinat x
+        int yPos = bitmap.getHeight() - 2; // Koordinat y, diatur sedikit ke bawah
+
+        canvas.drawText(label , xPos, yPos, paint);
 
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(myPath);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 fos.close();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

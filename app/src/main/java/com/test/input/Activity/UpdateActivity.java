@@ -390,7 +390,7 @@ public class UpdateActivity extends AppCompatActivity {
             return; // Menghentikan proses jika URI gambar kosong
         }
 
-        String kodeQRi = tvQR.getText().toString().trim();
+        String kodeQRi = tvQR.getText().toString();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
         Calendar calendar = Calendar.getInstance();
@@ -440,7 +440,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void updateData(){
-        kodeQr = tvQR.getText().toString().trim();
+        kodeQr = tvQR.getText().toString();
 
         String lokasi = etLokasi.getText().toString();
         String berat = etBerat.getText().toString();

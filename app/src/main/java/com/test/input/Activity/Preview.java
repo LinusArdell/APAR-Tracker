@@ -150,9 +150,7 @@ public class Preview extends AppCompatActivity {
             // Jika izin diberikan
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Lakukan tindakan yang perlu dilakukan setelah izin diberikan
             } else {
-                // Izin ditolak, mungkin berikan penjelasan mengapa izin tersebut diperlukan
             }
         }
     }

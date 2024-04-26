@@ -301,7 +301,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     }
 
     private void uploadData() {
-        String kodeQR = etResult.getText().toString().trim();
+        String kodeQR = etResult.getText().toString();
         String lokasi = etLokasi.getText().toString();
         String berat = etBerat.getText().toString();
         String keterangan = etketerangan.getText().toString();

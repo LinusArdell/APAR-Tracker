@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
                 Intent i = new Intent(MainActivity.this, Preview.class);
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(i);
                 return false;
             }
