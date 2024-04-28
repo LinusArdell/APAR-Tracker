@@ -235,6 +235,15 @@ public class MainActivity extends AppCompatActivity {
 
         version.setTitle("Versi aplikasi : " + versionApp);
 
+        report.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent i = new Intent(MainActivity.this, Report.class);
+                startActivity(i);
+                return false;
+            }
+        });
+
         feedback.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {

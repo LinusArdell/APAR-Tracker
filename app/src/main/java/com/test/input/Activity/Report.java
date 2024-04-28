@@ -24,6 +24,7 @@ public class Report extends AppCompatActivity {
     FloatingActionButton fab;
     ImageView ivReport;
     Uri selectedImageUri;
+    private static final int EMAIL_REQUEST_CODE = 456;
     private static final int GALLERY_REQUEST_CODE = 123;
 
     @Override
@@ -42,7 +43,7 @@ public class Report extends AppCompatActivity {
             public void onClick(View view) {
                 String iEmailTo, iSubjek, iKonten;
 
-                iSubjek = "Masukan dan Saran";
+                iSubjek = "Laporan";
                 iKonten = etKonten.getText().toString();
                 iEmailTo = "linus2016chaesa@mhs.mdp.ac.id";
 
@@ -97,6 +98,15 @@ public class Report extends AppCompatActivity {
             selectedImageUri = data.getData();
             if (selectedImageUri != null) {
                 ivReport.setImageURI(selectedImageUri);
+            }
+        } else if (requestCode == EMAIL_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Email berhasil dikirim", Toast.LENGTH_SHORT).show();
+            } else if (requestCode == EMAIL_REQUEST_CODE && resultCode == RESULT_OK) {
+                // Email sent successfully, you can handle any action here like returning to previous activity
+                Toast.makeText(this, "Email berhasil dikirim", Toast.LENGTH_SHORT).show();
+                // Kembali ke halaman sebelumnya
+                finish();
             }
         }
     }
