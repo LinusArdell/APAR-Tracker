@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ public class FeedBack extends AppCompatActivity {
 
     EditText etPesan;
     MaterialButton btnSend;
+    Button btnBack;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -25,6 +27,7 @@ public class FeedBack extends AppCompatActivity {
 
         etPesan = findViewById(R.id.et_text_email);
         btnSend = findViewById(R.id.btnSend);
+        btnBack = findViewById(R.id.btn_backs);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +43,13 @@ public class FeedBack extends AppCompatActivity {
                 } else {
                     sendEmail(iSubjek, iKonten, iEmailTo);
                 }
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
