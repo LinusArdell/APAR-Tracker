@@ -160,7 +160,7 @@ public class UpdateOffline extends AppCompatActivity {
                     saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
                             kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
-                    Toast.makeText(UpdateOffline.this, "Data tersimpan", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateOffline.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
 
                     boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
                     if (isSaved) {
@@ -173,7 +173,7 @@ public class UpdateOffline extends AppCompatActivity {
                     Intent intent = new Intent(UpdateOffline.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                    Toast.makeText(UpdateOffline.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateOffline.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UpdateOffline.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
                 }
@@ -284,7 +284,6 @@ public class UpdateOffline extends AppCompatActivity {
             public void onClick(View view) {
                 Intent photoPicker = new Intent();
                 photoPicker.setAction(Intent.ACTION_OPEN_DOCUMENT);
-
                 photoPicker.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 photoPicker.addCategory(Intent.CATEGORY_OPENABLE);
                 photoPicker.setType("image/*");
@@ -340,7 +339,7 @@ public class UpdateOffline extends AppCompatActivity {
                     saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
                             kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
-                    Toast.makeText(UpdateOffline.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateOffline.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
                     displayAllDataFromSharedPreferences();
 
                     boolean isSaved = editor.commit();
@@ -356,7 +355,7 @@ public class UpdateOffline extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(UpdateOffline.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateOffline.this, "Gambar harus diperbarui", Toast.LENGTH_SHORT).show();
                 }
             }
         });

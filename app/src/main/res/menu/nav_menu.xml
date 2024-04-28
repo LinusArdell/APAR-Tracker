@@ -62,8 +62,16 @@
 
 
     <item
-        android:title="Versi aplikasi">
+        android:title="Informasi dan dukungan">
         <menu>
+            <item
+                android:id="@+id/nav_feedback"
+                android:title="Masukan dan saran"
+                android:icon="@drawable/baseline_feedback_24"/>
+            <item
+                android:id="@+id/nav_report"
+                android:title="Laporkan bug dan masalah"
+                android:icon="@drawable/baseline_report_24"/>
             <item
                 android:id="@+id/nav_version"
                 android:title="Versi aplikasi " />

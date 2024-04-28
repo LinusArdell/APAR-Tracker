@@ -228,10 +228,21 @@ public class MainActivity extends AppCompatActivity {
         MenuItem register = menu.findItem(R.id.nav_register);
         MenuItem draft = menu.findItem(R.id.nav_draft);
         MenuItem version = menu.findItem(R.id.nav_version);
+        MenuItem feedback = menu.findItem(R.id.nav_feedback);
+        MenuItem report = menu.findItem(R.id.nav_report);
 
         String versionApp = BuildConfig.VERSION_NAME;
 
-        version.setTitle("Versi : " + versionApp);
+        version.setTitle("Versi aplikasi : " + versionApp);
+
+        feedback.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent i = new Intent(MainActivity.this, FeedBack.class);
+                startActivity(i);
+                return false;
+            }
+        });
 
         draft.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override

@@ -360,7 +360,7 @@ public class UpdateActivity extends AppCompatActivity {
             saveDataToSharedPreferences(kodeQR, lokasiTabung, MerkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
-            Toast.makeText(UpdateActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
 
             boolean isSaved = editor.commit();
             if (isSaved) {
@@ -375,7 +375,7 @@ public class UpdateActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(UpdateActivity.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateActivity.this, "Gambar harus diperbarui", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
-                android:text="Add item"
+                android:text="Tambah item"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"

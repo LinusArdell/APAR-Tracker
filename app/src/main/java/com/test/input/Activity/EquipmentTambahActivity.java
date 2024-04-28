@@ -454,7 +454,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, satuanberat);
 
-            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan kedalam draft", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
 
             boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
             if (isSaved) {
@@ -466,7 +466,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             Intent intent = new Intent(EquipmentTambahActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(EquipmentTambahActivity.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
         }

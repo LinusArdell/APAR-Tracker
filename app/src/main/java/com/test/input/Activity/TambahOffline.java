@@ -147,6 +147,7 @@ public class TambahOffline extends AppCompatActivity {
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK){
                             Intent data = result.getData();
+
                             uri = data.getData();
                             uploadGambar.setImageURI(uri);
                         } else {
@@ -169,6 +170,8 @@ public class TambahOffline extends AppCompatActivity {
             public void onClick(View view) {
                 Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 photoPicker.addCategory(Intent.CATEGORY_OPENABLE);
+                photoPicker.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                photoPicker.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 photoPicker.setType("image/*");
                 startActivityForResult(photoPicker, PICK_FILE_REQUEST_CODE);
                 activityResultLauncher.launch(photoPicker);
@@ -225,7 +228,7 @@ public class TambahOffline extends AppCompatActivity {
                     saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAR, beratTabung, jenisAPAR, isiString, tekananString, kesesuaianString,
                             kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
-                    Toast.makeText(TambahOffline.this, "Data tersimpan dalam draft", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TambahOffline.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
                     displayAllDataFromSharedPreferences();
 
                     boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
