@@ -52,6 +52,8 @@ public class Report extends AppCompatActivity {
                 } else {
                     sendEmail(iSubjek, iKonten, iEmailTo, selectedImageUri);
                 }
+
+                finish();
             }
         });
 

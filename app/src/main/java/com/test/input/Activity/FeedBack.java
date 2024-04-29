@@ -43,6 +43,8 @@ public class FeedBack extends AppCompatActivity {
                 } else {
                     sendEmail(iSubjek, iKonten, iEmailTo);
                 }
+
+                finish();
             }
         });
 

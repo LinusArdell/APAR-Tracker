@@ -59,6 +59,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
 import com.test.input.BuildConfig;
 import com.test.input.Class.DataClass;
+import com.test.input.Experimental.Updates;
 import com.test.input.R;
 import com.test.input.Class.UserClass;
 
@@ -230,10 +231,20 @@ public class MainActivity extends AppCompatActivity {
         MenuItem version = menu.findItem(R.id.nav_version);
         MenuItem feedback = menu.findItem(R.id.nav_feedback);
         MenuItem report = menu.findItem(R.id.nav_report);
+        MenuItem update = menu.findItem(R.id.nav_update);
 
         String versionApp = BuildConfig.VERSION_NAME;
 
         version.setTitle("Versi aplikasi : " + versionApp);
+
+        update.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent i = new Intent(MainActivity.this, Updates.class);
+                startActivity(i);
+                return false;
+            }
+        });
 
         report.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -435,9 +446,9 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        if (!isOnboardingCompleted()) {
-            showOnboarding();
-        }
+//        if (!isOnboardingCompleted()) {
+//            showOnboarding();
+//        }
     }
 
     private void showOnboarding() {

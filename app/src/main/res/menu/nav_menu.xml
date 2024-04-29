@@ -53,10 +53,7 @@
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/baseline_logout_24"
-                android:title="Logout"/>
-<!--            <item-->
-<!--                android:id="@+id/nav_add_offline"-->
-<!--                android:title="add offline"/>-->
+                android:title="Logout"/>x
         </menu>
     </item>
 
@@ -72,6 +69,10 @@
                 android:id="@+id/nav_report"
                 android:title="Laporkan bug dan masalah"
                 android:icon="@drawable/baseline_report_24"/>
+            <item
+                android:id="@+id/nav_update"
+                android:title="Periksa pembaruan"
+                android:icon="@drawable/update_24"/>
             <item
                 android:id="@+id/nav_version"
                 android:title="Versi aplikasi " />

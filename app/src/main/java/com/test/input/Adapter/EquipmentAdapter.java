@@ -121,7 +121,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
             if (diffInDays <= 14) {
                 return Color.GREEN; // Warna hijau jika tanggal tidak lebih dari 3 minggu yang lalu
-            } else if (diffInDays <= 21) {
+            } else if (diffInDays <= 28) {
                 return Color.WHITE; // Warna default (putih) jika tanggal antara 3 dan 4 minggu yang lalu
             } else {
                 return Color.RED; // Warna merah jika tanggal lebih dari 4 minggu yang lalu

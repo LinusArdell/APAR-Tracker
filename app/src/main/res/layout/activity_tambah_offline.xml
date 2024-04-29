@@ -338,7 +338,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
-                                android:text="Kondisi selang" />
+                                android:text="Kondisi selang baik, tidak retak, tidak bocor" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
@@ -358,7 +358,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
-                                android:text="Segel pin terpasang"/>
+                                android:text="Segel pin terpasang baik"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"

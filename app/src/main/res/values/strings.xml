@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Input</string>
+    <string name="app_name">Cek APAR</string>
     <string name="folder_name">QR_Code</string>
 
     <string-array name="merk_apar">
