@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -52,9 +53,13 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class TambahOffline extends AppCompatActivity {
@@ -78,12 +83,7 @@ public class TambahOffline extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_tambah_offline);
-
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -170,9 +170,9 @@ public class TambahOffline extends AppCompatActivity {
             public void onClick(View view) {
                 Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 photoPicker.addCategory(Intent.CATEGORY_OPENABLE);
+                photoPicker.setType("image/*");
                 photoPicker.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 photoPicker.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                photoPicker.setType("image/*");
                 startActivityForResult(photoPicker, PICK_FILE_REQUEST_CODE);
                 activityResultLauncher.launch(photoPicker);
             }
@@ -204,7 +204,8 @@ public class TambahOffline extends AppCompatActivity {
 
                 String keterangan = etketerangan.getText().toString();
 
-                String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+                String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                 String username = getUsernameLocally();
 
@@ -246,6 +247,22 @@ public class TambahOffline extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @SuppressLint("WrongConstant")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+
+            // Request persistent access to the URI
+            int takeFlags = data.getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            // Check for the freshest data.
+            getContentResolver().takePersistableUriPermission(uri, takeFlags);
+        }
     }
 
     private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,

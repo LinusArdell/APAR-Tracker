@@ -12,8 +12,10 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +31,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -110,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_main);
 
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isStoragePermissionGranted()) {
                     downloadFile();
                 } else {
-                    Toast.makeText(MainActivity.this, "Izin penyimpanan diperlukan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
+                    requestStoragePermission();
                 }
                 return false;
             }
@@ -445,10 +446,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
-//        if (!isOnboardingCompleted()) {
-//            showOnboarding();
-//        }
     }
 
     private void showOnboarding() {
@@ -785,13 +782,25 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
     }
 
+    private void requestStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivityForResult(intent, PERMISSION_STORAGE_CODE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_STORAGE_CODE);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             } else {
-                Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -803,7 +812,6 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-
     }
 
     private void saveUserLocally(String username) {
@@ -811,5 +819,17 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("username", username);
         editor.apply();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PERMISSION_STORAGE_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
+                downloadFile();
+            } else {
+                Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

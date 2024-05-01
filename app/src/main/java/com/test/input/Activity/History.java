@@ -47,10 +47,10 @@ public class History extends AppCompatActivity {
     RecyclerView recyclerViews;
     List<HistoryClass> dataLists;
     HistoryAdapter adapter;
-    TextView tvTitle;
+    TextView tvTitle, tvIsEmpty;
     Button btnBack;
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +59,7 @@ public class History extends AppCompatActivity {
         recyclerViews = findViewById(R.id.recyHistorya);
         tvTitle = findViewById(R.id.t_history_title);
         btnBack = findViewById(R.id.btn_backs);
+        tvIsEmpty = findViewById(R.id.emptyState);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -68,6 +68,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class EquipmentTambahActivity extends AppCompatActivity {
 
@@ -350,7 +351,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                         if (userData != null) {
                             finalUser[0] = userData.getUsername();
 
-                            String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+                            String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                             String isiString = isitabung ? "Baik" : "Beku";
                             String tekananString = tekanan ? "Cukup" : "Kurang";
@@ -430,7 +432,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         String keterangan = etketerangan.getText().toString();
 
-        String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+        String currentDate = sdf.format(Calendar.getInstance().getTime());
 
         String username = getUsernameLocally();
 

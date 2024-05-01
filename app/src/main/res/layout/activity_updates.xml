@@ -68,4 +68,15 @@
         android:id="@+id/recVersion"
         android:layout_below="@id/tool_bar"/>
 
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/tool_bar"-->
+<!--        android:text="Belum ada pembaruan yang tersedia"-->
+<!--        android:textSize="26sp"-->
+<!--        android:textColor="@color/main_color"-->
+<!--        android:id="@+id/emptyState"-->
+<!--        android:layout_marginTop="80dp"-->
+<!--        android:gravity="center"/>-->
+
 </RelativeLayout>

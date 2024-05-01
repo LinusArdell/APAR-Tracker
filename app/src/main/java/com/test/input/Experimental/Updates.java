@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +33,9 @@ public class Updates extends AppCompatActivity {
     List<VersionClass> dataList;
     Button btnBack;
     TextView tvCurrentVer;
+    TextView tvIsEmpty;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,7 @@ public class Updates extends AppCompatActivity {
         btnBack = findViewById(R.id.btn_backs);
         tvCurrentVer = findViewById(R.id.tv_currentver);
         recyclerView = findViewById(R.id.recVersion);
+//        tvIsEmpty = findViewById(R.id.emptyState);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("files");
         dataList =new ArrayList<>();
@@ -61,6 +65,14 @@ public class Updates extends AppCompatActivity {
         });
 
         fetchDataFromFirebase();
+
+//        if (dataList.isEmpty()) {
+//            recyclerView.setVisibility(View.GONE);
+//            tvIsEmpty.setVisibility(View.VISIBLE);
+//        } else {
+//            recyclerView.setVisibility(View.VISIBLE);
+//            tvIsEmpty.setVisibility(View.GONE);
+//        }
     }
 
     private void fetchDataFromFirebase() {

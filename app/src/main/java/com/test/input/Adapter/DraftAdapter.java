@@ -131,14 +131,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
                 ContentResolver contentResolver = view.getContext().getContentResolver();
 
-                InputStream inputStream = null;
-                try {
-                    inputStream = contentResolver.openInputStream(uri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
 
-                if (inputStream != null) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
                     Calendar calendar = Calendar.getInstance();
                     String currentDate = dateFormat.format(calendar.getTime());
@@ -197,10 +190,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
                         }
                     });
-                } else {
-                    dialog.dismiss();
-                    Toast.makeText(view.getContext(), "Failed to get InputStream from Uri", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 

@@ -59,6 +59,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class UpdateActivity extends AppCompatActivity {
 
@@ -336,7 +337,8 @@ public class UpdateActivity extends AppCompatActivity {
 
         String keterangan = etketerangan.getText().toString();
 
-        String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+        String currentDate = sdf.format(Calendar.getInstance().getTime());
 
         String username = getUsernameLocally();
 
@@ -488,9 +490,8 @@ public class UpdateActivity extends AppCompatActivity {
                             // Mengambil nama pengguna dari data pengguna
                             finalUser[0] = userData.getUsername();
 
-                            // Sekarang Anda bisa menggunakan finalUser di sini
-                            // Lanjutkan dengan kode uploadData() di sini
-                            String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+                            String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                             if (kodeQr.isEmpty()) {
                                 Toast.makeText(UpdateActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();

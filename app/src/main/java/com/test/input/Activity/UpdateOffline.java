@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -59,7 +60,7 @@ public class UpdateOffline extends AppCompatActivity {
     Uri uri;
     private FirebaseAuth firebaseAuth;
     private ActivityResultLauncher<String> requestPermissionLauncher;
-
+    private static final int PICK_FILE_REQUEST_CODE = 123;
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPARs, jenisAPAR, satuanBerat;
     private EditText etLokasi, etBerat, etketerangan;
@@ -183,12 +184,11 @@ public class UpdateOffline extends AppCompatActivity {
         ActivityResultLauncher<Intent> activityResultLauncher= registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                     @Override
-                    public void onActivityResult(ActivityResult o) {
-                        if (o.getResultCode() == Activity.RESULT_OK) {
-                            Intent data = o.getData();
-                            final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                            uri= data.getData();
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK){
+                            Intent data = result.getData();
+
+                            uri = data.getData();
                             updateImage.setImageURI(uri);
                         } else {
                             Toast.makeText(UpdateOffline.this, "No Image Selected", Toast.LENGTH_SHORT).show();
@@ -282,11 +282,12 @@ public class UpdateOffline extends AppCompatActivity {
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent photoPicker = new Intent();
-                photoPicker.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                photoPicker.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                Intent photoPicker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 photoPicker.addCategory(Intent.CATEGORY_OPENABLE);
                 photoPicker.setType("image/*");
+                photoPicker.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                photoPicker.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                startActivityForResult(photoPicker, PICK_FILE_REQUEST_CODE);
                 activityResultLauncher.launch(photoPicker);
             }
         });
@@ -315,7 +316,8 @@ public class UpdateOffline extends AppCompatActivity {
 
                 String keterangan = etketerangan.getText().toString();
 
-                String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+                String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                 String username = getUsernameLocally();
 
@@ -466,6 +468,22 @@ public class UpdateOffline extends AppCompatActivity {
         Map<String, ?> allEntries = sharedPreferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             Log.d("SharedPreferencesData", entry.getKey() + ": " + entry.getValue().toString());
+        }
+    }
+
+    @SuppressLint("WrongConstant")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+
+            // Request persistent access to the URI
+            int takeFlags = data.getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            // Check for the freshest data.
+            getContentResolver().takePersistableUriPermission(uri, takeFlags);
         }
     }
 }

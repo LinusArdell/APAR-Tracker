@@ -36,6 +36,7 @@ public class Preview extends AppCompatActivity {
     private DraftAdapter adapter;
     Button btnBack;
     private static final int REQUEST_PERMISSIONS = 100;
+    TextView tvIsEmpty;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -47,6 +48,8 @@ public class Preview extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
+
+        tvIsEmpty = findViewById(R.id.emptyState);
 
         btnBack = findViewById(R.id.btn_backs);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -60,8 +63,6 @@ public class Preview extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         dataList = new ArrayList<>();
-
-//        dataList = getAllImageDataFromSharedPreferences();
         dataList.clear();
         dataList.addAll(getAllImageDataFromSharedPreferences());
         adapter = new DraftAdapter(this, dataList);
@@ -69,6 +70,14 @@ public class Preview extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         requestStoragePermissions();
+
+        if (dataList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            tvIsEmpty.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            tvIsEmpty.setVisibility(View.GONE);
+        }
     }
 
     private List<DraftClass> getAllImageDataFromSharedPreferences(){
@@ -129,7 +138,6 @@ public class Preview extends AppCompatActivity {
         }
         return dataLists;
     }
-
 
     private void requestStoragePermissions() {
         if (ContextCompat.checkSelfPermission(this,
