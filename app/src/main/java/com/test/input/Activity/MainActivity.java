@@ -414,7 +414,6 @@ public class MainActivity extends AppCompatActivity {
                     dataClass.setKey(itemSnapshot.getKey());
                     dataList.add(dataClass);
                 }
-                sortDataByDate();
                 restoreSortingStatus();
                 dialog.dismiss();
 

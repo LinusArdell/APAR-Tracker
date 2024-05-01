@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class DateHelper {
     public static String convertToRelativeDate(String dateString) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
         try {
             Date date = sdf.parse(dateString);
             Calendar calendar = Calendar.getInstance();

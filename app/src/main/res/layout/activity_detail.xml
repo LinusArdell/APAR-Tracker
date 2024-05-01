@@ -612,7 +612,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Update"
+                android:text="PERIKSA"
                 android:textColor="@android:color/white"
                 android:textStyle="normal"
                 android:background="?attr/selectableItemBackgroundBorderless"

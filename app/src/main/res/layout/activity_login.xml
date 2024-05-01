@@ -103,7 +103,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:clickable="true"
-                android:text="Forgot Password ?"
+                android:text="Lupa Password ?"
                 android:textAlignment="center"
                 android:textColor="@color/main_color"
                 android:textSize="15dp" />

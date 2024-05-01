@@ -486,7 +486,7 @@ public class DetailActivity extends AppCompatActivity {
 
         new TapTargetSequence(this)
                 .targets(
-                        TapTarget.forView(editButton,"Update", "Perbarui data hasil pemeriksaan")
+                        TapTarget.forView(editButton,"Periksa", "Catat hasil pemeriksaan APAR")
                                 .outerCircleColor(R.color.main_color)
                                 .outerCircleAlpha(0.96f)
                                 .targetCircleColor(R.color.white)

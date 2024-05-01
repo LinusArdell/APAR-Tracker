@@ -337,7 +337,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         String keterangan = etketerangan.getText().toString();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
         String currentDate = sdf.format(Calendar.getInstance().getTime());
 
         String username = getUsernameLocally();
@@ -401,9 +401,8 @@ public class UpdateActivity extends AppCompatActivity {
 
         String kodeQRi = tvQR.getText().toString();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = dateFormat.format(calendar.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
+        String currentDate = sdf.format(Calendar.getInstance().getTime());
 
         String childKey = currentDate + kodeQRi;
 
@@ -490,7 +489,7 @@ public class UpdateActivity extends AppCompatActivity {
                             // Mengambil nama pengguna dari data pengguna
                             finalUser[0] = userData.getUsername();
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
                             String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                             if (kodeQr.isEmpty()) {

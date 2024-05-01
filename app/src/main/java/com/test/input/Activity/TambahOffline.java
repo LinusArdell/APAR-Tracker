@@ -204,7 +204,7 @@ public class TambahOffline extends AppCompatActivity {
 
                 String keterangan = etketerangan.getText().toString();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
                 String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                 String username = getUsernameLocally();
