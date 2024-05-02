@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_color"
             android:textColor="@color/white"
-            android:text="Cancel"
+            android:text="BATAL"
             android:background="?attr/selectableItemBackgroundBorderless"/>
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_gravity="right"
             android:backgroundTint="@color/main_color"
             android:textColor="@color/white"
-            android:text="SAVE"
+            android:text="SIMPAN"
             android:background="?attr/selectableItemBackgroundBorderless"/>
 
     </com.google.android.material.navigation.NavigationView>
@@ -474,7 +474,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Update &amp; Close"
+            android:text="SImpan &amp; TUTUP"
             android:backgroundTint="@color/main_color"
             android:id="@+id/btn_update"
             android:textColor="@color/white"

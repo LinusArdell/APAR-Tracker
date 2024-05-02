@@ -21,8 +21,12 @@ import com.test.input.Class.HistoryClass;
 import com.test.input.Experimental.DateHelper;
 import com.test.input.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryAdapter extends RecyclerView.Adapter<MyHistoryHolder>{
 
@@ -47,8 +51,19 @@ public class HistoryAdapter extends RecyclerView.Adapter<MyHistoryHolder>{
         holder.recQr.setText(dataList.get(position).getKodeQR());
         holder.recUser.setText(dataList.get(position).getUser());
         holder.recLokasi.setText(dataList.get(position).getLokasiTabung());
-        String formattedDate = DateHelper.convertToRelativeDate(dataList.get(position).getDataDate());
-        holder.recDate.setText(formattedDate);
+
+        SimpleDateFormat sdfInput = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
+        SimpleDateFormat sdfOutput = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+
+        try {
+            Date date = sdfInput.parse(dataList.get(position).getDataDate());
+            String formattedDate = sdfOutput.format(date);
+            holder.recDate.setText(formattedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+//        holder.recDate.setText(dataList.get(position).getDataDate());
 
         holder.recCard.setOnClickListener(new View.OnClickListener() {
             @Override

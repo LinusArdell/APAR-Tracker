@@ -505,7 +505,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Save &amp; Close"
+            android:text="Simpan &amp; Tutup"
             android:textColor="@color/white"
             android:background="@color/main_color"
             android:backgroundTint="@color/main_color"

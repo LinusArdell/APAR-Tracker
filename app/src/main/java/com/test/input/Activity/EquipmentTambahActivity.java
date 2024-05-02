@@ -379,7 +379,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy", Locale.US);
                                         Calendar calendar = Calendar.getInstance();
                                         String currentDate = dateFormat.format(calendar.getTime());
 

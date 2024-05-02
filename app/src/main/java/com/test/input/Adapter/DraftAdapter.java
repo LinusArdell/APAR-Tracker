@@ -43,6 +43,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
@@ -131,8 +132,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
                 ContentResolver contentResolver = view.getContext().getContentResolver();
 
-
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy", Locale.US);
                     Calendar calendar = Calendar.getInstance();
                     String currentDate = dateFormat.format(calendar.getTime());
                     String childKey = currentDate + kodeQR;
@@ -152,7 +152,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                             DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian,
                                     kondisi, selang, pin, keterangan, historyImageURl, tanggal, user, nozzle, posisi, satuanBerat);
 
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy", Locale.US);
                             Calendar calendar = Calendar.getInstance();
                             String currentDate = dateFormat.format(calendar.getTime());
 

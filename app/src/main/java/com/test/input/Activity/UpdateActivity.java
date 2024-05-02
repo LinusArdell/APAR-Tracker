@@ -91,12 +91,7 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_update);
-
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -401,10 +396,11 @@ public class UpdateActivity extends AppCompatActivity {
 
         String kodeQRi = tvQR.getText().toString();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
-        String currentDate = sdf.format(Calendar.getInstance().getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy", Locale.US);
+        Calendar calendar = Calendar.getInstance();
+        String currentDates = dateFormat.format(calendar.getTime());
 
-        String childKey = currentDate + kodeQRi;
+        String childKey = currentDates + kodeQRi;
 
         String fileName = "image_" + childKey;
 
@@ -528,7 +524,7 @@ public class UpdateActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy");
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy");
                                         Calendar calendar = Calendar.getInstance();
                                         String currentDate = dateFormat.format(calendar.getTime());
 

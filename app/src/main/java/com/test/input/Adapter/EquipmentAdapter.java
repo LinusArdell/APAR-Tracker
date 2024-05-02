@@ -109,7 +109,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
     }
 
     private int getBackgroundColor(String dateString) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
         try {
             Date date = sdf.parse(dateString);
             Calendar calendar = Calendar.getInstance();
@@ -120,20 +120,20 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
             long diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
 
             if (diffInDays <= 14) {
-                return Color.GREEN; // Warna hijau jika tanggal tidak lebih dari 3 minggu yang lalu
+                return Color.parseColor("#68ed5c"); // Warna hijau (#5dcb84) jika tanggal tidak lebih dari 2 minggu yang lalu
             } else if (diffInDays <= 28) {
-                return Color.WHITE; // Warna default (putih) jika tanggal antara 3 dan 4 minggu yang lalu
+                return Color.WHITE; // Warna default (putih) jika tanggal antara 2 dan 4 minggu yang lalu
             } else {
-                return Color.RED; // Warna merah jika tanggal lebih dari 4 minggu yang lalu
+                return Color.parseColor("#f44336"); // Warna merah (#f55d46) jika tanggal lebih dari 4 minggu yang lalu
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return Color.GREEN; // Jika parsing gagal, kembalikan warna default (putih)
+            return Color.parseColor("#68ed5c"); // Jika parsing gagal, kembalikan warna default (hijau)
         }
     }
 
     private int getTextColor(int backgroundColor) {
-        if (backgroundColor == Color.GREEN || backgroundColor == Color.WHITE) {
+        if (backgroundColor == Color.parseColor("#68ed5c") || backgroundColor == Color.WHITE) {
             return Color.BLACK; // Jika latar belakang hijau atau putih, warna teksnya hitam
         } else {
             return Color.WHITE; // Jika latar belakang merah, warna teksnya putih
