@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -39,12 +40,14 @@ import com.google.firebase.storage.StorageReference;
 import com.test.input.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -65,6 +68,8 @@ public class UpdateOffline extends AppCompatActivity {
     private Spinner merkAPARs, jenisAPAR, satuanBerat;
     private EditText etLokasi, etBerat, etketerangan;
     private TextView tvQR, tvID;
+    private static final int REQUEST_TAKE_PHOTO = 1;
+    private String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +96,8 @@ public class UpdateOffline extends AppCompatActivity {
                 "Altek",
                 "Holly Fire",
                 "Chubb Fire",
-                "Tonanta");
+                "Tonanta",
+                "Starvvo");
 
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_merk, mList);
         mArrayAdapter.setDropDownViewResource(R.layout.spinner_list_merk);
@@ -143,7 +149,8 @@ public class UpdateOffline extends AppCompatActivity {
 
                 String keterangan = etketerangan.getText().toString();
 
-                String currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
+                String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                 String username = getUsernameLocally();
 
@@ -199,10 +206,16 @@ public class UpdateOffline extends AppCompatActivity {
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Bundle extras = result.getData().getExtras();
-                        Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        updateImage.setImageBitmap(imageBitmap);
-                        uri = getImageUri(this, imageBitmap);
+                        if (result.getData() != null && result.getData().getExtras() != null) {
+                            Bundle extras = result.getData().getExtras();
+                            Bitmap imageBitmap = (Bitmap) extras.get("data");
+                            updateImage.setImageBitmap(imageBitmap);
+                            uri = getImageUri(this, imageBitmap);
+                        } else {
+                            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
+                            updateImage.setImageBitmap(imageBitmap);
+                            uri = Uri.fromFile(new File(currentPhotoPath));
+                        }
                     } else {
                         Toast.makeText(UpdateOffline.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                     }
@@ -457,7 +470,21 @@ public class UpdateOffline extends AppCompatActivity {
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            takePictureLauncher.launch(takePictureIntent);
+            // Membuat file tempat gambar akan disimpan
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error terjadi saat membuat file
+            }
+            // Lanjutkan hanya jika file berhasil dibuat
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.test.input.Fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureLauncher.launch(takePictureIntent);
+            }
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
         }
@@ -478,12 +505,24 @@ public class UpdateOffline extends AppCompatActivity {
         if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
             Uri uri = data.getData();
 
-            // Request persistent access to the URI
             int takeFlags = data.getFlags()
                     & (Intent.FLAG_GRANT_READ_URI_PERMISSION
                     | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            // Check for the freshest data.
             getContentResolver().takePersistableUriPermission(uri, takeFlags);
         }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }

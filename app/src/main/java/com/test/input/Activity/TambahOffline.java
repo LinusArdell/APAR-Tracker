@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -18,8 +19,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +55,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +75,7 @@ public class TambahOffline extends AppCompatActivity {
     private Button btnSimpan, btnBack;
     private ImageView uploadGambar;
     private ImageButton btnImage, btnHelp, btnQR;
-    private String imageURL;
+    private String currentPhotoPath;
     private Uri uri;
     ScrollView scrollView;
     Dialog dialog;
@@ -104,7 +109,8 @@ public class TambahOffline extends AppCompatActivity {
                 "Altek",
                 "Holly Fire",
                 "Chubb Fire",
-                "Tonanta");
+                "Tonanta",
+                "Starvvo");
 
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_merk, mList);
         mArrayAdapter.setDropDownViewResource(R.layout.spinner_list_merk);
@@ -129,13 +135,18 @@ public class TambahOffline extends AppCompatActivity {
         findViewById(R.id.btn_upload_qr).setOnClickListener(view -> checkPermissionAndShowActivity(this));
 
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
+                new ActivityResultContracts.StartActivityForResult(), result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Bundle extras = result.getData().getExtras();
-                        Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        uploadGambar.setImageBitmap(imageBitmap);
-                        uri = getImageUri(this, imageBitmap);
+                        if (result.getData() != null && result.getData().getExtras() != null) {
+                            Bundle extras = result.getData().getExtras();
+                            Bitmap imageBitmap = (Bitmap) extras.get("data");
+                            uploadGambar.setImageBitmap(imageBitmap);
+                            uri = getImageUri(this, imageBitmap);
+                        } else {
+                            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
+                            uploadGambar.setImageBitmap(imageBitmap);
+                            uri = Uri.fromFile(new File(currentPhotoPath));
+                        }
                     } else {
                         Toast.makeText(TambahOffline.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                     }
@@ -312,7 +323,18 @@ public class TambahOffline extends AppCompatActivity {
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            takePictureLauncher.launch(takePictureIntent);
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.test.input.Fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureLauncher.launch(takePictureIntent);
+            }
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
         }
@@ -323,6 +345,20 @@ public class TambahOffline extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
         return Uri.parse(path);
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     private boolean containsIllegalCharacters(String kodeQR) {

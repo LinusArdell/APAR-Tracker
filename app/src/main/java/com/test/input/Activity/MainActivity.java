@@ -115,9 +115,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -402,7 +399,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Test");
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Draft");
         dialog.show();
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -559,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sortDataByDate() {
         Collections.sort(dataList, new Comparator<DataClass>() {
-            DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.getDefault());
+            DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
             @Override
             public int compare(DataClass data1, DataClass data2) {
                 try {
@@ -719,6 +715,7 @@ public class MainActivity extends AppCompatActivity {
         options.setBeepEnabled(false);
         options.setBarcodeImageEnabled(true);
         options.setOrientationLocked(false);
+//        options.setTorchEnabled(true);
 
         qrCodeLauncher.launch(options);
     }

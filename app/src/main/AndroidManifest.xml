@@ -123,7 +123,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.test.input.fileprovider"
+            android:authorities="com.test.input.Fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

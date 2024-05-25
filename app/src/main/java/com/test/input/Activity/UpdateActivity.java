@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,10 +16,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -54,10 +57,13 @@ import com.test.input.R;
 import com.test.input.Class.UserClass;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -74,11 +80,13 @@ public class UpdateActivity extends AppCompatActivity {
     StorageReference storageReference, historyStorageReference;
     private FirebaseAuth firebaseAuth;
     private ActivityResultLauncher<String> requestPermissionLauncher;
-
     private SwitchMaterial isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
     private Spinner merkAPAR, jenisAPAR, satuanBerat;
     private EditText etLokasi, etBerat, etketerangan;
     private TextView tvQR, tvID;
+
+    private static final int REQUEST_TAKE_PHOTO = 1;
+    private String currentPhotoPath;
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -134,7 +142,8 @@ public class UpdateActivity extends AppCompatActivity {
                 "Altek",
                 "Holly Fire",
                 "Chubb Fire",
-                "Tonanta");
+                "Tonanta",
+                "Starvvo");
 
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_merk, mList);
         mArrayAdapter.setDropDownViewResource(R.layout.spinner_list_merk);
@@ -190,12 +199,16 @@ public class UpdateActivity extends AppCompatActivity {
         ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Bundle extras = result.getData().getExtras();
-                        Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        // Menampilkan gambar di ImageView
-                        updateImage.setImageBitmap(imageBitmap);
-                        // Mengonversi Bitmap ke Uri
-                        uri = getImageUri(this, imageBitmap);
+                        if (result.getData() != null && result.getData().getExtras() != null) {
+                            Bundle extras = result.getData().getExtras();
+                            Bitmap imageBitmap = (Bitmap) extras.get("data");
+                            updateImage.setImageBitmap(imageBitmap);
+                            uri = getImageUri(this, imageBitmap);
+                        } else {
+                            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
+                            updateImage.setImageBitmap(imageBitmap);
+                            uri = Uri.fromFile(new File(currentPhotoPath));
+                        }
                     } else {
                         Toast.makeText(UpdateActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                     }
@@ -274,7 +287,6 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Draft").child(key);
 
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,7 +308,12 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
-        btnCapture.setOnClickListener(View -> dispatchTakePictureIntent(takePictureLauncher));
+        btnCapture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent(takePictureLauncher);
+            }
+        });
 
         requestPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -388,10 +405,9 @@ public class UpdateActivity extends AppCompatActivity {
     public void saveData(){
         Log.d("UpdateActivity", "URI: " + uri);
 
-        // Memeriksa apakah URI gambar tidak null
         if (uri == null) {
             Toast.makeText(UpdateActivity.this, "Gambar wajib diperbarui", Toast.LENGTH_SHORT).show();
-            return; // Menghentikan proses jika URI gambar kosong
+            return;
         }
 
         String kodeQRi = tvQR.getText().toString();
@@ -524,7 +540,7 @@ public class UpdateActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy");
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy", Locale.US);
                                         Calendar calendar = Calendar.getInstance();
                                         String currentDate = dateFormat.format(calendar.getTime());
 
@@ -561,7 +577,21 @@ public class UpdateActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            takePictureLauncher.launch(takePictureIntent);
+            // Membuat file tempat gambar akan disimpan
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error terjadi saat membuat file
+            }
+            // Lanjutkan hanya jika file berhasil dibuat
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.test.input.Fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureLauncher.launch(takePictureIntent);
+            }
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
         }
@@ -610,5 +640,19 @@ public class UpdateActivity extends AppCompatActivity {
     private String getUsernameLocally() {
         SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
         return sharedPreferences.getString("username", "");
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }
