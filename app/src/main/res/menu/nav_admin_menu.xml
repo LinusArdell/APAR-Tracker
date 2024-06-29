@@ -22,12 +22,25 @@
         </menu>
     </item>
     <item
-        android:title="Alat">
+        android:title="Laporan">
         <menu>
             <item
-                android:id="@+id/nav_generate"
-                android:icon="@drawable/qr_24"
-                android:title="QR Generator"/>
+                android:id="@+id/nav_download"
+                android:icon="@drawable/baseline_download_24"
+                android:title="Unduh Excel"/>
+            <item
+                android:id="@+id/nav_download_bulan"
+                android:icon="@drawable/baseline_download_24"
+                android:title="Data Pemeriksaan Bulan Ini"/>
+            <item
+                android:id="@+id/nav_download_hari"
+                android:icon="@drawable/baseline_download_24"
+                android:title="Data Pemeriksaan Hari Ini"/>
+        </menu>
+    </item>
+    <item
+        android:title="Alat">
+        <menu>
             <item
                 android:id="@+id/nav_guide"
                 android:title="Panduan pengguna"
@@ -38,12 +51,15 @@
         android:title="Akun">
         <menu>
             <item
+                android:id="@+id/nav_register"
+                android:title="Buat akun baru"
+                android:icon="@drawable/baseline_person_24"/>
+            <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/baseline_logout_24"
                 android:title="Logout"/>
         </menu>
     </item>
-
 
     <item
         android:title="Informasi">

@@ -283,10 +283,10 @@ public class UpdateActivity extends AppCompatActivity {
 //            key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
 
-            tvID.setText("Update " + bundle.getString("KodeQR"));
+            tvID.setText("Periksa " + bundle.getString("KodeQR"));
         }
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Database").child(key);
 
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,6 +353,7 @@ public class UpdateActivity extends AppCompatActivity {
         String currentDate = sdf.format(Calendar.getInstance().getTime());
 
         String username = getUsernameLocally();
+        String role = getRoleLocally(); // Ambil role dari penyimpanan lokal
 
         if (username != null && uri != null) {
             // Lanjutkan menyimpan data ke SharedPreferences dengan nama pengguna yang diperoleh
@@ -365,7 +366,7 @@ public class UpdateActivity extends AppCompatActivity {
             String nozzleString = nozzles ? "Baik" : "Tersumbat";
             String posisiString = posisi ? "Baik" : "Terhalang";
 
-            if (JenisAPArs.equals("Carbondioxide")){
+            if (JenisAPArs.equals("Carbondioxide")) {
                 kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
             } else {
                 kesesuaianString = "N/A";
@@ -378,15 +379,20 @@ public class UpdateActivity extends AppCompatActivity {
 
             boolean isSaved = editor.commit();
             if (isSaved) {
-
                 Log.d("DataSave", "Data saved successfully");
             } else {
                 Log.d("DataSave", "Failed to save data");
             }
 
-            Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(intent);
+            if ("admin".equalsIgnoreCase(role)) {
+                Intent intent = new Intent(UpdateActivity.this, AdminActivity.class);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            }
             finish();
         } else {
             Toast.makeText(UpdateActivity.this, "Gambar harus diperbarui", Toast.LENGTH_SHORT).show();
@@ -422,7 +428,8 @@ public class UpdateActivity extends AppCompatActivity {
 
         historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
 
-        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
+//        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
+
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
@@ -437,23 +444,6 @@ public class UpdateActivity extends AppCompatActivity {
                 Uri urlImage = uriTask.getResult();
                 historyImageUrl = urlImage.toString();
                 updateData();
-                dialog.dismiss();
-            }
-        });
-
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isComplete());
-                Uri urlImage = uriTask.getResult();
-                imageUrl = urlImage.toString();
-                updateData();
-                dialog.dismiss();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
                 dialog.dismiss();
             }
         });
@@ -481,36 +471,36 @@ public class UpdateActivity extends AppCompatActivity {
         Boolean posisi = posisiTabung.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
-        final String[] finalUser = {""}; // Inisialisasi finalUser
+        final String[] finalUser = {""};
 
         if (users != null) {
-            // Mengambil UID pengguna saat ini
             String userId = users.getUid();
 
-            // Mengambil referensi ke data pengguna di Realtime Database
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            DatabaseReference userRoleRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("role");
 
-            // Mendengarkan satu kali untuk mendapatkan data pengguna
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        // Mengambil data pengguna dari snapshot
                         UserClass userData = snapshot.getValue(UserClass.class);
                         if (userData != null) {
-                            // Mengambil nama pengguna dari data pengguna
                             finalUser[0] = userData.getUsername();
 
                             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
+                            SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                            String currentDates = sdfs.format(Calendar.getInstance().getTime());
+                            SimpleDateFormat months = new SimpleDateFormat("MMM", Locale.US);
+                            String currentMonth = months.format(Calendar.getInstance().getTime());
                             String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                             if (kodeQr.isEmpty()) {
                                 Toast.makeText(UpdateActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                                return; // Menghentikan proses upload jika kodeQR kosong
+                                return;
                             }
 
                             if (uri == null) {
-                                Toast.makeText(UpdateActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UpdateActivity.this, "Gambar harus dipilih", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -520,7 +510,6 @@ public class UpdateActivity extends AppCompatActivity {
                             String kondisiString = kondisi ? "Baik" : "Berkarat";
                             String selangString = selang ? "Baik" : "Rusak";
                             String pinString = pin ? "Baik" : "Rusak";
-
                             String nozzleString = nozzle ? "Baik" : "Tersumbat";
                             String posisiString = posisi ? "Baik" : "Terhalang";
 
@@ -531,10 +520,10 @@ public class UpdateActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+                                    kondisiString, selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat, currentDates, currentMonth);
 
                             DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+                                    kondisiString, selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat, currentDates, currentMonth);
 
                             databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -547,13 +536,29 @@ public class UpdateActivity extends AppCompatActivity {
                                         String childKey = currentDate + kodeQr;
                                         FirebaseDatabase.getInstance().getReference("History").child(kodeQr).child(childKey).setValue(historyData);
 
-                                        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
-                                        reference.delete();
                                         Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                                        // Panggil intent untuk memulai MainActivity di sini setelah data berhasil disimpan
-                                        Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+
+                                        userRoleRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()) {
+                                                    String role = dataSnapshot.getValue(String.class);
+                                                    if ("admin".equalsIgnoreCase(role)) {
+                                                        startActivity(new Intent(getApplicationContext(), AdminActivity.class));
+                                                    } else {
+                                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                    }
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(UpdateActivity.this, "Error! : Peran pengguna tidak ditemukan!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Toast.makeText(UpdateActivity.this, "Error! : Gagal memuat peran pengguna!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -568,7 +573,6 @@ public class UpdateActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Penanganan kesalahan (jika diperlukan)
                 }
             });
         }
@@ -577,14 +581,11 @@ public class UpdateActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Membuat file tempat gambar akan disimpan
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error terjadi saat membuat file
             }
-            // Lanjutkan hanya jika file berhasil dibuat
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.test.input.Fileprovider",
@@ -604,7 +605,6 @@ public class UpdateActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-
     }
 
     private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,
@@ -640,6 +640,11 @@ public class UpdateActivity extends AppCompatActivity {
     private String getUsernameLocally() {
         SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
         return sharedPreferences.getString("username", "");
+    }
+
+    private String getRoleLocally() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        return sharedPreferences.getString("role", "");
     }
 
     private File createImageFile() throws IOException {

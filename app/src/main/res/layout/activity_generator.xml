@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:text="BACK"
+                    android:text="KEMBALI"
                     app:tint="@color/white"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"/>
@@ -107,7 +107,7 @@
                         android:drawableLeft="@drawable/qr_24"
                         android:drawableTint="@color/white"
                         android:backgroundTint="@color/main_color"
-                        android:text="generate"
+                        android:text="cetak"
                         android:textColor="@color/white"/>
 
                 </RelativeLayout>
@@ -126,27 +126,33 @@
                     android:layout_margin="10dp">
 
                     <Button
+                        android:id="@+id/btn_download"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="@color/main_color"
                         android:drawableLeft="@drawable/baseline_save_24"
                         android:drawableTint="@color/white"
-                        android:backgroundTint="@color/main_color"
                         android:text="download"
-                        android:id="@+id/btn_download"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white" />
 
                     <Button
                         android:id="@+id/btn_clear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_margin="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="@color/main_color"
                         android:drawableLeft="@drawable/baseline_clear_24"
                         android:drawableTint="@color/white"
-                        android:backgroundTint="@color/main_color"
-                        android:text="clear"
-                        android:textColor="@color/white"/>
+                        android:text="bersihkan"
+                        android:textColor="@color/white" />
 
                 </RelativeLayout>
 

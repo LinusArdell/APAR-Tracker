@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "431035625491",
-    "project_id": "input-a8ba6",
-    "storage_bucket": "input-a8ba6.appspot.com"
+    "project_number": "77892812497",
+    "firebase_url": "https://apar-tracker-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "apar-tracker",
+    "storage_bucket": "apar-tracker.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:431035625491:android:60de2a6f82f10cd3694fe6",
+        "mobilesdk_app_id": "1:77892812497:android:c374833d328e272c5b8ff0",
         "android_client_info": {
           "package_name": "com.test.input"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD7m-S4UcTbu2Kw6Ir_oLoINVWo9bqZqJU"
+          "current_key": "AIzaSyDLJs4ovj3XpYSASmRCWFEI3dNyEvsLxs0"
         }
       ],
       "services": {

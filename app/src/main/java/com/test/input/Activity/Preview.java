@@ -110,6 +110,9 @@ public class Preview extends AppCompatActivity {
                 String kondisiTabungKey = key + "KondisiTabung";
                 String satuanBerat = key + "Satuan";
 
+                String currentDates = key + "CurrentDates";
+                String currentMonth = key + "CurrentMonth";
+
                 String kodeQR = sharedPreferences.getString(kodeQRkey, "");
                 String lokasi = sharedPreferences.getString(lokasiKey, "");
                 String merk = sharedPreferences.getString(merkKey, "");
@@ -129,10 +132,13 @@ public class Preview extends AppCompatActivity {
                 String KondisiTabung = sharedPreferences.getString(kondisiTabungKey, "");
 
                 String SatuanBerat = sharedPreferences.getString(satuanBerat, "");
+
+                String CurrentDates = sharedPreferences.getString(currentDates, "");
+                String CurrentMonth = sharedPreferences.getString(currentMonth, "");
                 if (!TextUtils.isEmpty(kodeQR)) {
                     dataLists.add(new DraftClass(kodeQR,  lokasi,  merk,  berat,  jenis,
                             IsiTabung,  Tekanan,  Kesesuaian,  KondisiTabung,  KondisiSelang,
-                            KondisiPin,  Keterangan,  uriString,  Tanggal,  User,  Nozzle,  Posisi, SatuanBerat));
+                            KondisiPin,  Keterangan,  uriString,  Tanggal,  User,  Nozzle,  Posisi, SatuanBerat,CurrentDates, CurrentMonth));
                 }
             }
         }

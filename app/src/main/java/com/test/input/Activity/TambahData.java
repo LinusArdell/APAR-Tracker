@@ -29,11 +29,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -67,16 +64,14 @@ import com.test.input.Class.UserClass;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class EquipmentTambahActivity extends AppCompatActivity {
+public class TambahData extends AppCompatActivity {
 
     private EditText etResult, etLokasi, etBerat, etketerangan;
     private SwitchMaterial tekananTabung, kesesuaianBerat, isiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
@@ -176,7 +171,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             uri = Uri.fromFile(new File(currentPhotoPath));
                         }
                     } else {
-                        Toast.makeText(EquipmentTambahActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TambahData.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -189,7 +184,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             uri =data.getData();
                             uploadGambar.setImageURI(uri);
                         } else {
-                            Toast.makeText(EquipmentTambahActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahData.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -265,16 +260,13 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
     public void saveData() {
         if (uri == null) {
-            Toast.makeText(EquipmentTambahActivity.this, "Gambar wajib dipilih", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TambahData.this, "Gambar wajib dipilih", Toast.LENGTH_SHORT).show();
             return;
         }
 
         StorageReference historyStorage = FirebaseStorage.getInstance().getReference().child("History Images").child(uri.getLastPathSegment());
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
-                .child(uri.getLastPathSegment());
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(TambahData.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog = builder.create();
@@ -288,24 +280,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 Uri urlImages = uriTask.getResult();
                 historyImageUrl = urlImages.toString();
                 uploadData();
-                dialog.dismiss();
-            }
-        });
-
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isComplete());
-                Uri urlImage = uriTask.getResult();
-                imageURL = urlImage.toString();
-                uploadData();
-                dialog.dismiss();
-                Log.d("URI_Log", "URI: " + uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
                 dialog.dismiss();
             }
         });
@@ -339,18 +313,18 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
             if (kodeQR.isEmpty()) {
                 etResult.setError("Kode QR tidak boleh kosong");
-                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TambahData.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (containsIllegalCharacters(kodeQR)) {
                 etResult.setError("Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'");
-                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TambahData.this, "Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (uri == null) {
-                Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TambahData.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
                 return;
             }
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -362,6 +336,13 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             finalUser[0] = userData.getUsername();
 
                             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
+
+                            SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                            String currentDates = sdfs.format(Calendar.getInstance().getTime());
+
+                            SimpleDateFormat months = new SimpleDateFormat("MMM", Locale.US);
+                            String currentMonth = months.format(Calendar.getInstance().getTime());
+
                             String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                             String isiString = isitabung ? "Baik" : "Beku";
@@ -380,11 +361,12 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat, currentDates, currentMonth);
 
                             DataClass historyData = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
-                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat, currentDates, currentMonth);
+
+                            FirebaseDatabase.getInstance().getReference("Database").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
@@ -395,7 +377,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                                         String childKey = currentDate + kodeQR;
                                         FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyData);
 
-                                        Toast.makeText(EquipmentTambahActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahData.this, "Saved", Toast.LENGTH_SHORT).show();
                                         Log.d(String.valueOf(uri), "Uri");
                                         finish();
                                     }
@@ -403,7 +385,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(EquipmentTambahActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TambahData.this, "Database Error", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -412,7 +394,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(EquipmentTambahActivity.this, "Cannot connect to database", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TambahData.this, "Cannot connect to database", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -466,7 +448,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, satuanberat);
 
-            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TambahData.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
 
             boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
             if (isSaved) {
@@ -475,12 +457,10 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 Log.d("DataSave", "Failed to save data");
             }
 
-            Intent intent = new Intent(EquipmentTambahActivity.this, MainActivity.class);
-            startActivity(intent);
             finish();
-            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TambahData.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(EquipmentTambahActivity.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TambahData.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
         }
     }
 

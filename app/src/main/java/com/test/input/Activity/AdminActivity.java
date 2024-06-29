@@ -1,5 +1,23 @@
 package com.test.input.Activity;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -26,24 +44,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,21 +61,21 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
 import com.test.input.BuildConfig;
 import com.test.input.Class.DataClass;
-import com.test.input.R;
 import com.test.input.Class.UserClass;
+import com.test.input.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
-
+public class AdminActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private ValueEventListener eventListener;
     private RecyclerView recyclerView;
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_admin);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -125,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
 
         dataList = new ArrayList<>();
 
-        adapter = new EquipmentAdapter(MainActivity.this, dataList);
+        adapter = new EquipmentAdapter(AdminActivity.this, dataList);
         recyclerView.setAdapter(adapter);
 
         fabQr = findViewById(R.id.qrScan);
 
-        dialog = new Dialog(MainActivity.this);
+        dialog = new Dialog(AdminActivity.this);
         dialog.setContentView(R.layout.custom_dialog_logout);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         sortByZa.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         sortByRecent.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
@@ -189,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         sortByDate.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
@@ -218,49 +215,52 @@ public class MainActivity extends AppCompatActivity {
 
         Menu menu = navigationView.getMenu();
         MenuItem logoutItem = menu.findItem(R.id.nav_logout);
+        MenuItem downloadItem = menu.findItem(R.id.nav_download);
         MenuItem addNew = menu.findItem(R.id.nav_add);
-//        MenuItem downloadItem = menu.findItem(R.id.nav_download);
-        MenuItem generateQR = menu.findItem(R.id.nav_generate);
         MenuItem onboard = menu.findItem(R.id.nav_guide);
-        MenuItem draft = menu.findItem(R.id.nav_draft);
+        MenuItem register = menu.findItem(R.id.nav_register);
         MenuItem version = menu.findItem(R.id.nav_version);
+
+        MenuItem downloadBulan = menu.findItem(R.id.nav_download_bulan);
+        MenuItem downlaodHari = menu.findItem(R.id.nav_download_hari);
+//        MenuItem navlist = menu.findItem(R.id.nav_data);
+
+        MenuItem draft = menu.findItem(R.id.nav_draft);
 
         String versionApp = BuildConfig.VERSION_NAME;
 
         version.setTitle("Versi aplikasi : " + versionApp);
 
+        downloadBulan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                if (isStoragePermissionGranted()) {
+                    downloadBulan();
+                } else {
+                    requestStoragePermission();
+                }
+                return false;
+            }
+        });
+
         draft.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                Intent i = new Intent(MainActivity.this, Preview.class);
+                Intent i = new Intent(AdminActivity.this, Preview.class);
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(i);
                 return false;
             }
         });
 
-        onboard.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        downlaodHari.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                showOnboarding();
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
-
-        generateQR.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                Intent intent = new Intent(MainActivity.this, Generator.class);
-                startActivity(intent);
-                return false;
-            }
-        });
-
-        logoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                dialog.show();
+                if (isStoragePermissionGranted()) {
+                    downloadHari();
+                } else {
+                    requestStoragePermission();
+                }
                 return false;
             }
         });
@@ -269,11 +269,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
                 if (isNetworkStatusAvialable(getApplicationContext())){
-                    Intent intent = new Intent(MainActivity.this, TambahData.class);
+                    Intent intent = new Intent(AdminActivity.this, TambahData.class);
                     startActivity(intent);
                 }
                 else {
-                    dialog = new Dialog(MainActivity.this);
+                    dialog = new Dialog(AdminActivity.this);
                     dialog.setContentView(R.layout.dialog_no_internet_upload);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_logout_bg));
@@ -294,12 +294,50 @@ public class MainActivity extends AppCompatActivity {
                     btnYa.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent i = new Intent(MainActivity.this, TambahData.class);
+                            Intent i = new Intent(AdminActivity.this, TambahData.class);
                             startActivity(i);
                             dialog.dismiss();
                         }
                     });
                 }
+                return false;
+            }
+        });
+
+        register.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent i = new Intent(AdminActivity.this, Register.class);
+                startActivity(i);
+                return false;
+            }
+        });
+
+        onboard.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                showOnboarding();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
+        downloadItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                if (isStoragePermissionGranted()) {
+                    downloadFile();
+                } else {
+                    requestStoragePermission();
+                }
+                return false;
+            }
+        });
+
+        logoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                dialog.show();
                 return false;
             }
         });
@@ -336,10 +374,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.qrScan).setOnClickListener(view -> checkPermissionAndShowActivity(this));
         findViewById(R.id.searchQr).setOnClickListener(view -> checkPermissionAndShowActivitys(this));
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(AdminActivity.this, 1);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(AdminActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog = builder.create();
@@ -382,9 +420,9 @@ public class MainActivity extends AppCompatActivity {
         requestPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
-                        Toast.makeText(MainActivity.this, "Access Granted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminActivity.this, "Access Granted", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(MainActivity.this, "Camera permission required", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminActivity.this, "Camera permission required", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -456,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout() {
         mAuth.signOut();
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -578,7 +616,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isGranted) {
                     showCamera();
                 } else {
-                    Toast.makeText(MainActivity.this, "Beri akses kamera untuk aplikasi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminActivity.this, "Beri akses kamera untuk aplikasi", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -613,7 +651,7 @@ public class MainActivity extends AppCompatActivity {
                     // Jika data ditemukan, buka aktivitas detail
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         DataClass data = snapshot.getValue(DataClass.class);
-                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                        Intent intent = new Intent(AdminActivity.this, DetailActivity.class);
 
                         intent.putExtra("Key", data.getKodeQR().toString());
                         intent.putExtra("User", data.getUser().toString());
@@ -640,7 +678,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     // Jika data tidak ditemukan, buka aktivitas tambah
-                    Intent intent = new Intent(MainActivity.this, TambahData.class);
+                    Intent intent = new Intent(AdminActivity.this, TambahData.class);
                     intent.putExtra("KodeQR", contents);
                     startActivity(intent);
                 }
@@ -648,7 +686,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, "Database Error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminActivity.this, "Database Error!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -711,13 +749,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadFile() {
-        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlBkOtlUi_8ROqZxxeID4-pniUSl4s9plF5WVtonEEep3EJRBC1VOFvVhOnSngu8pCOaNQJaepMBdk/pub?output=xlsx";
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSste5UVtH0xbs2NgKZysxAu-5CvrxJ-9C8Ys-rT7CwD_M9iWk_TdxATbrithb536IZ5dQMKT_psi4M/pub?output=xlsx";
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle("File Spreadsheet");
         request.setDescription("Mengunduh file spreadsheet...");
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
 
         DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         downloadManager.enqueue(request);
@@ -786,5 +824,43 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void downloadBulan() {
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjqyduOkrdTa4pGsRiIANgKxe7gl-URbGS53CKVx7By0ymNiV4G6wXaW51afwsRuZcIbKvssslQQzx/pub?output=xlsx";
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+        SimpleDateFormat sdfs = new SimpleDateFormat("MMM yyyy", Locale.US);
+        String currentDatess = sdfs.format(Calendar.getInstance().getTime());
+
+        request.setTitle("Hasil Pemeriksaan APAR bulan" + currentDatess);
+        request.setDescription("Mengunduh file spreadsheet...");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
+
+        Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
+    }
+
+    private void downloadHari() {
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSAj7Fgh636q_XD5u2Xqwczper62Mg9a21r9Ox-y4GFHPKGHA2PDQF7ose5_BMBmQMpvf71h0iSStG5/pub?output=xlsx";
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+        SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+        String currentDates = sdfs.format(Calendar.getInstance().getTime());
+
+        request.setTitle("Hasil Pemeriksaan Harian" + currentDates);
+        request.setDescription("Mengunduh file spreadsheet...");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
+
+        Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
     }
 }

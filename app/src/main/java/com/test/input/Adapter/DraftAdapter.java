@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
@@ -23,23 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.test.input.Activity.EquipmentTambahActivity;
-import com.test.input.Activity.Preview;
-import com.test.input.Class.DataClass;
 import com.test.input.Class.DraftClass;
-import com.test.input.Experimental.DateHelper;
 import com.test.input.R;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -139,7 +130,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                     String fileName = "image_" + childKey;
                     StorageReference historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
 //                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
+//                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
 
                     historyStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -149,8 +140,14 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                             Uri urlImage = uriTask.getResult();
                             historyImageURl = urlImage.toString();
 
+                            SimpleDateFormat months = new SimpleDateFormat("MMM", Locale.US);
+                            String currentMonth = months.format(Calendar.getInstance().getTime());
+
+                            SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                            String currentDates = sdfs.format(Calendar.getInstance().getTime());
+
                             DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian,
-                                    kondisi, selang, pin, keterangan, historyImageURl, tanggal, user, nozzle, posisi, satuanBerat);
+                                    kondisi, selang, pin, keterangan, historyImageURl, tanggal, user, nozzle, posisi, satuanBerat, currentDates, currentMonth);
 
                             SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy", Locale.US);
                             Calendar calendar = Calendar.getInstance();
@@ -158,24 +155,9 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
                             String childKey = currentDate + KodeQr;
                             FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyDataClass);
-                        }
-                    });
 
-                    storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while (!uriTask.isComplete());
-                            Uri urlImage = uriTask.getResult();
-                            imageURL = urlImage.toString();
-
-                            logSharedPreferencesData();
-
-                            DraftClass dataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin,
-                                    keterangan, imageURL, tanggal, user, nozzle, posisi, satuanBerat);
-
-                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            FirebaseDatabase.getInstance().getReference("Database").child(kodeQR).setValue(historyDataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                //                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     dialog.dismiss();
@@ -190,6 +172,23 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
                         }
                     });
+
+//                    storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+//                            while (!uriTask.isComplete());
+//                            Uri urlImage = uriTask.getResult();
+//                            imageURL = urlImage.toString();
+//
+//                            logSharedPreferencesData();
+//
+//                            DraftClass dataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin,
+//                                    keterangan, imageURL, tanggal, user, nozzle, posisi, satuanBerat);
+//
+//
+//                        }
+//                    });
             }
         });
 

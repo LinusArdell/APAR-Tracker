@@ -45,8 +45,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.zxing.BarcodeFormat;
@@ -74,6 +79,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
     private TextView etLokasi, etBerat, etketerangan, tvTitleDetail, tvDate, tvSatuan;
     public boolean success = false;
+    private FirebaseAuth auth;
     AlertDialog.Builder dialogScan;
     LayoutInflater inflaterScan;
     View dialogViewScan;
@@ -145,14 +151,14 @@ public class DetailActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
                 builder.setTitle("Konfirmasi");
                 builder.setMessage("Apakah Anda yakin ingin menghapus item ini?");
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Hapus", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Eksekusi aksi penghapusan
                         performDeleteAction();
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Tidak melakukan apa-apa jika tombol cancel ditekan
@@ -288,6 +294,8 @@ public class DetailActivity extends AppCompatActivity {
         detailPemeriksa = findViewById(R.id.detail_user);
         btnHistory = findViewById(R.id.btnHistory);
         tvSatuan = findViewById(R.id.detail_satuan);
+
+        auth = FirebaseAuth.getInstance();
     }
 
     private void fillDataFromIntent() {
@@ -320,28 +328,46 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void performDeleteAction() {
-//        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Draft");
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
+        FirebaseUser user = auth.getCurrentUser();
+
+        String userId = user.getUid();
+
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Database");
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
         Log.d("DetailActivity", "Key: " + key);
         Log.d("DetailActivity", "Reference: " + reference.toString());
-        Log.d("DetailActivity", "ImageUrl: " + imageUrl);
 
-        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        userReference.child("role").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void unused) {
-                reference.child(key).removeValue();
-                Toast.makeText(DetailActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String role = dataSnapshot.getValue(String.class);
+                    reference.child(key).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(DetailActivity.this, "Berhasil Dihapus", Toast.LENGTH_SHORT).show();
+                            if ("Admin".equalsIgnoreCase(role)) {
+                                startActivity(new Intent(getApplicationContext(), AdminActivity.class));
+                            } else {
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            }
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(DetailActivity.this, "Error! : Gagal menghapus data!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(DetailActivity.this, "Error! : Peran pengguna tidak ditemukan!", Toast.LENGTH_SHORT).show();
+                }
             }
 
-        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(DetailActivity.this, "Error! : Update data terlebih dahulu dan perbaharui gambar!", Toast.LENGTH_SHORT).show();
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(DetailActivity.this, "Error! : Gagal memuat peran pengguna!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -376,7 +402,7 @@ public class DetailActivity extends AppCompatActivity {
                     btnYa.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startUpdateOfflineActivity();
+                            startUpdateActivity();
                             dialog.dismiss();
                         }
                     });

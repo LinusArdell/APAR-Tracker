@@ -289,7 +289,7 @@ public class UpdateOffline extends AppCompatActivity {
             key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
 
-            tvID.setText("Update " + bundle.getString("KodeQR"));
+            tvID.setText("Periksa " + bundle.getString("KodeQR"));
         }
 
         updateImage.setOnClickListener(new View.OnClickListener() {

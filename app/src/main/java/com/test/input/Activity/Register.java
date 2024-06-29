@@ -34,6 +34,7 @@ public class Register extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
+    String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,8 @@ public class Register extends AppCompatActivity {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_register);
+
+        role = "User";
 
         inisialisasiKomponen();
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -119,7 +122,7 @@ public class Register extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             FirebaseUser user = auth.getCurrentUser();
-                            saveUserData(user.getUid(), username, user.getEmail());
+                            saveUserData(user.getUid(), username, user.getEmail(), role);
                             Toast.makeText(Register.this, "Registration successful", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
@@ -129,8 +132,9 @@ public class Register extends AppCompatActivity {
                 });
     }
 
-    private void saveUserData(String userId, String username, String email) {
-        UserClass userData = new UserClass(username, email);
+    private void saveUserData(String userId, String username, String email, String role) {
+        role = "User";
+        UserClass userData = new UserClass(username, email, role);
         mDatabase.child("users").child(userId).setValue(userData);
     }
 }
