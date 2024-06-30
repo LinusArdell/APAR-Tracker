@@ -429,7 +429,6 @@ public class TambahData extends AppCompatActivity {
         String username = getUsernameLocally();
 
         if (username != null && uri != null) {
-            // Lanjutkan menyimpan data ke SharedPreferences dengan nama pengguna yang diperoleh
             String isiString = isiTabungs ? "Baik" : "Beku";
             String tekananString = Tekanan ? "Cukup" : "Kurang";
             String kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";

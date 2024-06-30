@@ -31,23 +31,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.Report"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.FeedBack"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activity.DetailHistory"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.History"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.UpdateOffline"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

@@ -435,30 +435,6 @@ public class DetailActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void startUpdateOfflineActivity() {
-        Intent intent = new Intent(DetailActivity.this, UpdateOffline.class)
-                .putExtra("KodeQR", detailKodeQR.getText().toString())
-                .putExtra("Tanggal", detailTanggal.getText().toString())
-                .putExtra("Lokasi", etLokasi.getText().toString())
-                .putExtra("Merk", merkAPAR.getText().toString())
-                .putExtra("Berat", etBerat.getText().toString())
-                .putExtra("Jenis", jenisAPAR.getText().toString())
-                .putExtra("IsiTabung", isiTabung.getText().toString())
-                .putExtra("Tekanan", tekananTabung.getText().toString())
-                .putExtra("Kesesuaian", kesesuaianBerat.getText().toString())
-                .putExtra("KondisiTabung", kondisiTabung.getText().toString())
-                .putExtra("KondisiSelang", kondisiSelang.getText().toString())
-                .putExtra("KondisiPin", kondisiPin.getText().toString())
-                .putExtra("Keterangan", etketerangan.getText().toString())
-                .putExtra("Nozzle", kondisiNozzle.getText().toString())
-                .putExtra("Posisi", posisiTabung.getText().toString())
-                .putExtra("Image", imageUrl)
-                .putExtra("Satuan", tvSatuan.getText().toString())
-                .putExtra("Key", key);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(intent);
-    }
-
     private void OpenFolder(String absolutePath, String filename) {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());

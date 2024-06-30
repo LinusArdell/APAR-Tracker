@@ -120,23 +120,23 @@ public class EquipmentAdapter extends RecyclerView.Adapter<MyViewHolder> {
             long diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
 
             if (diffInDays <= 14) {
-                return Color.parseColor("#68ed5c"); // Warna hijau (#5dcb84) jika tanggal tidak lebih dari 2 minggu yang lalu
+                return Color.parseColor("#68ed5c");
             } else if (diffInDays <= 28) {
-                return Color.WHITE; // Warna default (putih) jika tanggal antara 2 dan 4 minggu yang lalu
+                return Color.WHITE;
             } else {
-                return Color.parseColor("#f44336"); // Warna merah (#f55d46) jika tanggal lebih dari 4 minggu yang lalu
+                return Color.parseColor("#f44336");
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return Color.parseColor("#68ed5c"); // Jika parsing gagal, kembalikan warna default (hijau)
+            return Color.parseColor("#68ed5c");
         }
     }
 
     private int getTextColor(int backgroundColor) {
         if (backgroundColor == Color.parseColor("#68ed5c") || backgroundColor == Color.WHITE) {
-            return Color.BLACK; // Jika latar belakang hijau atau putih, warna teksnya hitam
+            return Color.BLACK;
         } else {
-            return Color.WHITE; // Jika latar belakang merah, warna teksnya putih
+            return Color.WHITE;
         }
     }
 

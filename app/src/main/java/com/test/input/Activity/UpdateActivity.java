@@ -428,8 +428,6 @@ public class UpdateActivity extends AppCompatActivity {
 
         historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
 
-//        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
-
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);

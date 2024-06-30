@@ -2,7 +2,7 @@ package com.test.input.Class;
 
 import java.io.Serializable;
 
-public class DataClass implements Serializable {
+public class DataClass{
 
     private String kodeQR;
     private String dataImage;
@@ -33,7 +33,7 @@ public class DataClass implements Serializable {
                       String posisiTabung,
                       String satuanBerat,
                       String dataTanggal,
-                      String months){ //String signatureUrl
+                      String months){
 
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
@@ -50,7 +50,7 @@ public class DataClass implements Serializable {
         this.dataDate = dataDate;
         this.dataImage = dataImage;
         this.kondisiNozzle = kondisiNozzle;
-        this.posisiTabung = posisiTabung; //   this.signatureUrl = signatureUrl;
+        this.posisiTabung = posisiTabung;
         this.user = user;
         this.satuanBerat = satuanBerat;
         this.dataTanggal = dataTanggal;
