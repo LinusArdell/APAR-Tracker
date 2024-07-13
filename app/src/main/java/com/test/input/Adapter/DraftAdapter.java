@@ -172,23 +172,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
 
                         }
                     });
-
-//                    storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-//                            while (!uriTask.isComplete());
-//                            Uri urlImage = uriTask.getResult();
-//                            imageURL = urlImage.toString();
-//
-//                            logSharedPreferencesData();
-//
-//                            DraftClass dataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian, kondisi, selang, pin,
-//                                    keterangan, imageURL, tanggal, user, nozzle, posisi, satuanBerat);
-//
-//
-//                        }
-//                    });
             }
         });
 

@@ -220,10 +220,8 @@ public class AdminActivity extends AppCompatActivity {
         MenuItem onboard = menu.findItem(R.id.nav_guide);
         MenuItem register = menu.findItem(R.id.nav_register);
         MenuItem version = menu.findItem(R.id.nav_version);
-
         MenuItem downloadBulan = menu.findItem(R.id.nav_download_bulan);
         MenuItem downlaodHari = menu.findItem(R.id.nav_download_hari);
-//        MenuItem navlist = menu.findItem(R.id.nav_data);
 
         MenuItem draft = menu.findItem(R.id.nav_draft);
 

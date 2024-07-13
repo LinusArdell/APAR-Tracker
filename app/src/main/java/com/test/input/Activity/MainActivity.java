@@ -68,6 +68,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -219,15 +220,52 @@ public class MainActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
         MenuItem logoutItem = menu.findItem(R.id.nav_logout);
         MenuItem addNew = menu.findItem(R.id.nav_add);
-//        MenuItem downloadItem = menu.findItem(R.id.nav_download);
+        MenuItem downloadItem = menu.findItem(R.id.nav_download);
         MenuItem generateQR = menu.findItem(R.id.nav_generate);
         MenuItem onboard = menu.findItem(R.id.nav_guide);
         MenuItem draft = menu.findItem(R.id.nav_draft);
         MenuItem version = menu.findItem(R.id.nav_version);
-
+        MenuItem downloadBulan = menu.findItem(R.id.nav_download_bulan);
+        MenuItem downlaodHari = menu.findItem(R.id.nav_download_hari);
         String versionApp = BuildConfig.VERSION_NAME;
 
         version.setTitle("Versi aplikasi : " + versionApp);
+
+        downloadBulan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                if (isStoragePermissionGranted()) {
+                    downloadBulan();
+                } else {
+                    requestStoragePermission();
+                }
+                return false;
+            }
+        });
+
+        downlaodHari.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                if (isStoragePermissionGranted()) {
+                    downloadHari();
+                } else {
+                    requestStoragePermission();
+                }
+                return false;
+            }
+        });
+
+        downloadItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                if (isStoragePermissionGranted()) {
+                    downloadFile();
+                } else {
+                    requestStoragePermission();
+                }
+                return false;
+            }
+        });
 
         draft.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -523,11 +561,8 @@ public class MainActivity extends AppCompatActivity {
         saveSortingStatus();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return true;
-    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -786,5 +821,43 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void downloadBulan() {
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjqyduOkrdTa4pGsRiIANgKxe7gl-URbGS53CKVx7By0ymNiV4G6wXaW51afwsRuZcIbKvssslQQzx/pub?output=xlsx";
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+        SimpleDateFormat sdfs = new SimpleDateFormat("MMM yyyy", Locale.US);
+        String currentDatess = sdfs.format(Calendar.getInstance().getTime());
+
+        request.setTitle("Hasil Pemeriksaan APAR bulan" + currentDatess);
+        request.setDescription("Mengunduh file spreadsheet...");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
+
+        Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
+    }
+
+    private void downloadHari() {
+        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSAj7Fgh636q_XD5u2Xqwczper62Mg9a21r9Ox-y4GFHPKGHA2PDQF7ose5_BMBmQMpvf71h0iSStG5/pub?output=xlsx";
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+        SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+        String currentDates = sdfs.format(Calendar.getInstance().getTime());
+
+        request.setTitle("Hasil Pemeriksaan Harian" + currentDates);
+        request.setDescription("Mengunduh file spreadsheet...");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
+
+        Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
     }
 }

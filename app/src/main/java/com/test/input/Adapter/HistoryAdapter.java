@@ -102,6 +102,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<MyHistoryHolder>{
     public int getItemCount() {
         return dataList.size();
     }
+
+    public void searchDataList(ArrayList<HistoryClass> searchList){
+        dataList = searchList;
+        notifyDataSetChanged();
+    }
 }
 
 class MyHistoryHolder extends RecyclerView.ViewHolder{

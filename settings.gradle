@@ -13,5 +13,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "Input"
+rootProject.name = "APAR Tracker"
 include ':app'
