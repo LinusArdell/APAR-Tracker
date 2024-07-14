@@ -451,7 +451,16 @@ public class UpdateActivity extends AppCompatActivity {
         kodeQr = tvQR.getText().toString();
 
         String lokasi = etLokasi.getText().toString();
-        String berat = etBerat.getText().toString();
+
+        int berat;
+        try {
+            berat = Integer.parseInt(etBerat.getText().toString());
+        } catch (NumberFormatException e) {
+            etBerat.setError("Berat harus berupa angka");
+            Toast.makeText(UpdateActivity.this, "Berat harus berupa angka", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String keterangan = etketerangan.getText().toString();
 
         String MerkAPAR = merkAPAR.getSelectedItem().toString();
@@ -460,11 +469,15 @@ public class UpdateActivity extends AppCompatActivity {
 
         Boolean isitabung = isiTabung.isChecked();
         Boolean tekanan = tekananTabung.isChecked();
-        Boolean kesesuaian = kesesuaianBerat.isChecked();
+        Boolean kesesuaian;
+        if (JenisAPAR.equals("Carbondioxide")) {
+            kesesuaian = kesesuaianBerat.isChecked();
+        } else {
+            kesesuaian = false;
+        }
         Boolean kondisi = kondisiTabung.isChecked();
         Boolean selang = kondisiSelang.isChecked();
         Boolean pin = kondisiPin.isChecked();
-
         Boolean nozzle = kondisiNozzle.isChecked();
         Boolean posisi = posisiTabung.isChecked();
 
@@ -502,26 +515,11 @@ public class UpdateActivity extends AppCompatActivity {
                                 return;
                             }
 
-                            String isiString = isitabung ? "Baik" : "Beku";
-                            String tekananString = tekanan ? "Cukup" : "Kurang";
-                            String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
-                            String kondisiString = kondisi ? "Baik" : "Berkarat";
-                            String selangString = selang ? "Baik" : "Rusak";
-                            String pinString = pin ? "Baik" : "Rusak";
-                            String nozzleString = nozzle ? "Baik" : "Tersumbat";
-                            String posisiString = posisi ? "Baik" : "Terhalang";
+                            DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isitabung, tekanan, kesesuaian,
+                                    kondisi,selang, pin, keterangan, historyImageUrl, currentDate, finalUser[0], nozzle, posisi, SatuanBerat, currentDates, currentMonth);
 
-                            if (JenisAPAR.equals("Carbondioxide")) {
-                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
-                            } else {
-                                kesesuaianString = "N/A";
-                            }
-
-                            DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString, selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat, currentDates, currentMonth);
-
-                            DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString, selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat, currentDates, currentMonth);
+                            DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isitabung, tekanan, kesesuaian,
+                                    kondisi,selang, pin, keterangan, historyImageUrl, currentDate, finalUser[0], nozzle, posisi, SatuanBerat, currentDates, currentMonth);
 
                             databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

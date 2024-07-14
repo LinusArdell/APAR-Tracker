@@ -4,28 +4,30 @@ public class HistoryClass {
     private String kodeQR;
     private String dataImage;
     private String dataDate;
-    private String key, satuanBerat;
-    private String user;
-    private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
-    private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
+    private String key;
+    private String user, satuanBerat;
+    private Integer beratTabung;
+
+    private String lokasiTabung, merkAPAR, jenisAPAR, keterangan;
+    private Boolean kondisiTabung , posisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, tekananTabung, isiTabung, kesesuaianBerat;
 
     public HistoryClass (String kodeQR,
-                      String lokasiTabung,
-                      String merkAPAR,
-                      String beratTabung,
-                      String jenisAPAR,
-                      String isiTabung,
-                      String Tekanan,
-                      String kesesuaianBerat,
-                      String kondisiTabung,
-                      String kondisiSelang,
-                      String kondisiPin,
-                      String keterangan,
-                      String dataImage,
-                      String dataDate,
-                      String user,
-                      String kondisiNozzle,
-                      String posisiTabung,
+                         String lokasiTabung,
+                         String merkAPAR,
+                         Integer beratTabung,
+                         String jenisAPAR,
+                         Boolean isiTabung,
+                         Boolean Tekanan,
+                         Boolean kesesuaianBerat,
+                         Boolean kondisiTabung,
+                         Boolean kondisiSelang,
+                         Boolean kondisiPin,
+                         String keterangan,
+                         String dataImage,
+                         String dataDate,
+                         String user,
+                         Boolean kondisiNozzle,
+                         Boolean posisiTabung,
                          String satuanBerat){ //String signatureUrl
 
         this.kodeQR = kodeQR;
@@ -51,11 +53,11 @@ public class HistoryClass {
     public HistoryClass(){
     }
 
-    public String getKondisiNozzle() {
+    public Boolean getKondisiNozzle() {
         return kondisiNozzle;
     }
 
-    public String getPosisiTabung() {
+    public Boolean getPosisiTabung() {
         return posisiTabung;
     }
 
@@ -67,7 +69,7 @@ public class HistoryClass {
         return lokasiTabung;
     }
 
-    public String getBeratTabung() {
+    public Integer getBeratTabung() {
         return beratTabung;
     }
 
@@ -79,23 +81,23 @@ public class HistoryClass {
         return jenisAPAR;
     }
 
-    public String getIsiTabung() {
+    public Boolean getIsiTabung() {
         return isiTabung;
     }
 
-    public String getTekananTabung() {
+    public Boolean getTekananTabung() {
         return tekananTabung;
     }
 
-    public String getKesesuaianBerat() {
+    public Boolean getKesesuaianBerat() {
         return kesesuaianBerat;
     }
 
-    public String getKondisiSelang() {
+    public Boolean getKondisiSelang() {
         return kondisiSelang;
     }
 
-    public String getKondisiPin() {
+    public Boolean getKondisiPin() {
         return kondisiPin;
     }
 
@@ -118,7 +120,7 @@ public class HistoryClass {
         return kodeQR;
     }
 
-    public String getKondisiTabung() {
+    public Boolean getKondisiTabung() {
         return kondisiTabung;
     }
 

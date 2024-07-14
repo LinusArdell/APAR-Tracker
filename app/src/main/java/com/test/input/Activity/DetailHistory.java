@@ -80,23 +80,27 @@ public class DetailHistory extends AppCompatActivity {
 
             detailKodeQR.setText(bundle.getString("KodeQR"));
             detailTanggal.setText(bundle.getString("Tanggal"));
-            isiTabung.setText(bundle.getString("IsiTabung"));
-            tekananTabung.setText(bundle.getString("Tekanan"));
-            kesesuaianBerat.setText(bundle.getString("Kesesuaian"));
-            kondisiTabung.setText(bundle.getString("KondisiTabung"));
-            kondisiSelang.setText(bundle.getString("KondisiSelang"));
-            kondisiPin.setText(bundle.getString("KondisiPin"));
+
+            // Menampilkan data boolean sesuai ketentuan
+            isiTabung.setText(bundle.getBoolean("IsiTabung") ? "Baik" : "Beku");
+            tekananTabung.setText(bundle.getBoolean("Tekanan") ? "Cukup" : "Kurang");
+            kesesuaianBerat.setText(bundle.getBoolean("Kesesuaian") ? "Cukup" : "Kurang");
+            kondisiTabung.setText(bundle.getBoolean("KondisiTabung") ? "Baik" : "Berkarat");
+            kondisiSelang.setText(bundle.getBoolean("KondisiSelang") ? "Baik" : "Rusak");
+            kondisiPin.setText(bundle.getBoolean("KondisiPin") ? "Baik" : "Rusak");
+            kondisiNozzle.setText(bundle.getBoolean("Nozzle") ? "Baik" : "Tersumbat");
+            posisiTabung.setText(bundle.getBoolean("Posisi") ? "Baik" : "Terhalang");
+
             merkAPAR.setText(bundle.getString("Merk"));
             jenisAPAR.setText(bundle.getString("Jenis"));
             etLokasi.setText(bundle.getString("Lokasi"));
-            etBerat.setText(bundle.getString("Berat"));
+
+            etBerat.setText(String.valueOf(bundle.getInt("Berat")));
+            detailSatuan.setText(bundle.getString("Satuan"));
             etketerangan.setText(bundle.getString("Keterangan"));
-            kondisiNozzle.setText(bundle.getString("Nozzle"));
-            posisiTabung.setText(bundle.getString("Posisi"));
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
             detailPemeriksa.setText(bundle.getString("User"));
-            detailSatuan.setText(bundle.getString("Satuan"));
             Glide.with(this).load(bundle.getString("Image")).into(detailImage);
         }
     }

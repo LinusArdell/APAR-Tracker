@@ -9,28 +9,28 @@ public class DataClass{
     private String dataDate;
     private String key;
     private String user, satuanBerat, dataTanggal;
-    private String months;
+    private Integer beratTabung;
 
-    private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
-    private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
+    private String lokasiTabung, months, merkAPAR, jenisAPAR, keterangan;
+    private Boolean kondisiTabung , posisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, tekananTabung, isiTabung, kesesuaianBerat;
 
     public DataClass (String kodeQR,
                       String lokasiTabung,
                       String merkAPAR,
-                      String beratTabung,
+                      Integer beratTabung,
                       String jenisAPAR,
-                      String isiTabung,
-                      String Tekanan,
-                      String kesesuaianBerat,
-                      String kondisiTabung,
-                      String kondisiSelang,
-                      String kondisiPin,
+                      Boolean isiTabung,
+                      Boolean Tekanan,
+                      Boolean kesesuaianBerat,
+                      Boolean kondisiTabung,
+                      Boolean kondisiSelang,
+                      Boolean kondisiPin,
                       String keterangan,
                       String dataImage,
                       String dataDate,
                       String user,
-                      String kondisiNozzle,
-                      String posisiTabung,
+                      Boolean kondisiNozzle,
+                      Boolean posisiTabung,
                       String satuanBerat,
                       String dataTanggal,
                       String months){
@@ -64,11 +64,11 @@ public class DataClass{
         return months;
     }
 
-    public String getKondisiNozzle() {
+    public Boolean getKondisiNozzle() {
         return kondisiNozzle;
     }
 
-    public String getPosisiTabung() {
+    public Boolean getPosisiTabung() {
         return posisiTabung;
     }
 
@@ -80,7 +80,7 @@ public class DataClass{
         return lokasiTabung;
     }
 
-    public String getBeratTabung() {
+    public Integer getBeratTabung() {
         return beratTabung;
     }
 
@@ -92,23 +92,23 @@ public class DataClass{
         return jenisAPAR;
     }
 
-    public String getIsiTabung() {
+    public Boolean getIsiTabung() {
         return isiTabung;
     }
 
-    public String getTekananTabung() {
+    public Boolean getTekananTabung() {
         return tekananTabung;
     }
 
-    public String getKesesuaianBerat() {
+    public Boolean getKesesuaianBerat() {
         return kesesuaianBerat;
     }
 
-    public String getKondisiSelang() {
+    public Boolean getKondisiSelang() {
         return kondisiSelang;
     }
 
-    public String getKondisiPin() {
+    public Boolean getKondisiPin() {
         return kondisiPin;
     }
 
@@ -131,7 +131,7 @@ public class DataClass{
         return kodeQR;
     }
 
-    public String getKondisiTabung() {
+    public Boolean getKondisiTabung() {
         return kondisiTabung;
     }
 

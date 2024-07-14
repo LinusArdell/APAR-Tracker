@@ -131,18 +131,13 @@ public class History extends AppCompatActivity {
         eventListeners = databaseReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Bersihkan dataLists sebelum menambahkan data baru
                 dataLists.clear();
 
-                // Iterasi melalui setiap child dari "Test" di Firebase
                 for (DataSnapshot itemSnapshot: snapshot.getChildren()){
-                    // Ambil data dan tambahkan ke dataLists
                     HistoryClass dataClass = itemSnapshot.getValue(HistoryClass.class);
                     dataClass.setKey(itemSnapshot.getKey());
                     dataLists.add(dataClass);
                 }
-
-                // Pemberitahuan ke adapter bahwa data telah berubah
                 adapter.notifyDataSetChanged();
             }
 
