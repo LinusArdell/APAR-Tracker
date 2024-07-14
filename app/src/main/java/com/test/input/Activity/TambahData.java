@@ -321,7 +321,7 @@ public class TambahData extends AppCompatActivity {
 
         if (users != null) {
             String userId = users.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId);
 
             if (kodeQR.isEmpty()) {
                 etResult.setError("Kode QR tidak boleh kosong");
@@ -363,7 +363,7 @@ public class TambahData extends AppCompatActivity {
                             DataClass historyData = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isitabung, tekanan, kesesuaian,
                                     kondisi,selang, pin, keterangan, historyImageUrl, currentDate, finalUser[0], nozzle, posisi, SatuanBerat, currentDates, currentMonth);
 
-                            FirebaseDatabase.getInstance().getReference("Database").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            FirebaseDatabase.getInstance().getReference("APAR").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
@@ -372,7 +372,7 @@ public class TambahData extends AppCompatActivity {
                                         String currentDate = dateFormat.format(calendar.getTime());
 
                                         String childKey = currentDate + kodeQR;
-                                        FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyData);
+                                        FirebaseDatabase.getInstance().getReference("Riwayat_Pemeriksaan_APAR").child(kodeQR).child(childKey).setValue(historyData);
 
                                         Toast.makeText(TambahData.this, "Saved", Toast.LENGTH_SHORT).show();
                                         Log.d(String.valueOf(uri), "Uri");

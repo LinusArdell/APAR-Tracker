@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
 
             String email = currentUser.getEmail();
             userEmail.setText(email);
-            mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabase.child("Pengguna").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Database");
+        databaseReference = FirebaseDatabase.getInstance().getReference("APAR");
         dialog.show();
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

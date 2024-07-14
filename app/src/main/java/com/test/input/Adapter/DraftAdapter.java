@@ -206,8 +206,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                         DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian,
                                 kondisi, selang, pin, keterangan, historyImageURL, tanggal, user, nozzle, posisi, satuanBerat, currentDates, currentMonth);
 
-                        FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyDataClass);
-                        FirebaseDatabase.getInstance().getReference("Database").child(kodeQR).setValue(historyDataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        FirebaseDatabase.getInstance().getReference("Riwayat_Pemeriksaan_APAR").child(kodeQR).child(childKey).setValue(historyDataClass);
+                        FirebaseDatabase.getInstance().getReference("APAR").child(kodeQR).setValue(historyDataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 dialog.dismiss();

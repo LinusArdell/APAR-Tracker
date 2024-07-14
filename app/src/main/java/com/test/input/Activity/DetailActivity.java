@@ -338,8 +338,8 @@ public class DetailActivity extends AppCompatActivity {
 
         String userId = user.getUid();
 
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Database");
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("APAR");
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId);
 
         Log.d("DetailActivity", "Key: " + key);
         Log.d("DetailActivity", "Reference: " + reference.toString());

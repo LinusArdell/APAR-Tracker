@@ -287,7 +287,7 @@ public class UpdateActivity extends AppCompatActivity {
             tvID.setText("Periksa " + bundle.getString("KodeQR"));
         }
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Database").child(key);
+        databaseReference = FirebaseDatabase.getInstance().getReference("APAR").child(key);
 
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -496,8 +496,8 @@ public class UpdateActivity extends AppCompatActivity {
         if (users != null) {
             String userId = users.getUid();
 
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-            DatabaseReference userRoleRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("role");
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId);
+            DatabaseReference userRoleRef = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId).child("role");
 
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -539,7 +539,7 @@ public class UpdateActivity extends AppCompatActivity {
                                         String currentDate = dateFormat.format(calendar.getTime());
 
                                         String childKey = currentDate + kodeQr;
-                                        FirebaseDatabase.getInstance().getReference("History").child(kodeQr).child(childKey).setValue(historyData);
+                                        FirebaseDatabase.getInstance().getReference("Riwayat_Pemeriksaan_APAR").child(kodeQr).child(childKey).setValue(historyData);
 
                                         Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
 

@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseUser user = auth.getCurrentUser();
                     if (user != null) {
                         String userId = user.getUid();
-                        FirebaseDatabase.getInstance().getReference().child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("Pengguna").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 processDialog.dismiss();
                                 if (dataSnapshot.exists()) {

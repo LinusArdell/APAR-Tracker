@@ -100,7 +100,7 @@ public class History extends AppCompatActivity {
         sharedPreferencess = getSharedPreferences("sorting_prefss", Context.MODE_PRIVATE);
 
         String childKey = tvTitle.getText().toString();
-        databaseReferences = FirebaseDatabase.getInstance().getReference("History").child(childKey);
+        databaseReferences = FirebaseDatabase.getInstance().getReference("Riwayat_Pemeriksaan_APAR").child(childKey);
 
         Toolbar toolbar = findViewById(R.id.tool_bar);
         Menu item = toolbar.getMenu();

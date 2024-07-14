@@ -135,6 +135,6 @@ public class Register extends AppCompatActivity {
     private void saveUserData(String userId, String username, String email, String role) {
         role = "User";
         UserClass userData = new UserClass(username, email, role);
-        mDatabase.child("users").child(userId).setValue(userData);
+        mDatabase.child("Pengguna").child(userId).setValue(userData);
     }
 }
