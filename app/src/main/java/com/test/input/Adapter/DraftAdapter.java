@@ -69,24 +69,25 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                 .load(dataList.getDataImage())
                 .into(holder.recImage12);
 
-        holder.recQr12.setText(dataLists.get(position).getKodeQR());
-        holder.recUser12.setText(dataLists.get(position).getUser());
-        holder.recLokasi12.setText(dataLists.get(position).getLokasiTabung());
+        holder.recQr12.setText(dataList.getKodeQR());
+        holder.recUser12.setText(dataList.getUser());
+        holder.recLokasi12.setText(dataList.getLokasiTabung());
 
-        holder.tvMerk12.setText(dataLists.get(position).getMerkAPAR());
-        holder.tvBerat12.setText(dataLists.get(position).getBeratTabung());
-        holder.satuan12.setText(dataLists.get(position).getSatuanBerat());
-        holder.tvJenis12.setText(dataLists.get(position).getJenisAPAR());
-        holder.tvTanggal12.setText(dataLists.get(position).getDataDate());
-        holder.tvKondisiTabung12.setText(dataLists.get(position).getKondisiTabung());
-        holder.tvPosisi12.setText(dataLists.get(position).getPosisiTabung());
-        holder.tvKondisiSelang12.setText(dataLists.get(position).getKondisiSelang());
-        holder.tvPin12.setText(dataLists.get(position).getKondisiPin());
-        holder.tvNozzle12.setText(dataLists.get(position).getKondisiNozzle());
-        holder.tvJarum12.setText(dataLists.get(position).getTekananTabung());
-        holder.tvPowder12.setText(dataLists.get(position).getIsiTabung());
-        holder.tvSelisih12.setText(dataLists.get(position).getKesesuaianBerat());
-        holder.tvKeterangan12.setText(dataLists.get(position).getKeterangan());
+        holder.tvMerk12.setText(dataList.getMerkAPAR());
+        holder.tvBerat12.setText(String.valueOf(dataList.getBeratTabung())); // Konversi int ke String
+        holder.satuan12.setText(dataList.getSatuanBerat());
+        holder.tvJenis12.setText(dataList.getJenisAPAR());
+        holder.tvTanggal12.setText(dataList.getDataDate());
+
+        holder.tvKondisiTabung12.setText(dataList.getKondisiTabung() ? "Baik" : "Berkarat"); // Konversi boolean ke String
+        holder.tvPosisi12.setText(dataList.getPosisiTabung() ? "Baik" : "Terhalang"); // Konversi boolean ke String
+        holder.tvKondisiSelang12.setText(dataList.getKondisiSelang() ? "Baik" : "Rusak"); // Konversi boolean ke String
+        holder.tvPin12.setText(dataList.getKondisiPin() ? "Baik" : "Rusak"); // Konversi boolean ke String
+        holder.tvNozzle12.setText(dataList.getKondisiNozzle() ? "Baik" : "Tersumbat"); // Konversi boolean ke String
+        holder.tvJarum12.setText(dataList.getTekananTabung() ? "Cukup" : "Kurang"); // Konversi boolean ke String
+        holder.tvPowder12.setText(dataList.getIsiTabung() ? "Baik" : "Beku"); // Konversi boolean ke String
+        holder.tvSelisih12.setText(dataList.getKesesuaianBerat() ? "Cukup" : "Kurang"); // Konversi boolean ke String
+        holder.tvKeterangan12.setText(dataList.getKeterangan());
 
         holder.btnUploadDraft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,80 +99,129 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftViewHolder>{
                 dialog.show();
                 DraftClass draft = dataLists.get(holder.getAdapterPosition());
 
+                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("data_offline", Context.MODE_PRIVATE);
+
+                boolean isitabung;
+                boolean tekanan;
+                boolean kesesuaian;
+                boolean kondisi;
+                boolean selang;
+                boolean pin;
+                boolean nozzle;
+                boolean posisi;
+
                 String kodeQR = draft.getKodeQR();
                 String lokasi = draft.getLokasiTabung();
-                String berat = draft.getBeratTabung();
+                int berat = Integer.parseInt(String.valueOf(draft.getBeratTabung())); // Konversi string ke int
                 String keterangan = draft.getKeterangan();
-
                 String MerkAPAR = draft.getMerkAPAR();
                 String jenisAPAR = draft.getJenisAPAR();
                 String satuanBerat = draft.getSatuanBerat();
+                String uniqueKey = "imageUri_" + kodeQR + "_";
 
-                String isitabung = draft.getIsiTabung();
-                String tekanan = draft.getTekananTabung();
-                String kesesuaian = draft.getKesesuaianBerat();
-                String kondisi = draft.getKondisiTabung();
-                String selang = draft.getKondisiSelang();
-                String pin = draft.getKondisiPin();
-                String nozzle = draft.getKondisiNozzle();
-                String posisi = draft.getPosisiTabung();
+                String isiTabungValue = sharedPreferences.getString(uniqueKey + "IsiTabung", "Beku");
+                String tekananTabungValue = sharedPreferences.getString(uniqueKey + "Tekanan", "Kurang");
+                String kesesuaianValue = sharedPreferences.getString(uniqueKey + "Kesesuaian", "Kurang");
+                String kondisiValue = sharedPreferences.getString(uniqueKey + "KondisiTabung", "Berkarat");
+                String selangValue = sharedPreferences.getString(uniqueKey + "KondisiSelang", "Rusak");
+                String pinValue = sharedPreferences.getString(uniqueKey + "KondisiPin", "Rusak");
+                String nozzleValue = sharedPreferences.getString(uniqueKey + "Nozzle", "Tersumbat");
+                String posisiValue = sharedPreferences.getString(uniqueKey + "Posisi", "Terhalang");
+
+                if (isiTabungValue.equals("Baik")){
+                    isitabung = true;
+                } else {
+                    isitabung = false;
+                }
+
+                if (tekananTabungValue.equals("Cukup")){
+                    tekanan = true;
+                } else {
+                    tekanan = false;
+                }
+
+                if (kesesuaianValue.equals("Cukup")){
+                    kesesuaian = true;
+                } else {
+                    kesesuaian = false;
+                }
+
+                if (kondisiValue.equals("Baik")){
+                    kondisi = true;
+                } else {
+                    kondisi = false;
+                }
+
+                if (selangValue.equals("Baik")){
+                    selang = true;
+                } else {
+                    selang = false;
+                }
+
+                if (pinValue.equals("Baik")){
+                    pin = true;
+                } else {
+                    pin = false;
+                }
+
+                if (nozzleValue.equals("Baik")){
+                    nozzle = true;
+                } else {
+                    nozzle = false;
+                }
+
+                if (posisiValue.equals("Baik")){
+                    posisi = true;
+                } else {
+                    posisi = false;
+                }
 
                 String user = draft.getUser();
                 String tanggal = draft.getDataDate();
-
                 Uri uri = Uri.parse(draft.getDataImage());
 
                 ContentResolver contentResolver = view.getContext().getContentResolver();
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy", Locale.US);
-                    Calendar calendar = Calendar.getInstance();
-                    String currentDate = dateFormat.format(calendar.getTime());
-                    String childKey = currentDate + kodeQR;
-                    String fileName = "image_" + childKey;
-                    StorageReference historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
-//                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Test")
-//                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(uri.getLastPathSegment());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy", Locale.US);
+                Calendar calendar = Calendar.getInstance();
+                String currentDate = dateFormat.format(calendar.getTime());
+                String childKey = currentDate + kodeQR;
+                String fileName = "image_" + childKey;
 
-                    historyStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while (!uriTask.isComplete());
-                            Uri urlImage = uriTask.getResult();
-                            historyImageURl = urlImage.toString();
+                StorageReference historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
+                historyStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!uriTask.isComplete());
+                        Uri urlImage = uriTask.getResult();
+                        String historyImageURL = urlImage.toString();
 
-                            SimpleDateFormat months = new SimpleDateFormat("MMM", Locale.US);
-                            String currentMonth = months.format(Calendar.getInstance().getTime());
+                        SimpleDateFormat months = new SimpleDateFormat("MMM", Locale.US);
+                        String currentMonth = months.format(Calendar.getInstance().getTime());
 
-                            SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
-                            String currentDates = sdfs.format(Calendar.getInstance().getTime());
+                        SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                        String currentDates = sdfs.format(Calendar.getInstance().getTime());
 
-                            DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian,
-                                    kondisi, selang, pin, keterangan, historyImageURl, tanggal, user, nozzle, posisi, satuanBerat, currentDates, currentMonth);
+                        DraftClass historyDataClass = new DraftClass(kodeQR, lokasi, MerkAPAR, berat, jenisAPAR, isitabung, tekanan, kesesuaian,
+                                kondisi, selang, pin, keterangan, historyImageURL, tanggal, user, nozzle, posisi, satuanBerat, currentDates, currentMonth);
 
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("MM dd yy", Locale.US);
-                            Calendar calendar = Calendar.getInstance();
-                            String currentDate = dateFormat.format(calendar.getTime());
-
-                            String childKey = currentDate + KodeQr;
-                            FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyDataClass);
-
-                            FirebaseDatabase.getInstance().getReference("Database").child(kodeQR).setValue(historyDataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                //                            FirebaseDatabase.getInstance().getReference("Draft").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    dialog.dismiss();
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(view.getContext(), "Data berhasil diupload", Toast.LENGTH_SHORT).show();
-                                        deleteItem(position);
-                                    } else {
-                                        Toast.makeText(view.getContext(), "Data berhasil diupload", Toast.LENGTH_SHORT).show();
-                                    }
+                        FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyDataClass);
+                        FirebaseDatabase.getInstance().getReference("Database").child(kodeQR).setValue(historyDataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                dialog.dismiss();
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(view.getContext(), "Data berhasil diupload", Toast.LENGTH_SHORT).show();
+                                    deleteItem(holder.getAdapterPosition());
+                                } else {
+                                    Toast.makeText(view.getContext(), "Data gagal diupload", Toast.LENGTH_SHORT).show();
                                 }
-                            });
+                            }
+                        });
 
-                        }
-                    });
+                    }
+                });
             }
         });
 

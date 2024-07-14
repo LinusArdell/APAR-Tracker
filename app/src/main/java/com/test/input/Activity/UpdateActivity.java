@@ -66,6 +66,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class UpdateActivity extends AppCompatActivity {
 
@@ -375,14 +376,12 @@ public class UpdateActivity extends AppCompatActivity {
             saveDataToSharedPreferences(kodeQR, lokasiTabung, MerkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
+            boolean isSaved = editor.commit();
+
             Toast.makeText(UpdateActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
 
-            boolean isSaved = editor.commit();
-            if (isSaved) {
-                Log.d("DataSave", "Data saved successfully");
-            } else {
-                Log.d("DataSave", "Failed to save data");
-            }
+            // Panggil metode untuk menampilkan data dari SharedPreferences di Logcat
+            showDataFromSharedPreferencesInLogcat();
 
             if ("admin".equalsIgnoreCase(role)) {
                 Intent intent = new Intent(UpdateActivity.this, AdminActivity.class);
@@ -396,6 +395,16 @@ public class UpdateActivity extends AppCompatActivity {
             finish();
         } else {
             Toast.makeText(UpdateActivity.this, "Gambar harus diperbarui", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showDataFromSharedPreferencesInLogcat() {
+        SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+
+        Log.d("DataSave", "Data dari SharedPreferences:");
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            Log.d("DataSave", entry.getKey() + ": " + entry.getValue().toString());
         }
     }
 

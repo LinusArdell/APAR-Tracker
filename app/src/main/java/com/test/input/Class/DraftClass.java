@@ -1,36 +1,36 @@
 package com.test.input.Class;
 
-import android.net.Uri;
-
 public class DraftClass {
     private String kodeQR;
     private String dataImage;
     private String dataDate;
-    private String key, satuanBerat;
-    private String user, dataTanggal, months;
-    private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
-    private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
+    private String key;
+    private String user, satuanBerat, dataTanggal;
+    private Integer beratTabung;
+
+    private String lokasiTabung, months, merkAPAR, jenisAPAR, keterangan;
+    private Boolean kondisiTabung , posisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, tekananTabung, isiTabung, kesesuaianBerat;
 
     public DraftClass(String kodeQR,
-                            String lokasiTabung,
-                            String merkAPAR,
-                            String beratTabung,
-                            String jenisAPAR,
-                            String isiTabung,
-                            String tekananTabung,
-                            String kesesuaianBerat,
-                            String kondisiTabung,
-                            String kondisiSelang,
-                            String kondisiPin,
-                            String keterangan,
-                            String dataImage,
-                            String dataDate,
-                            String user,
-                            String kondisiNozzle,
-                            String posisiTabung,
-                            String satuanBerat,
-                            String dataTanggal,
-                            String months){
+                      String lokasiTabung,
+                      String merkAPAR,
+                      Integer beratTabung,
+                      String jenisAPAR,
+                      Boolean isiTabung,
+                      Boolean Tekanan,
+                      Boolean kesesuaianBerat,
+                      Boolean kondisiTabung,
+                      Boolean kondisiSelang,
+                      Boolean kondisiPin,
+                      String keterangan,
+                      String dataImage,
+                      String dataDate,
+                      String user,
+                      Boolean kondisiNozzle,
+                      Boolean posisiTabung,
+                      String satuanBerat,
+                      String dataTanggal,
+                      String months){
 
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
@@ -38,7 +38,7 @@ public class DraftClass {
         this.beratTabung = beratTabung;
         this.jenisAPAR = jenisAPAR;
         this.isiTabung = isiTabung;
-        this.tekananTabung = tekananTabung;
+        this.tekananTabung = Tekanan;
         this.kesesuaianBerat = kesesuaianBerat;
         this.kondisiTabung = kondisiTabung;
         this.kondisiSelang = kondisiSelang;
@@ -54,11 +54,11 @@ public class DraftClass {
         this.months = months;
     }
 
-    public String getKondisiNozzle() {
+    public Boolean getKondisiNozzle() {
         return kondisiNozzle;
     }
 
-    public String getPosisiTabung() {
+    public Boolean getPosisiTabung() {
         return posisiTabung;
     }
 
@@ -70,7 +70,7 @@ public class DraftClass {
         return lokasiTabung;
     }
 
-    public String getBeratTabung() {
+    public Integer getBeratTabung() {
         return beratTabung;
     }
 
@@ -90,23 +90,23 @@ public class DraftClass {
         return jenisAPAR;
     }
 
-    public String getIsiTabung() {
+    public Boolean getIsiTabung() {
         return isiTabung;
     }
 
-    public String getTekananTabung() {
+    public Boolean getTekananTabung() {
         return tekananTabung;
     }
 
-    public String getKesesuaianBerat() {
+    public Boolean getKesesuaianBerat() {
         return kesesuaianBerat;
     }
 
-    public String getKondisiSelang() {
+    public Boolean getKondisiSelang() {
         return kondisiSelang;
     }
 
-    public String getKondisiPin() {
+    public Boolean getKondisiPin() {
         return kondisiPin;
     }
 
@@ -129,7 +129,7 @@ public class DraftClass {
         return kodeQR;
     }
 
-    public String getKondisiTabung() {
+    public Boolean getKondisiTabung() {
         return kondisiTabung;
     }
 
