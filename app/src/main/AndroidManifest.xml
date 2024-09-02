@@ -10,9 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
@@ -27,7 +25,15 @@
         tools:replace="android:label"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.AdminActivity"
+            android:name=".Experimental.Updates"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.Report"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.FeedBack"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -39,9 +45,21 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Activity.UpdateOffline"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Activity.Preview"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.TambahOffline"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity.MainActivity" />
+        </activity>
         <activity
             android:name=".Activity.Register"
             android:exported="false"
@@ -79,7 +97,7 @@
                 android:value=".Activity.MainActivity" />
         </activity>
         <activity
-            android:name=".Activity.TambahData"
+            android:name=".Activity.EquipmentTambahActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">

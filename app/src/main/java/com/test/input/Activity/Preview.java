@@ -22,20 +22,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.test.input.Adapter.DraftAdapter;
-import com.test.input.Class.DataClass;
 import com.test.input.Class.DraftClass;
-import com.test.input.Class.HistoryClass;
 import com.test.input.R;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class Preview extends AppCompatActivity {
@@ -90,7 +81,7 @@ public class Preview extends AppCompatActivity {
     }
 
     private List<DraftClass> getAllImageDataFromSharedPreferences(){
-        List<DraftClass> dataLists = new ArrayList<>();
+        List<DraftClass> dataLists =new ArrayList<>();
         SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
 
         Map<String, ?> allEntries = sharedPreferences.getAll();
@@ -119,45 +110,29 @@ public class Preview extends AppCompatActivity {
                 String kondisiTabungKey = key + "KondisiTabung";
                 String satuanBerat = key + "Satuan";
 
-                String currentDates = key + "CurrentDates";
-                String currentMonth = key + "CurrentMonth";
-
                 String kodeQR = sharedPreferences.getString(kodeQRkey, "");
                 String lokasi = sharedPreferences.getString(lokasiKey, "");
                 String merk = sharedPreferences.getString(merkKey, "");
-                String berat = sharedPreferences.getString(beratKey, "0"); // Default value "0" if not found
-                Integer beratInt = Integer.parseInt(berat); // Convert to Integer
-
+                String berat = sharedPreferences.getString(beratKey, "");
                 String jenis = sharedPreferences.getString(jenisKey, "");
 
                 String Tekanan = sharedPreferences.getString(tekananKey, "");
-                boolean tekananBoolean = Tekanan.equals("Cukup"); // Convert to boolean
                 String KondisiPin = sharedPreferences.getString(kondisiPinKey, "");
-                boolean kondisiPinBoolean = KondisiPin.equals("Baik"); // Convert to boolean
                 String User = sharedPreferences.getString(userKey, "");
                 String KondisiSelang = sharedPreferences.getString(kondisiSelangKey, "");
-                boolean kondisiSelangBoolean = KondisiSelang.equals("Baik"); // Convert to boolean
                 String IsiTabung = sharedPreferences.getString(isiTabungKey, "");
-                boolean isiTabungBoolean = IsiTabung.equals("Baik"); // Convert to boolean
                 String Keterangan = sharedPreferences.getString(keteranganKey, "");
                 String Nozzle = sharedPreferences.getString(nozzleKey, "");
-                boolean nozzleBoolean = Nozzle.equals("Baik"); // Convert to boolean
                 String Tanggal = sharedPreferences.getString(tanggalKey, "");
                 String Posisi = sharedPreferences.getString(posisiKey, "");
-                boolean posisiBoolean = Posisi.equals("Baik"); // Convert to boolean
                 String Kesesuaian = sharedPreferences.getString(kesesuaianKey, "");
-                boolean kesesuaianBoolean = Kesesuaian.equals("Cukup"); // Convert to boolean
                 String KondisiTabung = sharedPreferences.getString(kondisiTabungKey, "");
-                boolean kondisiTabung = KondisiTabung.equals("Cukup");
-                String SatuanBerat = sharedPreferences.getString(satuanBerat, "");
 
-                String CurrentDates = sharedPreferences.getString(currentDates, "");
-                String CurrentMonth = sharedPreferences.getString(currentMonth, "");
+                String SatuanBerat = sharedPreferences.getString(satuanBerat, "");
                 if (!TextUtils.isEmpty(kodeQR)) {
-                    dataLists.add(new DraftClass(kodeQR,  lokasi,  merk,  beratInt,  jenis,
-                            isiTabungBoolean,  tekananBoolean,  kesesuaianBoolean,  kondisiTabung,
-                            kondisiSelangBoolean,  kondisiPinBoolean,  Keterangan,  uriString,  Tanggal,
-                            User,  nozzleBoolean,  posisiBoolean, SatuanBerat, CurrentDates, CurrentMonth));
+                    dataLists.add(new DraftClass(kodeQR,  lokasi,  merk,  berat,  jenis,
+                            IsiTabung,  Tekanan,  Kesesuaian,  KondisiTabung,  KondisiSelang,
+                            KondisiPin,  Keterangan,  uriString,  Tanggal,  User,  Nozzle,  Posisi, SatuanBerat));
                 }
             }
         }
@@ -188,3 +163,4 @@ public class Preview extends AppCompatActivity {
         }
     }
 }
+

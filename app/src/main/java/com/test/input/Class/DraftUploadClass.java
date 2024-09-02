@@ -2,16 +2,17 @@ package com.test.input.Class;
 
 import android.net.Uri;
 
-public class DraftClass {
+public class DraftUploadClass {
+
     private String kodeQR;
     private String dataImage;
-    private String dataDate;
-    private String key, satuanBerat;
+    private String dataDate, satuanBerat;
+    private String key;
     private String user;
     private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
     private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
 
-    public DraftClass(String kodeQR,
+    public DraftUploadClass(String kodeQR,
                             String lokasiTabung,
                             String merkAPAR,
                             String beratTabung,
@@ -46,20 +47,28 @@ public class DraftClass {
         this.dataImage = dataImage;
         this.kondisiNozzle = kondisiNozzle;
         this.posisiTabung = posisiTabung;
-        this.satuanBerat = satuanBerat;
         this.user = user;
+        this.satuanBerat = satuanBerat;
     }
 
-    public String getKondisiNozzle() {
-        return kondisiNozzle;
+    public String getKodeQR() {
+        return kodeQR;
     }
 
-    public String getPosisiTabung() {
-        return posisiTabung;
+    public String getDataImage() {
+        return dataImage;
     }
 
-    public String getKeterangan() {
-        return keterangan;
+    public String getDataDate() {
+        return dataDate;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getUser() {
+        return user;
     }
 
     public String getLokasiTabung() {
@@ -78,6 +87,18 @@ public class DraftClass {
         return jenisAPAR;
     }
 
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public String getKondisiNozzle() {
+        return kondisiNozzle;
+    }
+
+    public String getPosisiTabung() {
+        return posisiTabung;
+    }
+
     public String getIsiTabung() {
         return isiTabung;
     }
@@ -90,43 +111,16 @@ public class DraftClass {
         return kesesuaianBerat;
     }
 
+    public String getKondisiTabung() {
+        return kondisiTabung;
+    }
+
     public String getKondisiSelang() {
         return kondisiSelang;
     }
 
     public String getKondisiPin() {
         return kondisiPin;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getKey() {
-        return key;
-    }
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getKodeQR() {
-        return kodeQR;
-    }
-
-    public String getKondisiTabung() {
-        return kondisiTabung;
-    }
-
-    public String getDataImage() {
-        return dataImage;
-    }
-
-    public String getDataDate() {
-        return dataDate;
     }
 
     public String getSatuanBerat() {

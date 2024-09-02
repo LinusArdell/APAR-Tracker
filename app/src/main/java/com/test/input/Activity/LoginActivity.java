@@ -10,7 +10,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,10 +29,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.test.input.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -69,19 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            // Periksa SharedPreferences
-            SharedPreferences preferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-            String role = preferences.getString("role", "");
 
+        if(user != null){
             finish();
-            if ("Admin".equals(role)) {
-                startActivity(new Intent(this, AdminActivity.class));
-            } else if ("User".equals(role)) {
-                startActivity(new Intent(this, MainActivity.class));
-            }
+            startActivity(new Intent(this, MainActivity.class));
         }
-
 
         checkAndRequestPermissions();
 
@@ -133,8 +120,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void validate(String userEmail, String userPassword) {
-        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+    public void validate(String userEmail, String userPassword){
+
+        if(userEmail.isEmpty() || userPassword.isEmpty()) {
             Toast.makeText(LoginActivity.this, "Email and password cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -145,53 +133,14 @@ public class LoginActivity extends AppCompatActivity {
         auth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = auth.getCurrentUser();
-                    if (user != null) {
-                        String userId = user.getUid();
-                        FirebaseDatabase.getInstance().getReference().child("Pengguna").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                processDialog.dismiss();
-                                if (dataSnapshot.exists()) {
-                                    String role = dataSnapshot.child("role").getValue(String.class);
-                                    if (role != null) {
-                                        // Simpan status login dan peran di SharedPreferences
-                                        SharedPreferences preferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putBoolean("isLoggedIn", true);
-                                        editor.putString("role", role);
-                                        editor.apply();
-
-                                        if (role.equals("Admin")) {
-                                            Toast.makeText(LoginActivity.this, "Login Successful as Admin", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
-                                        } else if (role.equals("User")) {
-                                            Toast.makeText(LoginActivity.this, "Login Successful as User", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                        } else {
-                                            Toast.makeText(LoginActivity.this, "Invalid role", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, "Role not defined", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "User data not found", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                processDialog.dismiss();
-                                Toast.makeText(LoginActivity.this, "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        processDialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "User not found", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
+                if(task.isSuccessful()){
                     processDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Email or Password is incorrect", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+                else{
+                    Toast.makeText(LoginActivity.this,"Email or Password is incorrect", Toast.LENGTH_SHORT).show();
+                    processDialog.dismiss();
                 }
             }
         });

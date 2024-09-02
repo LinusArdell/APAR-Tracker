@@ -13,7 +13,7 @@
                 <item
                     android:id="@+id/nav_add"
                     android:icon="@drawable/fab_add"
-                    android:title="Tambah data baru"/>
+                    android:title="Tambah item baru"/>
                 <item
                     android:id="@+id/nav_draft"
                     android:icon="@drawable/draft_24"
@@ -28,14 +28,6 @@
                 android:id="@+id/nav_download"
                 android:icon="@drawable/baseline_download_24"
                 android:title="Unduh Excel"/>
-            <item
-                android:id="@+id/nav_download_bulan"
-                android:icon="@drawable/baseline_download_24"
-                android:title="Data Pemeriksaan Bulan Ini"/>
-            <item
-                android:id="@+id/nav_download_hari"
-                android:icon="@drawable/baseline_download_24"
-                android:title="Data Pemeriksaan Hari Ini"/>
         </menu>
     </item>
     <item
@@ -44,7 +36,7 @@
             <item
                 android:id="@+id/nav_generate"
                 android:icon="@drawable/qr_24"
-                android:title="QR Generator"/>
+                android:title="Generate QR"/>
             <item
                 android:id="@+id/nav_guide"
                 android:title="Panduan pengguna"
@@ -55,16 +47,32 @@
         android:title="Akun">
         <menu>
             <item
+                android:id="@+id/nav_register"
+                android:title="Buat akun baru"
+                android:icon="@drawable/baseline_person_24"/>
+            <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/baseline_logout_24"
-                android:title="Logout"/>
+                android:title="Logout"/>x
         </menu>
     </item>
 
 
     <item
-        android:title="Informasi">
+        android:title="Informasi dan dukungan">
         <menu>
+            <item
+                android:id="@+id/nav_feedback"
+                android:title="Masukan dan saran"
+                android:icon="@drawable/baseline_feedback_24"/>
+            <item
+                android:id="@+id/nav_report"
+                android:title="Laporkan bug dan masalah"
+                android:icon="@drawable/baseline_report_24"/>
+            <item
+                android:id="@+id/nav_update"
+                android:title="Periksa pembaruan"
+                android:icon="@drawable/update_24"/>
             <item
                 android:id="@+id/nav_version"
                 android:title="Versi aplikasi " />

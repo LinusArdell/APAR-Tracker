@@ -2,27 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+<!--    <item android:title="Search"-->
+<!--        android:icon="@drawable/baseline_search_24"-->
+<!--        app:showAsAction="ifRoom|collapseActionView"-->
+<!--        app:actionViewClass="android.widget.SearchView"-->
+<!--        android:id="@+id/menuSearch"/>-->
+
     <group>
         <item
             android:id="@+id/sort_name_ascending"
             android:icon="@drawable/baseline_sort_24"
-            android:title="Urutkan A-Z"
+            android:title="Sort By Name A-Z"
             app:showAsAction="withText"/>
 
         <item
             android:id="@+id/sort_name_descending"
             android:icon="@drawable/baseline_sort_24"
-            android:title="Urutkan Z-A" />
+            android:title="Sort By Name Z-A" />
 
         <item
             android:id="@+id/sort_date_descending"
             android:icon="@drawable/baseline_sort_24"
-            android:title="Baru diunggah" />
+            android:title="Recently Uploaded" />
 
         <item
             android:id="@+id/sort_date_ascending"
             android:icon="@drawable/baseline_sort_24"
-            android:title="Belum Diperiksa" />
+            android:title="Sort by Date" />
 
     </group>
 </menu>

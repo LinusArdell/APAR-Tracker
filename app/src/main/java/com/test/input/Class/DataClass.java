@@ -2,38 +2,36 @@ package com.test.input.Class;
 
 import java.io.Serializable;
 
-public class DataClass{
+public class DataClass implements Serializable {
 
     private String kodeQR;
     private String dataImage;
     private String dataDate;
     private String key;
-    private String user, satuanBerat, dataTanggal;
-    private Integer beratTabung;
+    private String user, satuanBerat;
+    private String signatureUrl;
 
-    private String lokasiTabung, months, merkAPAR, jenisAPAR, keterangan;
-    private Boolean kondisiTabung , posisiTabung, kondisiSelang, kondisiPin, kondisiNozzle, tekananTabung, isiTabung, kesesuaianBerat;
+    private String lokasiTabung, beratTabung, merkAPAR, jenisAPAR, keterangan, kondisiNozzle, posisiTabung;
+    private String isiTabung, tekananTabung, kesesuaianBerat, kondisiTabung, kondisiSelang, kondisiPin;
 
     public DataClass (String kodeQR,
                       String lokasiTabung,
                       String merkAPAR,
-                      Integer beratTabung,
+                      String beratTabung,
                       String jenisAPAR,
-                      Boolean isiTabung,
-                      Boolean Tekanan,
-                      Boolean kesesuaianBerat,
-                      Boolean kondisiTabung,
-                      Boolean kondisiSelang,
-                      Boolean kondisiPin,
+                      String isiTabung,
+                      String Tekanan,
+                      String kesesuaianBerat,
+                      String kondisiTabung,
+                      String kondisiSelang,
+                      String kondisiPin,
                       String keterangan,
                       String dataImage,
                       String dataDate,
                       String user,
-                      Boolean kondisiNozzle,
-                      Boolean posisiTabung,
-                      String satuanBerat,
-                      String dataTanggal,
-                      String months){
+                      String kondisiNozzle,
+                      String posisiTabung,
+                      String satuanBerat){ //String signatureUrl
 
         this.kodeQR = kodeQR;
         this.lokasiTabung = lokasiTabung;
@@ -50,25 +48,23 @@ public class DataClass{
         this.dataDate = dataDate;
         this.dataImage = dataImage;
         this.kondisiNozzle = kondisiNozzle;
-        this.posisiTabung = posisiTabung;
+        this.posisiTabung = posisiTabung; //   this.signatureUrl = signatureUrl;
         this.user = user;
         this.satuanBerat = satuanBerat;
-        this.dataTanggal = dataTanggal;
-        this.months = months;
     }
 
     public DataClass(){
     }
 
-    public String getMonths() {
-        return months;
+    public String getSignatureUrl() {
+        return signatureUrl;
     }
 
-    public Boolean getKondisiNozzle() {
+    public String getKondisiNozzle() {
         return kondisiNozzle;
     }
 
-    public Boolean getPosisiTabung() {
+    public String getPosisiTabung() {
         return posisiTabung;
     }
 
@@ -80,7 +76,7 @@ public class DataClass{
         return lokasiTabung;
     }
 
-    public Integer getBeratTabung() {
+    public String getBeratTabung() {
         return beratTabung;
     }
 
@@ -92,23 +88,23 @@ public class DataClass{
         return jenisAPAR;
     }
 
-    public Boolean getIsiTabung() {
+    public String getIsiTabung() {
         return isiTabung;
     }
 
-    public Boolean getTekananTabung() {
+    public String getTekananTabung() {
         return tekananTabung;
     }
 
-    public Boolean getKesesuaianBerat() {
+    public String getKesesuaianBerat() {
         return kesesuaianBerat;
     }
 
-    public Boolean getKondisiSelang() {
+    public String getKondisiSelang() {
         return kondisiSelang;
     }
 
-    public Boolean getKondisiPin() {
+    public String getKondisiPin() {
         return kondisiPin;
     }
 
@@ -131,7 +127,7 @@ public class DataClass{
         return kodeQR;
     }
 
-    public Boolean getKondisiTabung() {
+    public String getKondisiTabung() {
         return kondisiTabung;
     }
 
@@ -145,9 +141,5 @@ public class DataClass{
 
     public String getSatuanBerat() {
         return satuanBerat;
-    }
-
-    public String getDataTanggal() {
-        return dataTanggal;
     }
 }

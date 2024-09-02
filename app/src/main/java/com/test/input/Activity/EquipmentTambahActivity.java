@@ -29,8 +29,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -64,14 +67,16 @@ import com.test.input.Class.UserClass;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class TambahData extends AppCompatActivity {
+public class EquipmentTambahActivity extends AppCompatActivity {
 
     private EditText etResult, etLokasi, etBerat, etketerangan;
     private SwitchMaterial tekananTabung, kesesuaianBerat, isiTabung, kondisiSelang, kondisiPin, kondisiNozzle, posisiTabung;
@@ -171,7 +176,7 @@ public class TambahData extends AppCompatActivity {
                             uri = Uri.fromFile(new File(currentPhotoPath));
                         }
                     } else {
-                        Toast.makeText(TambahData.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EquipmentTambahActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -184,7 +189,7 @@ public class TambahData extends AppCompatActivity {
                             uri =data.getData();
                             uploadGambar.setImageURI(uri);
                         } else {
-                            Toast.makeText(TambahData.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EquipmentTambahActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -260,13 +265,16 @@ public class TambahData extends AppCompatActivity {
 
     public void saveData() {
         if (uri == null) {
-            Toast.makeText(TambahData.this, "Gambar wajib dipilih", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EquipmentTambahActivity.this, "Gambar wajib dipilih", Toast.LENGTH_SHORT).show();
             return;
         }
 
         StorageReference historyStorage = FirebaseStorage.getInstance().getReference().child("History Images").child(uri.getLastPathSegment());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(TambahData.this);
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+                .child(uri.getLastPathSegment());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog = builder.create();
@@ -283,19 +291,30 @@ public class TambahData extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
+        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uriTask.isComplete());
+                Uri urlImage = uriTask.getResult();
+                imageURL = urlImage.toString();
+                uploadData();
+                dialog.dismiss();
+                Log.d("URI_Log", "URI: " + uri.toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void uploadData() {
         String kodeQR = etResult.getText().toString();
         String lokasi = etLokasi.getText().toString();
-        int berat;
-        try {
-            berat = Integer.parseInt(etBerat.getText().toString());
-        } catch (NumberFormatException e) {
-            etBerat.setError("Berat harus berupa angka");
-            Toast.makeText(TambahData.this, "Berat harus berupa angka", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        String berat = etBerat.getText().toString();
         String keterangan = etketerangan.getText().toString();
 
         String SatuanBerat = satuanBerat.getSelectedItem().toString();
@@ -304,12 +323,7 @@ public class TambahData extends AppCompatActivity {
 
         Boolean isitabung = isiTabung.isChecked();
         Boolean tekanan = tekananTabung.isChecked();
-        Boolean kesesuaian;
-        if (JenisAPAR.equals("Carbondioxide")) {
-            kesesuaian = kesesuaianBerat.isChecked();
-        } else {
-            kesesuaian = false;
-        }
+        Boolean kesesuaian = kesesuaianBerat.isChecked();
         Boolean kondisi = kondisiTabung.isChecked();
         Boolean selang = kondisiSelang.isChecked();
         Boolean pin = kondisiPin.isChecked();
@@ -321,22 +335,22 @@ public class TambahData extends AppCompatActivity {
 
         if (users != null) {
             String userId = users.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
             if (kodeQR.isEmpty()) {
                 etResult.setError("Kode QR tidak boleh kosong");
-                Toast.makeText(TambahData.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (containsIllegalCharacters(kodeQR)) {
                 etResult.setError("Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'");
-                Toast.makeText(TambahData.this, "Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EquipmentTambahActivity.this, "Kode QR tidak boleh mengandung karakter '.', '#', '$', '[', atau ']'", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (uri == null) {
-                Toast.makeText(TambahData.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EquipmentTambahActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
                 return;
             }
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -348,22 +362,37 @@ public class TambahData extends AppCompatActivity {
                             finalUser[0] = userData.getUsername();
 
                             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
-
-                            SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
-                            String currentDates = sdfs.format(Calendar.getInstance().getTime());
-
-                            SimpleDateFormat months = new SimpleDateFormat("MMM", Locale.US);
-                            String currentMonth = months.format(Calendar.getInstance().getTime());
-
                             String currentDate = sdf.format(Calendar.getInstance().getTime());
 
-                            DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isitabung, tekanan, kesesuaian,
-                                    kondisi,selang, pin, keterangan, historyImageUrl, currentDate, finalUser[0], nozzle, posisi, SatuanBerat, currentDates, currentMonth);
+                            String isiString = isitabung ? "Baik" : "Beku";
+                            String tekananString = tekanan ? "Cukup" : "Kurang";
+                            String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            String kondisiString = kondisi ? "Baik" : "Berkarat";
+                            String selangString = selang ? "Baik" : "Rusak";
+                            String pinString = pin ? "Baik" : "Rusak";
+                            String nozzleString = nozzle ? "Baik" : "Tersumbat";
+                            String posisiString = posisi ? "Baik" : "Terhalang";
 
-                            DataClass historyData = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isitabung, tekanan, kesesuaian,
-                                    kondisi,selang, pin, keterangan, historyImageUrl, currentDate, finalUser[0], nozzle, posisi, SatuanBerat, currentDates, currentMonth);
+                            if (JenisAPAR.equals("Carbondioxide")){
+                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            } else {
+                                kesesuaianString = "N/A";
+                            }
 
-                            FirebaseDatabase.getInstance().getReference("APAR").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            if (JenisAPAR.equals("Carbondioxide")){
+                                isiString = "N/A";
+                            } else if (JenisAPAR.equals("Halotron")) {
+                                isiString = "N/A";
+                            } else {
+                                isiString = isitabung ? "Baik" : "Beku";
+                            }
+
+                            DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+
+                            DataClass historyData = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+                            FirebaseDatabase.getInstance().getReference("Test").child(kodeQR).setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
@@ -372,9 +401,9 @@ public class TambahData extends AppCompatActivity {
                                         String currentDate = dateFormat.format(calendar.getTime());
 
                                         String childKey = currentDate + kodeQR;
-                                        FirebaseDatabase.getInstance().getReference("Riwayat_Pemeriksaan_APAR").child(kodeQR).child(childKey).setValue(historyData);
+                                        FirebaseDatabase.getInstance().getReference("History").child(kodeQR).child(childKey).setValue(historyData);
 
-                                        Toast.makeText(TambahData.this, "Saved", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EquipmentTambahActivity.this, "Saved", Toast.LENGTH_SHORT).show();
                                         Log.d(String.valueOf(uri), "Uri");
                                         finish();
                                     }
@@ -382,7 +411,7 @@ public class TambahData extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(TambahData.this, "Database Error", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EquipmentTambahActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -391,7 +420,7 @@ public class TambahData extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(TambahData.this, "Cannot connect to database", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EquipmentTambahActivity.this, "Cannot connect to database", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -426,6 +455,7 @@ public class TambahData extends AppCompatActivity {
         String username = getUsernameLocally();
 
         if (username != null && uri != null) {
+            // Lanjutkan menyimpan data ke SharedPreferences dengan nama pengguna yang diperoleh
             String isiString = isiTabungs ? "Baik" : "Beku";
             String tekananString = Tekanan ? "Cukup" : "Kurang";
             String kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
@@ -441,10 +471,18 @@ public class TambahData extends AppCompatActivity {
                 kesesuaianString = "N/A";
             }
 
+            if (jenisAPAr.equals("Carbondioxide")){
+                isiString = "N/A";
+            } else if (jenisAPAr.equals("Halotron")) {
+                isiString = "N/A";
+            } else {
+                isiString = isiTabungs ? "Baik" : "Beku";
+            }
+
             saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, satuanberat);
 
-            Toast.makeText(TambahData.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
 
             boolean isSaved = editor.commit(); // Simpan perubahan ke SharedPreferences
             if (isSaved) {
@@ -453,10 +491,12 @@ public class TambahData extends AppCompatActivity {
                 Log.d("DataSave", "Failed to save data");
             }
 
+            Intent intent = new Intent(EquipmentTambahActivity.this, MainActivity.class);
+            startActivity(intent);
             finish();
-            Toast.makeText(TambahData.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EquipmentTambahActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(TambahData.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EquipmentTambahActivity.this, "Gambar harus diisi", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -66,7 +66,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class UpdateActivity extends AppCompatActivity {
 
@@ -284,10 +283,10 @@ public class UpdateActivity extends AppCompatActivity {
 //            key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
 
-            tvID.setText("Periksa " + bundle.getString("KodeQR"));
+            tvID.setText("Update " + bundle.getString("KodeQR"));
         }
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("APAR").child(key);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
 
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,7 +353,6 @@ public class UpdateActivity extends AppCompatActivity {
         String currentDate = sdf.format(Calendar.getInstance().getTime());
 
         String username = getUsernameLocally();
-        String role = getRoleLocally(); // Ambil role dari penyimpanan lokal
 
         if (username != null && uri != null) {
             // Lanjutkan menyimpan data ke SharedPreferences dengan nama pengguna yang diperoleh
@@ -367,7 +365,7 @@ public class UpdateActivity extends AppCompatActivity {
             String nozzleString = nozzles ? "Baik" : "Tersumbat";
             String posisiString = posisi ? "Baik" : "Terhalang";
 
-            if (JenisAPArs.equals("Carbondioxide")) {
+            if (JenisAPArs.equals("Carbondioxide")){
                 kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
             } else {
                 kesesuaianString = "N/A";
@@ -376,35 +374,22 @@ public class UpdateActivity extends AppCompatActivity {
             saveDataToSharedPreferences(kodeQR, lokasiTabung, MerkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
-            boolean isSaved = editor.commit();
-
             Toast.makeText(UpdateActivity.this, "Data tersimpan dalam penyimpanan lokal", Toast.LENGTH_SHORT).show();
 
-            // Panggil metode untuk menampilkan data dari SharedPreferences di Logcat
-            showDataFromSharedPreferencesInLogcat();
+            boolean isSaved = editor.commit();
+            if (isSaved) {
 
-            if ("admin".equalsIgnoreCase(role)) {
-                Intent intent = new Intent(UpdateActivity.this, AdminActivity.class);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(intent);
+                Log.d("DataSave", "Data saved successfully");
             } else {
-                Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(intent);
+                Log.d("DataSave", "Failed to save data");
             }
+
+            Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
             finish();
         } else {
             Toast.makeText(UpdateActivity.this, "Gambar harus diperbarui", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void showDataFromSharedPreferencesInLogcat() {
-        SharedPreferences sharedPreferences = getSharedPreferences("data_offline", MODE_PRIVATE);
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-
-        Log.d("DataSave", "Data dari SharedPreferences:");
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            Log.d("DataSave", entry.getKey() + ": " + entry.getValue().toString());
         }
     }
 
@@ -437,6 +422,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
 
+        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
@@ -454,22 +440,30 @@ public class UpdateActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
+        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uriTask.isComplete());
+                Uri urlImage = uriTask.getResult();
+                imageUrl = urlImage.toString();
+                updateData();
+                dialog.dismiss();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public void updateData(){
         kodeQr = tvQR.getText().toString();
 
         String lokasi = etLokasi.getText().toString();
-
-        int berat;
-        try {
-            berat = Integer.parseInt(etBerat.getText().toString());
-        } catch (NumberFormatException e) {
-            etBerat.setError("Berat harus berupa angka");
-            Toast.makeText(UpdateActivity.this, "Berat harus berupa angka", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+        String berat = etBerat.getText().toString();
         String keterangan = etketerangan.getText().toString();
 
         String MerkAPAR = merkAPAR.getSelectedItem().toString();
@@ -478,57 +472,77 @@ public class UpdateActivity extends AppCompatActivity {
 
         Boolean isitabung = isiTabung.isChecked();
         Boolean tekanan = tekananTabung.isChecked();
-        Boolean kesesuaian;
-        if (JenisAPAR.equals("Carbondioxide")) {
-            kesesuaian = kesesuaianBerat.isChecked();
-        } else {
-            kesesuaian = false;
-        }
+        Boolean kesesuaian = kesesuaianBerat.isChecked();
         Boolean kondisi = kondisiTabung.isChecked();
         Boolean selang = kondisiSelang.isChecked();
         Boolean pin = kondisiPin.isChecked();
+
         Boolean nozzle = kondisiNozzle.isChecked();
         Boolean posisi = posisiTabung.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
-        final String[] finalUser = {""};
+        final String[] finalUser = {""}; // Inisialisasi finalUser
 
         if (users != null) {
+            // Mengambil UID pengguna saat ini
             String userId = users.getUid();
 
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId);
-            DatabaseReference userRoleRef = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId).child("role");
+            // Mengambil referensi ke data pengguna di Realtime Database
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
+            // Mendengarkan satu kali untuk mendapatkan data pengguna
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
+                        // Mengambil data pengguna dari snapshot
                         UserClass userData = snapshot.getValue(UserClass.class);
                         if (userData != null) {
+                            // Mengambil nama pengguna dari data pengguna
                             finalUser[0] = userData.getUsername();
 
                             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
-                            SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
-                            String currentDates = sdfs.format(Calendar.getInstance().getTime());
-                            SimpleDateFormat months = new SimpleDateFormat("MMM", Locale.US);
-                            String currentMonth = months.format(Calendar.getInstance().getTime());
                             String currentDate = sdf.format(Calendar.getInstance().getTime());
 
                             if (kodeQr.isEmpty()) {
                                 Toast.makeText(UpdateActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                                return;
+                                return; // Menghentikan proses upload jika kodeQR kosong
                             }
 
                             if (uri == null) {
-                                Toast.makeText(UpdateActivity.this, "Gambar harus dipilih", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UpdateActivity.this, "Gambar harus di pilih", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
-                            DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isitabung, tekanan, kesesuaian,
-                                    kondisi,selang, pin, keterangan, historyImageUrl, currentDate, finalUser[0], nozzle, posisi, SatuanBerat, currentDates, currentMonth);
+                            String isiString = isitabung ? "Baik" : "Beku";
+                            String tekananString = tekanan ? "Cukup" : "Kurang";
+                            String kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            String kondisiString = kondisi ? "Baik" : "Berkarat";
+                            String selangString = selang ? "Baik" : "Rusak";
+                            String pinString = pin ? "Baik" : "Rusak";
 
-                            DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isitabung, tekanan, kesesuaian,
-                                    kondisi,selang, pin, keterangan, historyImageUrl, currentDate, finalUser[0], nozzle, posisi, SatuanBerat, currentDates, currentMonth);
+                            String nozzleString = nozzle ? "Baik" : "Tersumbat";
+                            String posisiString = posisi ? "Baik" : "Terhalang";
+
+                            if (JenisAPAR.equals("Carbondioxide")) {
+                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            } else {
+                                kesesuaianString = "N/A";
+                            }
+
+                            if (JenisAPAR.equals("Carbondioxide")){
+                                isiString = "N/A";
+                            } else if (JenisAPAR.equals("Halotron")) {
+                                isiString = "N/A";
+                            } else {
+                                isiString = isitabung ? "Baik" : "Beku";
+                            }
+
+                            DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+
+                            DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
 
                             databaseReference.setValue(dataClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -539,31 +553,15 @@ public class UpdateActivity extends AppCompatActivity {
                                         String currentDate = dateFormat.format(calendar.getTime());
 
                                         String childKey = currentDate + kodeQr;
-                                        FirebaseDatabase.getInstance().getReference("Riwayat_Pemeriksaan_APAR").child(kodeQr).child(childKey).setValue(historyData);
+                                        FirebaseDatabase.getInstance().getReference("History").child(kodeQr).child(childKey).setValue(historyData);
 
+                                        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
+                                        reference.delete();
                                         Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-
-                                        userRoleRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                if (dataSnapshot.exists()) {
-                                                    String role = dataSnapshot.getValue(String.class);
-                                                    if ("admin".equalsIgnoreCase(role)) {
-                                                        startActivity(new Intent(getApplicationContext(), AdminActivity.class));
-                                                    } else {
-                                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                    }
-                                                    finish();
-                                                } else {
-                                                    Toast.makeText(UpdateActivity.this, "Error! : Peran pengguna tidak ditemukan!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Toast.makeText(UpdateActivity.this, "Error! : Gagal memuat peran pengguna!", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
+                                        // Panggil intent untuk memulai MainActivity di sini setelah data berhasil disimpan
+                                        Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -578,6 +576,7 @@ public class UpdateActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
+                    // Penanganan kesalahan (jika diperlukan)
                 }
             });
         }
@@ -586,11 +585,14 @@ public class UpdateActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Membuat file tempat gambar akan disimpan
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
+                // Error terjadi saat membuat file
             }
+            // Lanjutkan hanya jika file berhasil dibuat
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.test.input.Fileprovider",
@@ -610,6 +612,7 @@ public class UpdateActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+
     }
 
     private void saveDataToSharedPreferences(String kodeQR, String lokasiTabung, String merkAPAR, String beratTabung, String jenisAPAR,
@@ -645,11 +648,6 @@ public class UpdateActivity extends AppCompatActivity {
     private String getUsernameLocally() {
         SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
         return sharedPreferences.getString("username", "");
-    }
-
-    private String getRoleLocally() {
-        SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
-        return sharedPreferences.getString("role", "");
     }
 
     private File createImageFile() throws IOException {

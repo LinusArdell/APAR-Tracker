@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="Kembali"
+                android:text="BACK"
                 app:tint="@color/white"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"/>
@@ -42,7 +42,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="Buat akun baru"
+                android:text="Buat akun"
                 android:textSize="21dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -75,7 +75,7 @@
                 android:id="@+id/tv_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Daftar"
+                android:text="Register"
                 android:textAlignment="center"
                 android:textColor="@color/main_color"
                 android:textSize="36dp"
@@ -149,7 +149,7 @@
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/main_color"
                 android:textColor="@color/white"
-                android:text="Daftar"
+                android:text="Register"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.TambahDataOffline">
+    tools:context=".Activity.TambahOffline">
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
-                android:text="Tambah Data"
+                android:text="Add item"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"

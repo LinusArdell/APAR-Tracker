@@ -9,7 +9,7 @@
     tools:context=".Activity.History"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_color"
@@ -18,38 +18,24 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/tool_bar"
-        app:menu="@menu/riwayat"
         app:itemIconTint="@color/main_color"
         app:itemTextColor="@color/main_color">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center">
 
             <Button
                 android:id="@+id/btn_backs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="false"
+                android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="KEMBALI"
+                android:text="BACK"
                 app:tint="@color/white"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"/>
-
-            <androidx.appcompat.widget.SearchView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/search"
-                app:iconifiedByDefault="false"
-                app:searchHintIcon="@null"
-                app:queryHint="Search..."
-                android:focusable="false"
-                app:closeIcon="@drawable/clear_24"
-                app:searchIcon="@drawable/baseline_search_24"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/btn_backs" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,11 +46,20 @@
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:id="@+id/t_history_title"
-                android:visibility="gone"/>
+                android:id="@+id/t_history_title"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="Riwayat pemeriksaan"
+                android:textSize="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/t_history_title"/>
         </RelativeLayout>
 
-    </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.navigation.NavigationView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/tool_bar"
@@ -72,5 +67,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/recyHistorya"
         android:scrollbars="vertical"/>
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/tool_bar"-->
+<!--        android:text="Belum ada riwayat pembaruan yang tersedia"-->
+<!--        android:textSize="26sp"-->
+<!--        android:textColor="@color/main_color"-->
+<!--        android:id="@+id/emptyState"-->
+<!--        android:layout_marginTop="80dp"-->
+<!--        android:gravity="center"/>-->
 
 </RelativeLayout>

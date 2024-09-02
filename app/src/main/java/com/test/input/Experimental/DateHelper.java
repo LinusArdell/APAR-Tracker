@@ -50,7 +50,7 @@ public class DateHelper {
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return dateString;
+            return dateString; // Jika parsing gagal, kembalikan string asli
         }
     }
 }

@@ -16,11 +16,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -61,6 +62,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.test.input.Adapter.EquipmentAdapter;
 import com.test.input.BuildConfig;
 import com.test.input.Class.DataClass;
+import com.test.input.Experimental.Updates;
 import com.test.input.R;
 import com.test.input.Class.UserClass;
 
@@ -68,7 +70,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -223,46 +224,40 @@ public class MainActivity extends AppCompatActivity {
         MenuItem downloadItem = menu.findItem(R.id.nav_download);
         MenuItem generateQR = menu.findItem(R.id.nav_generate);
         MenuItem onboard = menu.findItem(R.id.nav_guide);
+        MenuItem register = menu.findItem(R.id.nav_register);
         MenuItem draft = menu.findItem(R.id.nav_draft);
         MenuItem version = menu.findItem(R.id.nav_version);
-        MenuItem downloadBulan = menu.findItem(R.id.nav_download_bulan);
-        MenuItem downlaodHari = menu.findItem(R.id.nav_download_hari);
+        MenuItem feedback = menu.findItem(R.id.nav_feedback);
+        MenuItem report = menu.findItem(R.id.nav_report);
+        MenuItem update = menu.findItem(R.id.nav_update);
+
         String versionApp = BuildConfig.VERSION_NAME;
 
         version.setTitle("Versi aplikasi : " + versionApp);
 
-        downloadBulan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        update.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                if (isStoragePermissionGranted()) {
-                    downloadBulan();
-                } else {
-                    requestStoragePermission();
-                }
+                Intent i = new Intent(MainActivity.this, Updates.class);
+                startActivity(i);
                 return false;
             }
         });
 
-        downlaodHari.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        report.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                if (isStoragePermissionGranted()) {
-                    downloadHari();
-                } else {
-                    requestStoragePermission();
-                }
+                Intent i = new Intent(MainActivity.this, Report.class);
+                startActivity(i);
                 return false;
             }
         });
 
-        downloadItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        feedback.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                if (isStoragePermissionGranted()) {
-                    downloadFile();
-                } else {
-                    requestStoragePermission();
-                }
+                Intent i = new Intent(MainActivity.this, FeedBack.class);
+                startActivity(i);
                 return false;
             }
         });
@@ -272,6 +267,15 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
                 Intent i = new Intent(MainActivity.this, Preview.class);
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(i);
+                return false;
+            }
+        });
+
+        register.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                Intent i = new Intent(MainActivity.this, Register.class);
                 startActivity(i);
                 return false;
             }
@@ -295,6 +299,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        downloadItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                if (isStoragePermissionGranted()) {
+                    downloadFile();
+                } else {
+                    requestStoragePermission();
+                }
+                return false;
+            }
+        });
+
         logoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -307,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
                 if (isNetworkStatusAvialable(getApplicationContext())){
-                    Intent intent = new Intent(MainActivity.this, TambahData.class);
+                    Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
                     startActivity(intent);
                 }
                 else {
@@ -332,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
                     btnYa.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent i = new Intent(MainActivity.this, TambahData.class);
+                            Intent i = new Intent(MainActivity.this, TambahOffline.class);
                             startActivity(i);
                             dialog.dismiss();
                         }
@@ -348,17 +364,16 @@ public class MainActivity extends AppCompatActivity {
 
             String email = currentUser.getEmail();
             userEmail.setText(email);
-            mDatabase.child("Pengguna").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         UserClass userData = snapshot.getValue(UserClass.class);
 
                         String username1 = userData.getUsername();
-                        String localRole = userData.getRole();
                         username.setText(username1);
 
-                        saveUserLocally(username1, localRole);
+                        saveUserLocally(username1);
                     }
                 }
 
@@ -383,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("APAR");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Test");
         dialog.show();
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -561,8 +576,11 @@ public class MainActivity extends AppCompatActivity {
         saveSortingStatus();
     }
 
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -675,7 +693,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     // Jika data tidak ditemukan, buka aktivitas tambah
-                    Intent intent = new Intent(MainActivity.this, TambahData.class);
+                    Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
                     intent.putExtra("KodeQR", contents);
                     startActivity(intent);
                 }
@@ -792,24 +810,12 @@ public class MainActivity extends AppCompatActivity {
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    private void saveUserLocally(String username, String role) {
+    private void saveUserLocally(String username) {
         SharedPreferences sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("username", username);
-        editor.putString("role", role);
         editor.apply();
-
-        // Menampilkan informasi yang disimpan di log
-        Log.d("SaveUserLocally", "Username: " + username);
-        Log.d("SaveUserLocally", "Role: " + role);
-
-        // Menampilkan informasi yang diambil dari SharedPreferences untuk verifikasi
-        String savedUsername = sharedPreferences.getString("username", "defaultUsername");
-        String savedRole = sharedPreferences.getString("role", "defaultRole");
-        Log.d("SaveUserLocally", "Saved Username: " + savedUsername);
-        Log.d("SaveUserLocally", "Saved Role: " + savedRole);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -821,43 +827,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mengunduh file.", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void downloadBulan() {
-        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjqyduOkrdTa4pGsRiIANgKxe7gl-URbGS53CKVx7By0ymNiV4G6wXaW51afwsRuZcIbKvssslQQzx/pub?output=xlsx";
-
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-        SimpleDateFormat sdfs = new SimpleDateFormat("MMM yyyy", Locale.US);
-        String currentDatess = sdfs.format(Calendar.getInstance().getTime());
-
-        request.setTitle("Hasil Pemeriksaan APAR bulan" + currentDatess);
-        request.setDescription("Mengunduh file spreadsheet...");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
-
-        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        downloadManager.enqueue(request);
-
-        Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
-    }
-
-    private void downloadHari() {
-        String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSAj7Fgh636q_XD5u2Xqwczper62Mg9a21r9Ox-y4GFHPKGHA2PDQF7ose5_BMBmQMpvf71h0iSStG5/pub?output=xlsx";
-
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-        SimpleDateFormat sdfs = new SimpleDateFormat("dd MMM yyyy", Locale.US);
-        String currentDates = sdfs.format(Calendar.getInstance().getTime());
-
-        request.setTitle("Hasil Pemeriksaan Harian" + currentDates);
-        request.setDescription("Mengunduh file spreadsheet...");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "spreadsheet.xlsx");
-
-        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        downloadManager.enqueue(request);
-
-        Toast.makeText(this, "Mengunduh file...", Toast.LENGTH_SHORT).show();
     }
 }

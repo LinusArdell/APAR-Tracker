@@ -45,13 +45,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.zxing.BarcodeFormat;
@@ -79,7 +74,6 @@ public class DetailActivity extends AppCompatActivity {
     private TextView merkAPAR, jenisAPAR, kondisiNozzle, posisiTabung;
     private TextView etLokasi, etBerat, etketerangan, tvTitleDetail, tvDate, tvSatuan;
     public boolean success = false;
-    private FirebaseAuth auth;
     AlertDialog.Builder dialogScan;
     LayoutInflater inflaterScan;
     View dialogViewScan;
@@ -151,14 +145,14 @@ public class DetailActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
                 builder.setTitle("Konfirmasi");
                 builder.setMessage("Apakah Anda yakin ingin menghapus item ini?");
-                builder.setPositiveButton("Hapus", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Eksekusi aksi penghapusan
                         performDeleteAction();
                     }
                 });
-                builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Tidak melakukan apa-apa jika tombol cancel ditekan
@@ -294,8 +288,6 @@ public class DetailActivity extends AppCompatActivity {
         detailPemeriksa = findViewById(R.id.detail_user);
         btnHistory = findViewById(R.id.btnHistory);
         tvSatuan = findViewById(R.id.detail_satuan);
-
-        auth = FirebaseAuth.getInstance();
     }
 
     private void fillDataFromIntent() {
@@ -306,24 +298,19 @@ public class DetailActivity extends AppCompatActivity {
 
             detailKodeQR.setText(bundle.getString("KodeQR"));
             detailTanggal.setText(bundle.getString("Tanggal"));
-
-            // Menampilkan data boolean sesuai ketentuan
-            isiTabung.setText(bundle.getBoolean("IsiTabung") ? "Baik" : "Beku");
-            tekananTabung.setText(bundle.getBoolean("Tekanan") ? "Cukup" : "Kurang");
-            kesesuaianBerat.setText(bundle.getBoolean("Kesesuaian") ? "Cukup" : "Kurang");
-            kondisiTabung.setText(bundle.getBoolean("KondisiTabung") ? "Baik" : "Berkarat");
-            kondisiSelang.setText(bundle.getBoolean("KondisiSelang") ? "Baik" : "Rusak");
-            kondisiPin.setText(bundle.getBoolean("KondisiPin") ? "Baik" : "Rusak");
-            kondisiNozzle.setText(bundle.getBoolean("Nozzle") ? "Baik" : "Tersumbat");
-            posisiTabung.setText(bundle.getBoolean("Posisi") ? "Baik" : "Terhalang");
-
+            isiTabung.setText(bundle.getString("IsiTabung"));
+            tekananTabung.setText(bundle.getString("Tekanan"));
+            kesesuaianBerat.setText(bundle.getString("Kesesuaian"));
+            kondisiTabung.setText(bundle.getString("KondisiTabung"));
+            kondisiSelang.setText(bundle.getString("KondisiSelang"));
+            kondisiPin.setText(bundle.getString("KondisiPin"));
             merkAPAR.setText(bundle.getString("Merk"));
             jenisAPAR.setText(bundle.getString("Jenis"));
             etLokasi.setText(bundle.getString("Lokasi"));
-
-            etBerat.setText(String.valueOf(bundle.getInt("Berat")));
-
+            etBerat.setText(bundle.getString("Berat"));
             etketerangan.setText(bundle.getString("Keterangan"));
+            kondisiNozzle.setText(bundle.getString("Nozzle"));
+            posisiTabung.setText(bundle.getString("Posisi"));
             tvSatuan.setText(bundle.getString("Satuan"));
             key = bundle.getString("Key");
             imageUrl = bundle.getString("Image");
@@ -332,48 +319,29 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-
     private void performDeleteAction() {
-        FirebaseUser user = auth.getCurrentUser();
-
-        String userId = user.getUid();
-
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("APAR");
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Pengguna").child(userId);
+//        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Draft");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Test");
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
 
         Log.d("DetailActivity", "Key: " + key);
         Log.d("DetailActivity", "Reference: " + reference.toString());
+        Log.d("DetailActivity", "ImageUrl: " + imageUrl);
 
-        userReference.child("role").addListenerForSingleValueEvent(new ValueEventListener() {
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String role = dataSnapshot.getValue(String.class);
-                    reference.child(key).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(DetailActivity.this, "Berhasil Dihapus", Toast.LENGTH_SHORT).show();
-                            if ("Admin".equalsIgnoreCase(role)) {
-                                startActivity(new Intent(getApplicationContext(), AdminActivity.class));
-                            } else {
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            }
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(DetailActivity.this, "Error! : Gagal menghapus data!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(DetailActivity.this, "Error! : Peran pengguna tidak ditemukan!", Toast.LENGTH_SHORT).show();
-                }
+            public void onSuccess(Void unused) {
+                reference.child(key).removeValue();
+                Toast.makeText(DetailActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
             }
 
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DetailActivity.this, "Error! : Gagal memuat peran pengguna!", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(DetailActivity.this, "Error! : Update data terlebih dahulu dan perbaharui gambar!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -408,7 +376,7 @@ public class DetailActivity extends AppCompatActivity {
                     btnYa.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startUpdateActivity();
+                            startUpdateOfflineActivity();
                             dialog.dismiss();
                         }
                     });
@@ -419,6 +387,30 @@ public class DetailActivity extends AppCompatActivity {
 
     private void startUpdateActivity() {
         Intent intent = new Intent(DetailActivity.this, UpdateActivity.class)
+                .putExtra("KodeQR", detailKodeQR.getText().toString())
+                .putExtra("Tanggal", detailTanggal.getText().toString())
+                .putExtra("Lokasi", etLokasi.getText().toString())
+                .putExtra("Merk", merkAPAR.getText().toString())
+                .putExtra("Berat", etBerat.getText().toString())
+                .putExtra("Jenis", jenisAPAR.getText().toString())
+                .putExtra("IsiTabung", isiTabung.getText().toString())
+                .putExtra("Tekanan", tekananTabung.getText().toString())
+                .putExtra("Kesesuaian", kesesuaianBerat.getText().toString())
+                .putExtra("KondisiTabung", kondisiTabung.getText().toString())
+                .putExtra("KondisiSelang", kondisiSelang.getText().toString())
+                .putExtra("KondisiPin", kondisiPin.getText().toString())
+                .putExtra("Keterangan", etketerangan.getText().toString())
+                .putExtra("Nozzle", kondisiNozzle.getText().toString())
+                .putExtra("Posisi", posisiTabung.getText().toString())
+                .putExtra("Image", imageUrl)
+                .putExtra("Satuan", tvSatuan.getText().toString())
+                .putExtra("Key", key);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
+    }
+
+    private void startUpdateOfflineActivity() {
+        Intent intent = new Intent(DetailActivity.this, UpdateOffline.class)
                 .putExtra("KodeQR", detailKodeQR.getText().toString())
                 .putExtra("Tanggal", detailTanggal.getText().toString())
                 .putExtra("Lokasi", etLokasi.getText().toString())
