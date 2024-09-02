@@ -271,8 +271,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         StorageReference historyStorage = FirebaseStorage.getInstance().getReference().child("History Images").child(uri.getLastPathSegment());
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
-                .child(uri.getLastPathSegment());
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
+//                .child(uri.getLastPathSegment());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentTambahActivity.this);
         builder.setCancelable(false);
@@ -292,23 +292,23 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             }
         });
 
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isComplete());
-                Uri urlImage = uriTask.getResult();
-                imageURL = urlImage.toString();
-                uploadData();
-                dialog.dismiss();
-                Log.d("URI_Log", "URI: " + uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                dialog.dismiss();
-            }
-        });
+//        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+//                while (!uriTask.isComplete());
+//                Uri urlImage = uriTask.getResult();
+//                imageURL = urlImage.toString();
+//                uploadData();
+//                dialog.dismiss();
+//                Log.d("URI_Log", "URI: " + uri.toString());
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                dialog.dismiss();
+//            }
+//        });
     }
 
     private void uploadData() {
@@ -388,7 +388,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString,selangString, pinString, keterangan, imageURL, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+                                    kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
 
                             DataClass historyData = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
                                     kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);

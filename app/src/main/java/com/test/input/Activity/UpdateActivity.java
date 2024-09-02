@@ -371,6 +371,14 @@ public class UpdateActivity extends AppCompatActivity {
                 kesesuaianString = "N/A";
             }
 
+            if (JenisAPArs.equals("Carbondioxide")){
+                isiString = "N/A";
+            } else if (JenisAPArs.equals("Halotron")) {
+                isiString = "N/A";
+            } else {
+                isiString = isiTabungs ? "Baik" : "Beku";
+            }
+
             saveDataToSharedPreferences(kodeQR, lokasiTabung, MerkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
                     kondisiString, selangString, pinString, keterangan, uri, currentDate, username, nozzleString, posisiString, SatuanBerat);
 
@@ -422,7 +430,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
 
-        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
+//        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
@@ -441,22 +449,22 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isComplete());
-                Uri urlImage = uriTask.getResult();
-                imageUrl = urlImage.toString();
-                updateData();
-                dialog.dismiss();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                dialog.dismiss();
-            }
-        });
+//        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+//                while (!uriTask.isComplete());
+//                Uri urlImage = uriTask.getResult();
+//                imageUrl = urlImage.toString();
+//                updateData();
+//                dialog.dismiss();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                dialog.dismiss();
+//            }
+//        });
     }
 
     public void updateData(){
@@ -539,7 +547,7 @@ public class UpdateActivity extends AppCompatActivity {
                             }
 
                             DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
-                                    kondisiString, selangString, pinString, keterangan, imageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
+                                    kondisiString, selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
 
                             DataClass historyData = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
                                     kondisiString,selangString, pinString, keterangan, historyImageUrl, currentDate, finalUser[0], nozzleString, posisiString, SatuanBerat);
@@ -555,10 +563,10 @@ public class UpdateActivity extends AppCompatActivity {
                                         String childKey = currentDate + kodeQr;
                                         FirebaseDatabase.getInstance().getReference("History").child(kodeQr).child(childKey).setValue(historyData);
 
-                                        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
-                                        reference.delete();
+//                                        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
+//                                        reference.delete();
                                         Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                                        // Panggil intent untuk memulai MainActivity di sini setelah data berhasil disimpan
+
                                         Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();

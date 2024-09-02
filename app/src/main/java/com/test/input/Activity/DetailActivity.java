@@ -96,12 +96,8 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_detail);
-
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -350,7 +346,6 @@ public class DetailActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startUpdateActivity();
                 if (isNetworkStatusAvialable(getApplicationContext())){
                     startUpdateActivity();
                 }
@@ -376,7 +371,7 @@ public class DetailActivity extends AppCompatActivity {
                     btnYa.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startUpdateOfflineActivity();
+                            startUpdateActivity();
                             dialog.dismiss();
                         }
                     });
@@ -387,30 +382,6 @@ public class DetailActivity extends AppCompatActivity {
 
     private void startUpdateActivity() {
         Intent intent = new Intent(DetailActivity.this, UpdateActivity.class)
-                .putExtra("KodeQR", detailKodeQR.getText().toString())
-                .putExtra("Tanggal", detailTanggal.getText().toString())
-                .putExtra("Lokasi", etLokasi.getText().toString())
-                .putExtra("Merk", merkAPAR.getText().toString())
-                .putExtra("Berat", etBerat.getText().toString())
-                .putExtra("Jenis", jenisAPAR.getText().toString())
-                .putExtra("IsiTabung", isiTabung.getText().toString())
-                .putExtra("Tekanan", tekananTabung.getText().toString())
-                .putExtra("Kesesuaian", kesesuaianBerat.getText().toString())
-                .putExtra("KondisiTabung", kondisiTabung.getText().toString())
-                .putExtra("KondisiSelang", kondisiSelang.getText().toString())
-                .putExtra("KondisiPin", kondisiPin.getText().toString())
-                .putExtra("Keterangan", etketerangan.getText().toString())
-                .putExtra("Nozzle", kondisiNozzle.getText().toString())
-                .putExtra("Posisi", posisiTabung.getText().toString())
-                .putExtra("Image", imageUrl)
-                .putExtra("Satuan", tvSatuan.getText().toString())
-                .putExtra("Key", key);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(intent);
-    }
-
-    private void startUpdateOfflineActivity() {
-        Intent intent = new Intent(DetailActivity.this, UpdateOffline.class)
                 .putExtra("KodeQR", detailKodeQR.getText().toString())
                 .putExtra("Tanggal", detailTanggal.getText().toString())
                 .putExtra("Lokasi", etLokasi.getText().toString())

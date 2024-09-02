@@ -217,13 +217,13 @@
                             android:layout_marginRight="10dp">
 
                             <TextView
+                                android:id="@+id/tv_berat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/main_color"
-                                android:textStyle="bold"
-                                android:textSize="16dp"
                                 android:text="Berat APAR"
-                                android:id="@+id/tv_berat"/>
+                                android:textColor="@color/main_color"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"

@@ -325,8 +325,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isNetworkStatusAvialable(getApplicationContext())){
                     Intent intent = new Intent(MainActivity.this, EquipmentTambahActivity.class);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     dialog = new Dialog(MainActivity.this);
                     dialog.setContentView(R.layout.dialog_no_internet_upload);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -348,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                     btnYa.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent i = new Intent(MainActivity.this, TambahOffline.class);
+                            Intent i = new Intent(MainActivity.this, EquipmentTambahActivity.class);
                             startActivity(i);
                             dialog.dismiss();
                         }
