@@ -16,3 +16,4 @@ local.properties
 app/build.gradle
 app/build.gradle
 app/google-services.json
+.idea/deploymentTargetDropDown.xml

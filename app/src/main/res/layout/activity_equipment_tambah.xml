@@ -299,19 +299,42 @@
                             android:layout_margin="10dp"
                             android:orientation="horizontal">
 
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_1"
+                                android:enabled="true"/>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
                                 android:text="Badan Tabung tidak berkarat"
+                                android:layout_gravity="center_vertical"
                                 android:id="@+id/tv_parameter1"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
                                 android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_kondisi"/>
+                                android:id="@+id/upload_kondisi"
+                                android:layout_gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_1"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
 
                         </LinearLayout>
 
@@ -320,6 +343,16 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:orientation="horizontal">
+
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_2"
+                                android:enabled="true"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -327,13 +360,26 @@
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
                                 android:text="Posisi tabung tidak terhalangi barang"
-                                android:id="@+id/tv_parameter2"/>
+                                android:id="@+id/tv_parameter2"
+                                android:layout_gravity="center_vertical"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
                                 android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_posisi"/>
+                                android:id="@+id/upload_posisi"
+                                android:layout_gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_2"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
 
                         </LinearLayout>
 
@@ -343,18 +389,41 @@
                             android:layout_margin="10dp"
                             android:orientation="horizontal">
 
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_3"
+                                android:enabled="true"/>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
-                                android:text="Kondisi selang baik, tidak retak, tidak bocor" />
+                                android:text="Kondisi selang baik, tidak retak, tidak bocor"
+                                android:layout_gravity="center_vertical"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
                                 android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_selang"/>
+                                android:id="@+id/upload_selang"
+                                android:layout_gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_3"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -363,19 +432,84 @@
                             android:layout_margin="10dp"
                             android:orientation="horizontal">
 
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_4"
+                                android:enabled="true"/>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
-                                android:text="Segel pin terpasang baik"/>
+                                android:text="Segel pin terpasang baik"
+                                android:layout_gravity="center_vertical"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
                                 android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_pin"/>
+                                android:id="@+id/upload_pin"
+                                android:layout_gravity="center_vertical"/>
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_4"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_5"
+                                android:enabled="true"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:textColor="@color/main_color"
+                                android:text="Mulut nozzle tidak tersumbat"
+                                android:layout_gravity="center_vertical"/>
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:id="@+id/upload_nozzle"
+                                android:layout_gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_5"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
 
                         </LinearLayout>
 
@@ -385,18 +519,41 @@
                             android:layout_margin="10dp"
                             android:orientation="horizontal">
 
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_6"
+                                android:enabled="true"/>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
-                                android:text="Mulut nozzle tidak tersumbat"/>
+                                android:text="Jarum indikator menunjukkan tekanan cukup"
+                                android:layout_gravity="center_vertical"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
                                 android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_nozzle"/>
+                                android:id="@+id/upload_tekanan"
+                                android:layout_gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_6"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
 
                         </LinearLayout>
 
@@ -406,18 +563,41 @@
                             android:layout_margin="10dp"
                             android:orientation="horizontal">
 
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_7"
+                                android:enabled="true"/>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
-                                android:text="Jarum indikator menunjukkan tekanan cukup"/>
+                                android:text="Powder tidak mengendap"
+                                android:layout_gravity="center_vertical"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
                                 android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_tekanan"/>
+                                android:id="@+id/upload_isi"
+                                android:layout_gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_7"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
 
                         </LinearLayout>
 
@@ -427,39 +607,41 @@
                             android:layout_margin="10dp"
                             android:orientation="horizontal">
 
-                            <TextView
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="13dp"
-                                android:textColor="@color/main_color"
-                                android:text="Powder tidak mengendap"/>
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="match_parent"
-                                android:layout_height="13dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_isi"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:orientation="horizontal">
+                                app:fabSize="mini"
+                                android:backgroundTint="@color/white"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/baseline_remove_24"
+                                android:id="@+id/fab_8"
+                                android:enabled="true"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
                                 android:textColor="@color/main_color"
-                                android:text="Selisih berat tabung &lt; 10%"/>
+                                android:text="Selisih berat tabung &lt; 10%"
+                                android:layout_gravity="center_vertical"/>
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="match_parent"
                                 android:layout_height="13dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:id="@+id/upload_kesesuaian"/>
+                                android:id="@+id/upload_kesesuaian"
+                                android:layout_gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="13dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_gravity="center_vertical"
+                                android:visibility="gone"
+                                android:text="N/A"
+                                android:id="@+id/tv_na_8"
+                                android:textAlignment="textEnd"
+                                android:layout_marginRight="7dp"/>
 
                         </LinearLayout>
 

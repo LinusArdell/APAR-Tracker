@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -39,6 +40,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -47,6 +49,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -97,6 +100,8 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
     private static final int REQUEST_TAKE_PHOTO = 1;
     private String currentPhotoPath;
+    private FloatingActionButton fab1, fab2, fab3, fab4, fab5, fab6, fab7, fab8;
+    private TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -113,6 +118,7 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         initializeUI();
+        fabOnClick();
 
         List<String> mList = Arrays.asList("Appron",
                 "Yamato",
@@ -142,6 +148,49 @@ public class EquipmentTambahActivity extends AppCompatActivity {
         ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
         aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
         jenisAPAR.setAdapter(aArrayAdapter);
+
+        jenisAPAR.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedItem = parentView.getItemAtPosition(position).toString();
+
+                // Jika pengguna memilih "Halotron", switch isiTabung dinonaktifkan
+                if (selectedItem.equals("Halotron") || (selectedItem.equals("Carbondioxide"))) {
+                    isiTabung.setEnabled(false);
+                    isiTabung.setVisibility(View.GONE);
+                    tv7.setVisibility(View.VISIBLE);
+                    fab7.setEnabled(false);
+                    fab7.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+
+                } else {
+                    // Jika item lain dipilih, kembalikan switch isiTabung ke kondisi semula
+                    isiTabung.setEnabled(true);
+                    isiTabung.setVisibility(View.VISIBLE);
+                    tv7.setVisibility(View.GONE);
+                    fab7.setEnabled(true);
+                    fab7.setImageResource(R.drawable.baseline_remove_24);
+                }
+
+                if (selectedItem.equals("Carbondioxide")) {
+                    kesesuaianBerat.setEnabled(true);
+                    kesesuaianBerat.setVisibility(View.VISIBLE);
+                    tv8.setVisibility(View.GONE);
+                    fab8.setImageResource(R.drawable.baseline_remove_24);
+                    fab8.setEnabled(true);
+                } else {
+                    kesesuaianBerat.setEnabled(false);
+                    kesesuaianBerat.setVisibility(View.GONE);
+                    tv8.setVisibility(View.VISIBLE);
+                    fab8.setEnabled(false);
+                    fab8.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Tidak melakukan apapun jika tidak ada yang dipilih
+            }
+        });
 
         List<String> bList = Arrays.asList("Kilogram", "Liter");
         ArrayAdapter<String> bArrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_list_satuan, bList);
@@ -239,6 +288,24 @@ public class EquipmentTambahActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        fab1 = findViewById(R.id.fab_1);
+        fab2 = findViewById(R.id.fab_2);
+        fab3 = findViewById(R.id.fab_3);
+        fab4 = findViewById(R.id.fab_4);
+        fab5 = findViewById(R.id.fab_5);
+        fab6 = findViewById(R.id.fab_6);
+        fab7 = findViewById(R.id.fab_7);
+        fab8 = findViewById(R.id.fab_8);
+
+        tv1 = findViewById(R.id.tv_na_1);
+        tv2 = findViewById(R.id.tv_na_2);
+        tv3 = findViewById(R.id.tv_na_3);
+        tv4 = findViewById(R.id.tv_na_4);
+        tv5 = findViewById(R.id.tv_na_5);
+        tv6 = findViewById(R.id.tv_na_6);
+        tv7 = findViewById(R.id.tv_na_7);
+        tv8 = findViewById(R.id.tv_na_8);
+
         etResult = findViewById(R.id.upload_qr);
         uploadGambar = findViewById(R.id.upload_image);
         btnUpload = findViewById(R.id.btn_upload);
@@ -291,24 +358,6 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
-//        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-//                while (!uriTask.isComplete());
-//                Uri urlImage = uriTask.getResult();
-//                imageURL = urlImage.toString();
-//                uploadData();
-//                dialog.dismiss();
-//                Log.d("URI_Log", "URI: " + uri.toString());
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                dialog.dismiss();
-//            }
-//        });
     }
 
     private void uploadData() {
@@ -373,18 +422,52 @@ public class EquipmentTambahActivity extends AppCompatActivity {
                             String nozzleString = nozzle ? "Baik" : "Tersumbat";
                             String posisiString = posisi ? "Baik" : "Terhalang";
 
-                            if (JenisAPAR.equals("Carbondioxide")){
-                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            if (tv1.getVisibility() == View.VISIBLE){
+                                kondisiString = "N/A";
                             } else {
-                                kesesuaianString = "N/A";
+                                kondisiString = kondisi ? "Baik" : "Berkarat";
                             }
 
-                            if (JenisAPAR.equals("Carbondioxide")){
-                                isiString = "N/A";
-                            } else if (JenisAPAR.equals("Halotron")) {
+                            if (tv2.getVisibility() == View.VISIBLE){
+                                posisiString = "N/A";
+                            } else {
+                                posisiString = posisi ? "Baik" : "Terhalang";
+                            }
+
+                            if (tv3.getVisibility() == View.VISIBLE){
+                                selangString = "N/A";
+                            } else {
+                                selangString = selang ? "Baik" : "Rusak";
+                            }
+
+                            if (tv4.getVisibility() == View.VISIBLE){
+                                pinString = "N/A";
+                            } else {
+                                pinString = pin ? "Baik" : "Rusak";
+                            }
+
+                            if (tv5.getVisibility() == View.VISIBLE){
+                                nozzleString = "N/A";
+                            } else {
+                                nozzleString = nozzle ? "Baik" : "Tersumbat";
+                            }
+
+                            if (tv6.getVisibility() == View.VISIBLE){
+                                tekananString = "N/A";
+                            } else {
+                                tekananString = tekanan ? "Cukup" : "Kurang";
+                            }
+
+                            if (tv7.getVisibility() == View.VISIBLE){
                                 isiString = "N/A";
                             } else {
                                 isiString = isitabung ? "Baik" : "Beku";
+                            }
+
+                            if (tv8.getVisibility() == View.VISIBLE){
+                                kesesuaianString = "N/A";
+                            } else {
+                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
                             }
 
                             DataClass dataClass = new DataClass(kodeQR, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
@@ -465,18 +548,52 @@ public class EquipmentTambahActivity extends AppCompatActivity {
             String nozzleString = nozzles ? "Baik" : "Tersumbat";
             String posisiString = posisi ? "Baik" : "Terhalang";
 
-            if (jenisAPAr.equals("Carbondioxide")) {
-                kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
+            if (tv1.getVisibility() == View.VISIBLE){
+                kondisiString = "N/A";
             } else {
-                kesesuaianString = "N/A";
+                kondisiString = skondisiTabung ? "Baik" : "Berkarat";
             }
 
-            if (jenisAPAr.equals("Carbondioxide")){
-                isiString = "N/A";
-            } else if (jenisAPAr.equals("Halotron")) {
+            if (tv2.getVisibility() == View.VISIBLE){
+                posisiString = "N/A";
+            } else {
+                posisiString = posisi ? "Baik" : "Terhalang";
+            }
+
+            if (tv3.getVisibility() == View.VISIBLE){
+                selangString = "N/A";
+            } else {
+                selangString = skondisiSelang ? "Baik" : "Rusak";
+            }
+
+            if (tv4.getVisibility() == View.VISIBLE){
+                pinString = "N/A";
+            } else {
+                pinString = kondisiPins ? "Baik" : "Rusak";
+            }
+
+            if (tv5.getVisibility() == View.VISIBLE){
+                nozzleString = "N/A";
+            } else {
+                nozzleString = nozzles ? "Baik" : "Tersumbat";
+            }
+
+            if (tv6.getVisibility() == View.VISIBLE){
+                tekananString = "N/A";
+            } else {
+                tekananString = Tekanan ? "Cukup" : "Kurang";
+            }
+
+            if (tv7.getVisibility() == View.VISIBLE){
                 isiString = "N/A";
             } else {
                 isiString = isiTabungs ? "Baik" : "Beku";
+            }
+
+            if (tv8.getVisibility() == View.VISIBLE){
+                kesesuaianString = "N/A";
+            } else {
+                kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
             }
 
             saveDataToSharedPreferences(kodeQR, lokasiTabung, merkAPAr, beratTabung, jenisAPAr, isiString, tekananString, kesesuaianString,
@@ -741,5 +858,143 @@ public class EquipmentTambahActivity extends AppCompatActivity {
 
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    private void fabOnClick(){
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiTabung.isEnabled()){
+                    kondisiTabung.setEnabled(false);
+                    kondisiTabung.setVisibility(View.GONE);
+                    tv1.setVisibility(View.VISIBLE);
+                    fab1.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiTabung.setEnabled(true);
+                    kondisiTabung.setVisibility(View.VISIBLE);
+                    tv1.setVisibility(View.GONE);
+                    fab1.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (posisiTabung.isEnabled()){
+                    posisiTabung.setEnabled(false);
+                    posisiTabung.setVisibility(View.GONE);
+                    tv2.setVisibility(View.VISIBLE);
+                    fab2.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    posisiTabung.setEnabled(true);
+                    posisiTabung.setVisibility(View.VISIBLE);
+                    tv2.setVisibility(View.GONE);
+                    fab2.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiSelang.isEnabled()){
+                    kondisiSelang.setEnabled(false);
+                    kondisiSelang.setVisibility(View.GONE);
+                    tv3.setVisibility(View.VISIBLE);
+                    fab3.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiSelang.setEnabled(true);
+                    kondisiSelang.setVisibility(View.VISIBLE);
+                    tv3.setVisibility(View.GONE);
+                    fab3.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiPin.isEnabled()){
+                    kondisiPin.setEnabled(false);
+                    kondisiPin.setVisibility(View.GONE);
+                    tv4.setVisibility(View.VISIBLE);
+                    fab4.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiPin.setEnabled(true);
+                    kondisiPin.setVisibility(View.VISIBLE);
+                    tv4.setVisibility(View.GONE);
+                    fab4.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiNozzle.isEnabled()){
+                    kondisiNozzle.setEnabled(false);
+                    kondisiNozzle.setVisibility(View.GONE);
+                    tv5.setVisibility(View.VISIBLE);
+                    fab5.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiNozzle.setEnabled(true);
+                    kondisiNozzle.setVisibility(View.VISIBLE);
+                    tv5.setVisibility(View.GONE);
+                    fab5.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tekananTabung.isEnabled()){
+                    tekananTabung.setEnabled(false);
+                    tekananTabung.setVisibility(View.GONE);
+                    tv6.setVisibility(View.VISIBLE);
+                    fab6.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    tekananTabung.setEnabled(true);
+                    tekananTabung.setVisibility(View.VISIBLE);
+                    tv6.setVisibility(View.GONE);
+                    fab6.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isiTabung.isEnabled()){
+                    isiTabung.setEnabled(false);
+                    isiTabung.setVisibility(View.GONE);
+                    tv7.setVisibility(View.VISIBLE);
+                    fab7.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    isiTabung.setEnabled(true);
+                    isiTabung.setVisibility(View.VISIBLE);
+                    tv7.setVisibility(View.GONE);
+                    fab7.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kesesuaianBerat.isEnabled()){
+                    kesesuaianBerat.setEnabled(false);
+                    kesesuaianBerat.setVisibility(View.GONE);
+                    tv8.setVisibility(View.VISIBLE);
+                    fab8.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kesesuaianBerat.setEnabled(true);
+                    kesesuaianBerat.setVisibility(View.VISIBLE);
+                    tv8.setVisibility(View.GONE);
+                    fab8.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
     }
 }

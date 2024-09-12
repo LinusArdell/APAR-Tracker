@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -87,10 +89,12 @@ public class UpdateActivity extends AppCompatActivity {
 
     private static final int REQUEST_TAKE_PHOTO = 1;
     private String currentPhotoPath;
+    private FloatingActionButton fab1, fab2, fab3, fab4, fab5, fab6, fab7, fab8;
+    private TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8;
 
     private Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
         return Uri.parse(path);
     }
@@ -106,29 +110,8 @@ public class UpdateActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        merkAPAR = findViewById(R.id.update_merk);
-        jenisAPAR = findViewById(R.id.update_jenis);
-        etLokasi = findViewById(R.id.update_lokasi);
-        etBerat = findViewById(R.id.update_berat);
-        etketerangan = findViewById(R.id.update_keterangan);
-        isiTabung = findViewById(R.id.update_isi);
-        tekananTabung = findViewById(R.id.update_tekanan);
-        kesesuaianBerat = findViewById(R.id.update_kesesuaian);
-        kondisiTabung = findViewById(R.id.update_tabung);
-        kondisiSelang = findViewById(R.id.update_selang);
-        kondisiPin = findViewById(R.id.update_pin);
-        btnCapture = findViewById(R.id.btn_capture);
-        firebaseAuth = FirebaseAuth.getInstance();
-        updateButton = findViewById(R.id.btn_update);
-        updateImage = findViewById(R.id.update_image);
-        btnCancel = findViewById(R.id.btn_cancel);
-        btnSave = findViewById(R.id.btn_save);
-        satuanBerat = findViewById(R.id.upload_satuan);
-        kondisiNozzle = findViewById(R.id.update_nozzle);
-        posisiTabung = findViewById(R.id.update_posisi);
-
-        tvQR = findViewById(R.id.tv_qr_update);
-        tvID = findViewById(R.id.tv_title_id);
+        initializeComponents();
+        fabOnClick();
 
         List<String> mList = Arrays.asList("Appron",
                 "Yamato",
@@ -158,6 +141,49 @@ public class UpdateActivity extends AppCompatActivity {
         ArrayAdapter<String> aArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_list_jenis, aList);
         aArrayAdapter.setDropDownViewResource(R.layout.spinner_list_jenis);
         jenisAPAR.setAdapter(aArrayAdapter);
+
+        jenisAPAR.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedItem = parentView.getItemAtPosition(position).toString();
+
+                // Jika pengguna memilih "Halotron", switch isiTabung dinonaktifkan
+                if (selectedItem.equals("Halotron") || (selectedItem.equals("Carbondioxide"))) {
+                    isiTabung.setEnabled(false);
+                    isiTabung.setVisibility(View.GONE);
+                    tv7.setVisibility(View.VISIBLE);
+                    fab7.setEnabled(false);
+                    fab7.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+
+                } else {
+                    // Jika item lain dipilih, kembalikan switch isiTabung ke kondisi semula
+                    isiTabung.setEnabled(true);
+                    isiTabung.setVisibility(View.VISIBLE);
+                    tv7.setVisibility(View.GONE);
+                    fab7.setEnabled(true);
+                    fab7.setImageResource(R.drawable.baseline_remove_24);
+                }
+
+                if (selectedItem.equals("Carbondioxide")) {
+                    kesesuaianBerat.setEnabled(true);
+                    kesesuaianBerat.setVisibility(View.VISIBLE);
+                    tv8.setVisibility(View.GONE);
+                    fab8.setImageResource(R.drawable.baseline_remove_24);
+                    fab8.setEnabled(true);
+                } else {
+                    kesesuaianBerat.setEnabled(false);
+                    kesesuaianBerat.setVisibility(View.GONE);
+                    tv8.setVisibility(View.VISIBLE);
+                    fab8.setEnabled(false);
+                    fab8.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Tidak melakukan apapun jika tidak ada yang dipilih
+            }
+        });
 
         List<String> bList = Arrays.asList("Kilogram", "Liter");
         ArrayAdapter<String> bArrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_list_satuan, bList);
@@ -259,31 +285,123 @@ public class UpdateActivity extends AppCompatActivity {
             String nozzleString = bundle.getString("Nozzle");
             String posisiString = bundle.getString("Posisi");
 
-            boolean isiTabungBoolean = isiTabungString.equals("Baik");
-            boolean tekananBoolean = tekananString.equals("Cukup");
-            boolean kesesuaianBoolean = kesesuaianString.equals("Cukup");
-            boolean kondisiBoolean = kondisiString.equals("Baik");
-            boolean selangBoolean = selangString.equals("Baik");
-            boolean pinBoolean = pinString.equals("Baik");
-
-            boolean nozzleBoolean = nozzleString.equals("Baik");
-            boolean posisiBoolean = posisiString.equals("Baik");
-
-            isiTabung.setChecked(isiTabungBoolean);
-            tekananTabung.setChecked(tekananBoolean);
-            kesesuaianBerat.setChecked(kesesuaianBoolean);
-            kondisiTabung.setChecked(kondisiBoolean);
-            kondisiSelang.setChecked(selangBoolean);
-            kondisiPin.setChecked(pinBoolean);
-
-            kondisiNozzle.setChecked(nozzleBoolean);
-            posisiTabung.setChecked(posisiBoolean);
             key = bundle.getString("KodeQR");
 
-//            key = bundle.getString("Key");
             oldImageURL = bundle.getString("Image");
 
             tvID.setText("Update " + bundle.getString("KodeQR"));
+
+            if ("N/A".equals(kondisiString)) {
+                kondisiTabung.setEnabled(false);
+                kondisiTabung.setVisibility(View.GONE);
+                tv1.setVisibility(View.VISIBLE);
+                fab1.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean kondisiBoolean = kondisiString.equals("Baik");
+                kondisiTabung.setChecked(kondisiBoolean);
+                kondisiTabung.setEnabled(true);
+                kondisiTabung.setVisibility(View.VISIBLE);
+                tv1.setVisibility(View.GONE);
+                fab1.setImageResource(R.drawable.baseline_remove_24);
+            }
+
+            if ("N/A".equals(posisiString)) {
+                posisiTabung.setEnabled(false);
+                posisiTabung.setVisibility(View.GONE);
+                tv2.setVisibility(View.VISIBLE);
+                fab2.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean posisiBoolean = posisiString.equals("Baik");
+                posisiTabung.setChecked(posisiBoolean);
+                posisiTabung.setEnabled(true);
+                posisiTabung.setVisibility(View.VISIBLE);
+                tv2.setVisibility(View.GONE);
+                fab2.setImageResource(R.drawable.baseline_remove_24);
+            }
+
+            if ("N/A".equals(selangString)) {
+                kondisiSelang.setEnabled(false);
+                kondisiSelang.setVisibility(View.GONE);
+                tv3.setVisibility(View.VISIBLE);
+                fab3.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean selangBoolean = selangString.equals("Baik");
+                kondisiSelang.setChecked(selangBoolean);
+                kondisiSelang.setEnabled(true);
+                kondisiSelang.setVisibility(View.VISIBLE);
+                tv3.setVisibility(View.GONE);
+                fab3.setImageResource(R.drawable.baseline_remove_24);
+            }
+
+            if ("N/A".equals(pinString)) {
+                kondisiPin.setEnabled(false);
+                kondisiPin.setVisibility(View.GONE);
+                tv4.setVisibility(View.VISIBLE);
+                fab4.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean pinBoolean = pinString.equals("Baik");
+                kondisiPin.setChecked(pinBoolean);
+                kondisiPin.setEnabled(true);
+                kondisiPin.setVisibility(View.VISIBLE);
+                tv4.setVisibility(View.GONE);
+                fab4.setImageResource(R.drawable.baseline_remove_24);
+            }
+
+            if ("N/A".equals(nozzleString)) {
+                kondisiNozzle.setEnabled(false);
+                kondisiNozzle.setVisibility(View.GONE);
+                tv5.setVisibility(View.VISIBLE);
+                fab5.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean nozzleBoolean = nozzleString.equals("Baik");
+                kondisiNozzle.setChecked(nozzleBoolean);
+                kondisiNozzle.setEnabled(true);
+                kondisiNozzle.setVisibility(View.VISIBLE);
+                tv5.setVisibility(View.GONE);
+                fab5.setImageResource(R.drawable.baseline_remove_24);
+            }
+
+            if ("N/A".equals(tekananString)) {
+                tekananTabung.setEnabled(false);
+                tekananTabung.setVisibility(View.GONE);
+                tv6.setVisibility(View.VISIBLE);
+                fab6.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean tekananBoolean = tekananString.equals("Cukup");
+                tekananTabung.setChecked(tekananBoolean);
+                tekananTabung.setEnabled(true);
+                tekananTabung.setVisibility(View.VISIBLE);
+                tv6.setVisibility(View.GONE);
+                fab6.setImageResource(R.drawable.baseline_remove_24);
+            }
+
+            if ("N/A".equals(isiTabungString)) {
+                isiTabung.setEnabled(false);
+                isiTabung.setVisibility(View.GONE);
+                tv7.setVisibility(View.VISIBLE);
+                fab7.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean isiTabungBoolean = "Baik".equals(isiTabungString);
+                isiTabung.setChecked(isiTabungBoolean);
+                isiTabung.setEnabled(true);
+                isiTabung.setVisibility(View.VISIBLE);
+                tv7.setVisibility(View.GONE);
+                fab7.setImageResource(R.drawable.baseline_remove_24);
+            }
+
+            if ("N/A".equals(kesesuaianString)) {
+                kesesuaianBerat.setEnabled(false);
+                kesesuaianBerat.setVisibility(View.GONE);
+                tv8.setVisibility(View.VISIBLE);
+                fab8.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+            } else {
+                boolean kesesuaianBoolean = kesesuaianString.equals("Cukup");
+                kesesuaianBerat.setChecked(kesesuaianBoolean);
+                kesesuaianBerat.setEnabled(true);
+                kesesuaianBerat.setVisibility(View.VISIBLE);
+                tv8.setVisibility(View.GONE);
+                fab8.setImageResource(R.drawable.baseline_remove_24);
+            }
         }
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Test").child(key);
@@ -319,7 +437,6 @@ public class UpdateActivity extends AppCompatActivity {
                 new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         Toast.makeText(UpdateActivity.this, "Access Granted", Toast.LENGTH_SHORT).show();
-//                        dispatchTakePictureIntent(takePictureLauncher);
                     } else {
                         Toast.makeText(UpdateActivity.this, "Camera permission required", Toast.LENGTH_SHORT).show();
                     }
@@ -355,7 +472,6 @@ public class UpdateActivity extends AppCompatActivity {
         String username = getUsernameLocally();
 
         if (username != null && uri != null) {
-            // Lanjutkan menyimpan data ke SharedPreferences dengan nama pengguna yang diperoleh
             String isiString = isiTabungs ? "Baik" : "Beku";
             String tekananString = Tekanan ? "Cukup" : "Kurang";
             String kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
@@ -365,18 +481,52 @@ public class UpdateActivity extends AppCompatActivity {
             String nozzleString = nozzles ? "Baik" : "Tersumbat";
             String posisiString = posisi ? "Baik" : "Terhalang";
 
-            if (JenisAPArs.equals("Carbondioxide")){
-                kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
+            if (tv1.getVisibility() == View.VISIBLE){
+                kondisiString = "N/A";
             } else {
-                kesesuaianString = "N/A";
+                kondisiString = skondisiTabung ? "Baik" : "Berkarat";
             }
 
-            if (JenisAPArs.equals("Carbondioxide")){
-                isiString = "N/A";
-            } else if (JenisAPArs.equals("Halotron")) {
+            if (tv2.getVisibility() == View.VISIBLE){
+                posisiString = "N/A";
+            } else {
+                posisiString = posisi ? "Baik" : "Terhalang";
+            }
+
+            if (tv3.getVisibility() == View.VISIBLE){
+                selangString = "N/A";
+            } else {
+                selangString = skondisiSelang ? "Baik" : "Rusak";
+            }
+
+            if (tv4.getVisibility() == View.VISIBLE){
+                pinString = "N/A";
+            } else {
+                pinString = kondisiPins ? "Baik" : "Rusak";
+            }
+
+            if (tv5.getVisibility() == View.VISIBLE){
+                nozzleString = "N/A";
+            } else {
+                nozzleString = nozzles ? "Baik" : "Tersumbat";
+            }
+
+            if (tv6.getVisibility() == View.VISIBLE){
+                tekananString = "N/A";
+            } else {
+                tekananString = Tekanan ? "Cukup" : "Kurang";
+            }
+
+            if (tv7.getVisibility() == View.VISIBLE){
                 isiString = "N/A";
             } else {
                 isiString = isiTabungs ? "Baik" : "Beku";
+            }
+
+            if (tv8.getVisibility() == View.VISIBLE){
+                kesesuaianString = "N/A";
+            } else {
+                kesesuaianString = skesesuaianBerat ? "Cukup" : "Kurang";
             }
 
             saveDataToSharedPreferences(kodeQR, lokasiTabung, MerkAPAR, beratTabung, JenisAPArs, isiString, tekananString, kesesuaianString,
@@ -430,7 +580,6 @@ public class UpdateActivity extends AppCompatActivity {
 
         historyStorageReference = FirebaseStorage.getInstance().getReference("History Images").child(fileName);
 
-//        storageReference = FirebaseStorage.getInstance().getReference().child("Android Images").child(String.valueOf(uri));
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
@@ -448,23 +597,6 @@ public class UpdateActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
-//        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-//                while (!uriTask.isComplete());
-//                Uri urlImage = uriTask.getResult();
-//                imageUrl = urlImage.toString();
-//                updateData();
-//                dialog.dismiss();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                dialog.dismiss();
-//            }
-//        });
     }
 
     public void updateData(){
@@ -489,24 +621,17 @@ public class UpdateActivity extends AppCompatActivity {
         Boolean posisi = posisiTabung.isChecked();
 
         final FirebaseUser users = firebaseAuth.getCurrentUser();
-        final String[] finalUser = {""}; // Inisialisasi finalUser
+        final String[] finalUser = {""};
 
         if (users != null) {
-            // Mengambil UID pengguna saat ini
             String userId = users.getUid();
-
-            // Mengambil referensi ke data pengguna di Realtime Database
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-
-            // Mendengarkan satu kali untuk mendapatkan data pengguna
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        // Mengambil data pengguna dari snapshot
                         UserClass userData = snapshot.getValue(UserClass.class);
                         if (userData != null) {
-                            // Mengambil nama pengguna dari data pengguna
                             finalUser[0] = userData.getUsername();
 
                             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH.mm.ss", Locale.US);
@@ -514,7 +639,7 @@ public class UpdateActivity extends AppCompatActivity {
 
                             if (kodeQr.isEmpty()) {
                                 Toast.makeText(UpdateActivity.this, "Kode QR tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                                return; // Menghentikan proses upload jika kodeQR kosong
+                                return;
                             }
 
                             if (uri == null) {
@@ -532,18 +657,52 @@ public class UpdateActivity extends AppCompatActivity {
                             String nozzleString = nozzle ? "Baik" : "Tersumbat";
                             String posisiString = posisi ? "Baik" : "Terhalang";
 
-                            if (JenisAPAR.equals("Carbondioxide")) {
-                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
+                            if (tv1.getVisibility() == View.VISIBLE){
+                                kondisiString = "N/A";
                             } else {
-                                kesesuaianString = "N/A";
+                                kondisiString = kondisi ? "Baik" : "Berkarat";
                             }
 
-                            if (JenisAPAR.equals("Carbondioxide")){
-                                isiString = "N/A";
-                            } else if (JenisAPAR.equals("Halotron")) {
+                            if (tv2.getVisibility() == View.VISIBLE){
+                                posisiString = "N/A";
+                            } else {
+                                posisiString = posisi ? "Baik" : "Terhalang";
+                            }
+
+                            if (tv3.getVisibility() == View.VISIBLE){
+                                selangString = "N/A";
+                            } else {
+                                selangString = selang ? "Baik" : "Rusak";
+                            }
+
+                            if (tv4.getVisibility() == View.VISIBLE){
+                                pinString = "N/A";
+                            } else {
+                                pinString = pin ? "Baik" : "Rusak";
+                            }
+
+                            if (tv5.getVisibility() == View.VISIBLE){
+                                nozzleString = "N/A";
+                            } else {
+                                nozzleString = nozzle ? "Baik" : "Tersumbat";
+                            }
+
+                            if (tv6.getVisibility() == View.VISIBLE){
+                                tekananString = "N/A";
+                            } else {
+                                tekananString = tekanan ? "Cukup" : "Kurang";
+                            }
+
+                            if (tv7.getVisibility() == View.VISIBLE){
                                 isiString = "N/A";
                             } else {
                                 isiString = isitabung ? "Baik" : "Beku";
+                            }
+
+                            if (tv8.getVisibility() == View.VISIBLE){
+                                kesesuaianString = "N/A";
+                            } else {
+                                kesesuaianString = kesesuaian ? "Cukup" : "Kurang";
                             }
 
                             DataClass dataClass = new DataClass(kodeQr, lokasi, MerkAPAR, berat, JenisAPAR, isiString, tekananString, kesesuaianString,
@@ -562,9 +721,6 @@ public class UpdateActivity extends AppCompatActivity {
 
                                         String childKey = currentDate + kodeQr;
                                         FirebaseDatabase.getInstance().getReference("History").child(kodeQr).child(childKey).setValue(historyData);
-
-//                                        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
-//                                        reference.delete();
                                         Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
 
                                         Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
@@ -593,14 +749,11 @@ public class UpdateActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent(ActivityResultLauncher<Intent> takePictureLauncher) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Membuat file tempat gambar akan disimpan
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error terjadi saat membuat file
-            }
-            // Lanjutkan hanya jika file berhasil dibuat
+                 }
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.test.input.Fileprovider",
@@ -670,5 +823,187 @@ public class UpdateActivity extends AppCompatActivity {
 
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    private void fabOnClick(){
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiTabung.isEnabled()){
+                    kondisiTabung.setEnabled(false);
+                    kondisiTabung.setVisibility(View.GONE);
+                    tv1.setVisibility(View.VISIBLE);
+                    fab1.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiTabung.setEnabled(true);
+                    kondisiTabung.setVisibility(View.VISIBLE);
+                    tv1.setVisibility(View.GONE);
+                    fab1.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (posisiTabung.isEnabled()){
+                    posisiTabung.setEnabled(false);
+                    posisiTabung.setVisibility(View.GONE);
+                    tv2.setVisibility(View.VISIBLE);
+                    fab2.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    posisiTabung.setEnabled(true);
+                    posisiTabung.setVisibility(View.VISIBLE);
+                    tv2.setVisibility(View.GONE);
+                    fab2.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiSelang.isEnabled()){
+                    kondisiSelang.setEnabled(false);
+                    kondisiSelang.setVisibility(View.GONE);
+                    tv3.setVisibility(View.VISIBLE);
+                    fab3.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiSelang.setEnabled(true);
+                    kondisiSelang.setVisibility(View.VISIBLE);
+                    tv3.setVisibility(View.GONE);
+                    fab3.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiPin.isEnabled()){
+                    kondisiPin.setEnabled(false);
+                    kondisiPin.setVisibility(View.GONE);
+                    tv4.setVisibility(View.VISIBLE);
+                    fab4.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiPin.setEnabled(true);
+                    kondisiPin.setVisibility(View.VISIBLE);
+                    tv4.setVisibility(View.GONE);
+                    fab4.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kondisiNozzle.isEnabled()){
+                    kondisiNozzle.setEnabled(false);
+                    kondisiNozzle.setVisibility(View.GONE);
+                    tv5.setVisibility(View.VISIBLE);
+                    fab5.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kondisiNozzle.setEnabled(true);
+                    kondisiNozzle.setVisibility(View.VISIBLE);
+                    tv5.setVisibility(View.GONE);
+                    fab5.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tekananTabung.isEnabled()){
+                    tekananTabung.setEnabled(false);
+                    tekananTabung.setVisibility(View.GONE);
+                    tv6.setVisibility(View.VISIBLE);
+                    fab6.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    tekananTabung.setEnabled(true);
+                    tekananTabung.setVisibility(View.VISIBLE);
+                    tv6.setVisibility(View.GONE);
+                    fab6.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isiTabung.isEnabled()){
+                    isiTabung.setEnabled(false);
+                    isiTabung.setVisibility(View.GONE);
+                    tv7.setVisibility(View.VISIBLE);
+                    fab7.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    isiTabung.setEnabled(true);
+                    isiTabung.setVisibility(View.VISIBLE);
+                    tv7.setVisibility(View.GONE);
+                    fab7.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+
+        fab8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (kesesuaianBerat.isEnabled()){
+                    kesesuaianBerat.setEnabled(false);
+                    kesesuaianBerat.setVisibility(View.GONE);
+                    tv8.setVisibility(View.VISIBLE);
+                    fab8.setImageResource(com.github.clans.fab.R.drawable.fab_add);
+                } else {
+                    kesesuaianBerat.setEnabled(true);
+                    kesesuaianBerat.setVisibility(View.VISIBLE);
+                    tv8.setVisibility(View.GONE);
+                    fab8.setImageResource(R.drawable.baseline_remove_24);
+                }
+            }
+        });
+    }
+
+    private void initializeComponents(){
+        fab1 = findViewById(R.id.fab_1);
+        fab2 = findViewById(R.id.fab_2);
+        fab3 = findViewById(R.id.fab_3);
+        fab4 = findViewById(R.id.fab_4);
+        fab5 = findViewById(R.id.fab_5);
+        fab6 = findViewById(R.id.fab_6);
+        fab7 = findViewById(R.id.fab_7);
+        fab8 = findViewById(R.id.fab_8);
+
+        tv1 = findViewById(R.id.tv_na_1);
+        tv2 = findViewById(R.id.tv_na_2);
+        tv3 = findViewById(R.id.tv_na_3);
+        tv4 = findViewById(R.id.tv_na_4);
+        tv5 = findViewById(R.id.tv_na_5);
+        tv6 = findViewById(R.id.tv_na_6);
+        tv7 = findViewById(R.id.tv_na_7);
+        tv8 = findViewById(R.id.tv_na_8);
+
+        merkAPAR = findViewById(R.id.update_merk);
+        jenisAPAR = findViewById(R.id.update_jenis);
+        etLokasi = findViewById(R.id.update_lokasi);
+        etBerat = findViewById(R.id.update_berat);
+        etketerangan = findViewById(R.id.update_keterangan);
+        isiTabung = findViewById(R.id.update_isi);
+        tekananTabung = findViewById(R.id.update_tekanan);
+        kesesuaianBerat = findViewById(R.id.update_kesesuaian);
+        kondisiTabung = findViewById(R.id.update_tabung);
+        kondisiSelang = findViewById(R.id.update_selang);
+        kondisiPin = findViewById(R.id.update_pin);
+        btnCapture = findViewById(R.id.btn_capture);
+        firebaseAuth = FirebaseAuth.getInstance();
+        updateButton = findViewById(R.id.btn_update);
+        updateImage = findViewById(R.id.update_image);
+        btnCancel = findViewById(R.id.btn_cancel);
+        btnSave = findViewById(R.id.btn_save);
+        satuanBerat = findViewById(R.id.upload_satuan);
+        kondisiNozzle = findViewById(R.id.update_nozzle);
+        posisiTabung = findViewById(R.id.update_posisi);
+
+        tvQR = findViewById(R.id.tv_qr_update);
+        tvID = findViewById(R.id.tv_title_id);
     }
 }

@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="BACK"
+                android:text="KEMBALI"
                 app:tint="@color/white"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"/>
@@ -142,7 +142,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/custom_input"
-                    android:hint="Beritahu pihak developer masalah apa yang anda hadapi. Anda dapat mendeskripsikannya secara tertulis dengan menyertakan informasi perangkat yang sedang anda gunakan, atau dengan melampirkan screenshot."
+                    android:hint="Beritahu pihak developer masalah yang anda temukan pada aplikasi. Anda dapat mendeskripsikannya secara tertulis dengan menyertakan informasi perangkat yang sedang anda gunakan, atau dengan melampirkan screenshot."
                     android:textColor="@color/main_color"
                     android:textColorHint="@color/main_color"
                     android:id="@+id/et_text_email"/>
